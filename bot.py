@@ -2,7 +2,7 @@ import serial
 import time
 import pyautogui as ui
 import buff_instruction as buff
-import enhance
+# import enhance
 
 CLICK = b'C'
 

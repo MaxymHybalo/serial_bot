@@ -34,7 +34,7 @@ def getBufferCommand(id):
 char_selector_cond = {
 			var.process : 'recognize',
 			var.region : (740, 130, 20, 20),
-			var.img : IMG_PREFIX + 'load_marker.png',
+			var.img : var.IMG_PREFIX + 'load_marker.png',
 			var.freq : 3
 		}
 
@@ -49,25 +49,25 @@ go_to_select_menu_v2 = [
 	{
 		var.process: 'center_on',
 		var.region: (940, 740, 120, 120),
-		var.img: IMG_PREFIX + 'menu_btn.png',
+		var.img: var.IMG_PREFIX + 'menu_btn.png',
 		var.freq: 1
 	},
 	{
 		var.process: 'center_on',
 		var.region: (955, 710,170, 20),
-		var.img: IMG_PREFIX + 'system_menu.png',
+		var.img: var.IMG_PREFIX + 'system_menu.png',
 		var.freq: 1
 	},
 	{
 		var.process: 'center_on',
 		var.region: (500, 400, 200, 30),
-		var.img: 'to_char_select.png',
+		var.img: var.IMG_PREFIX + 'to_char_select.png',
 		var.freq: 1
 	},
 		{
 		var.process: 'center_on',
 		var.region: (580, 230, 100, 30),
-		var.img: 'ok_btn.png',
+		var.img: var.IMG_PREFIX + 'ok_btn.png',
 		var.freq: 1
 	},
 ]
