@@ -69,13 +69,11 @@ def center_on(data):
   ins = recognize(data)
   print(data)
   click(ins[0] + ins[2] / 2, ins[1] + ins[3] / 2, 1)
-  # click(int(ins[0]) + 3, int(ins[2]) + 3)
 
 
 def recognize(data):
   wait = int(data['freq'])
   value = ui.locateOnScreen(str(data['img']), region = data['region'])
-  ui.screenshot('123.png', region = data['region'])
   while (value is None):
     time.sleep(wait)
     value = ui.locateOnScreen(data['img'], region = data['region'])
@@ -90,11 +88,3 @@ if __name__ == '__main__':
 
   processInstruction(inst)
   print(ui.position())
-
-  # s.close()
-  # print(ui.position())
-  # time.sleep(3)
-  # img = 'ok_btn.png'
-  # ui.screenshot(img, region=(587, 231, 88, 14))
-  # xy = ui.locateOnScreen(img, region=(0, 0, 800,a 160))
-  # print(xy)
