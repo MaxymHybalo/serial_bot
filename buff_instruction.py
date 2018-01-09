@@ -1,3 +1,4 @@
+IMG_PREFIX = 'assets/'
 process = 'process'
 x = 'x'
 y = 'y'
@@ -41,7 +42,7 @@ def getBufferCommand(id):
 char_selector_cond = {
 			process : 'recognize',
 			region : (740, 130, 20, 20),
-			img : 'load_marker.png',
+			img : IMG_PREFIX + 'load_marker.png',
 			freq : 3
 		}
 
@@ -56,13 +57,13 @@ go_to_select_menu_v2 = [
 	{
 		process: 'center_on',
 		region: (940, 740, 120, 120),
-		img: 'menu_btn.png',
+		img: IMG_PREFIX + 'menu_btn.png',
 		freq: 1
 	},
 	{
 		process: 'center_on',
 		region: (955, 710,170, 20),
-		img: 'system_menu.png',
+		img: IMG_PREFIX + 'system_menu.png',
 		freq: 1
 	},
 	{
