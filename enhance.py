@@ -14,7 +14,7 @@ ENHANCE_POINT = (132, 693)
 BREAK_POINT = (134, 628)
 CLEAR_FIX = (260, 605)
 
-ITEM_ENHANCE_CYCLE = 1
+ITEM_ENHANCE_CYCLE = 2
 delta = 35
 
 def getMatrix():
@@ -58,10 +58,10 @@ def _enchance(x, y):
 
 def enhance():
 	current_item_enhance = []
-	for line in range(START_ITEM_Y, MAX_V_CELLS):
-		for col in range(START_ITEM_X, MAX_H_CELLS + 1):
-			for i in range(ITEM_ENHANCE_CYCLE):
-				current_item_enhance += _enchance(col, line)
+	for i in range(ITEM_ENHANCE_CYCLE):
+		for col in range(START_ITEM_Y, MAX_V_CELLS):
+			for line in range(START_ITEM_X, MAX_H_CELLS + 1):
+				current_item_enhance += _enchance(line, col)
 	return current_item_enhance
 
 

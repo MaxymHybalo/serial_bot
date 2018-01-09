@@ -9,8 +9,7 @@ CLICK = b'C'
 PORT = 'COM4'
 BAUDRATE = 9600
 
-s = serial.Serial(PORT, BAUDRATE)
-s.timeout = 0.1
+s = None
 
 SCREEN_SIZE = ui.size()
 
@@ -20,6 +19,8 @@ X_DIRECT = ('X', 'Z')
 Y_DIRECT = ('Y', 'U')
 
 def run():
+    s = serial.Serial(PORT, BAUDRATE)
+    s.timeout = 0.1
     if not s.is_open:
       s.open()
 
@@ -35,7 +36,7 @@ def search(goal, dim, direction):
       move(direction[1])
     else:
       move(direction[0])
-    coord = ui.position()[dim]  
+    coord = ui.position()[dim]
 
 
 def click(x, y, delay):
@@ -82,7 +83,11 @@ def recognize(data):
 
 if __name__ == '__main__':
 
-  run()
-  processInstruction(enhance.enhance())
+  # run()
+  # processInstruction(enhance.enhance())
   # processInstruction(buff.getBuffInstruction())
+  # test instruction
+  enh = enhance.enhance()
+  for i in enh:
+      print(i)
   print("Finished work")
