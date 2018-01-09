@@ -1,4 +1,4 @@
-from buff_instruction import process, x, y, delay, await_
+import variables as var
 
 START_POINT = (85, 85)
 MAX_H_CELLS = 8
@@ -34,10 +34,10 @@ def getClick(x, y):
 	x -= 1
 	y -= 1
 	return {
-		'x': values[y][x][0],
-		'y': values[y][x][1],
-		'delay': 1,
-		'process': 'dclick'
+		var.x: values[y][x][0],
+		var.y: values[y][x][1],
+		var.delay: 1,
+		var.process: 'dclick'
 	}
 
 def test():
@@ -49,7 +49,7 @@ def test():
 	return iterator
 
 def _enchance(x, y):
-	return [getClick(x,y), 
+	return [getClick(x,y),
 			getClick(CUBE_X, CUBE_Y),
 			click(CLEAR_FIX[0], CLEAR_FIX[1], 0),
 			click(ENHANCE_POINT[0], ENHANCE_POINT[1]),
@@ -67,8 +67,8 @@ def enhance():
 
 def click(_x, _y, _delay = 2):
 	return {
-		process: 'dclick',
-		x: _x,
-		y: _y,
-		delay: _delay
+		var.process: 'dclick',
+		var.x: _x,
+		var.y: _y,
+		var.delay: _delay
 	}
