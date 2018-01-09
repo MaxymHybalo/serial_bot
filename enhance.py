@@ -1,8 +1,8 @@
 import variables as var
 
 START_POINT = (85, 85)
-MAX_H_CELLS = 3
-MAX_V_CELLS = 2
+MAX_H_CELLS = 6
+MAX_V_CELLS = 3
 
 CUBE_X = 1
 CUBE_Y = 1
@@ -14,7 +14,7 @@ ENHANCE_POINT = (132, 693)
 BREAK_POINT = (134, 628)
 CLEAR_FIX = (260, 605)
 
-ITEM_ENHANCE_CYCLE = 2
+ITEM_ENHANCE_CYCLE = 1
 delta = 35
 
 def getMatrix():
@@ -60,7 +60,9 @@ def enhance():
 	current_item_enhance = []
 	for i in range(ITEM_ENHANCE_CYCLE):
 		for col in range(START_ITEM_Y, MAX_V_CELLS):
-			for line in range(START_ITEM_X, MAX_H_CELLS + 1):
+			start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
+			for line in range(start_line, MAX_H_CELLS):
+				# print(col, line)
 				current_item_enhance += _enchance(line, col)
 	return current_item_enhance
 

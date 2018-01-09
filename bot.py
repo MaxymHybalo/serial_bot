@@ -83,11 +83,13 @@ def recognize(data):
 
 if __name__ == '__main__':
 
-  # run()
-  # processInstruction(enhance.enhance())
+  run()
+  processInstruction(enhance.enhance())
   # processInstruction(buff.getBuffInstruction())
   # test instruction
-  enh = enhance.enhance()
-  for i in enh:
-      print(i)
+  # enh = enhance.enhance()
+  # for i in enh:
+  #   print(i)
+
+
   print("Finished work")
