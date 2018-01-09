@@ -1,12 +1,4 @@
-IMG_PREFIX = 'assets/'
-process = 'process'
-x = 'x'
-y = 'y'
-delay = 'delay'
-
-freq = 'freq'
-region = 'region'
-img = 'img'
+import variables as var
 
 def buffs(clicks, delays):
 	result = list()
@@ -32,51 +24,51 @@ def getBufferCommand(id):
 	zero_pos = 150
 	multiplier = 205 - 150
 	return {
-		process: 'click',
-		x: 850,
-		y: zero_pos + multiplier * id,
-		delay: 1
+		var.process: 'click',
+		var.x: 850,
+		var.y: zero_pos + multiplier * id,
+		var.delay: 1
 	}
 
 
 char_selector_cond = {
-			process : 'recognize',
-			region : (740, 130, 20, 20),
-			img : IMG_PREFIX + 'load_marker.png',
-			freq : 3
+			var.process : 'recognize',
+			var.region : (740, 130, 20, 20),
+			var.img : IMG_PREFIX + 'load_marker.png',
+			var.freq : 3
 		}
 
 
 def await_(delay):
 	return {
-		process: 'wait',
-		'delay': delay
+		var.process: 'wait',
+		var.delay: delay
 	}
 
 go_to_select_menu_v2 = [
 	{
-		process: 'center_on',
-		region: (940, 740, 120, 120),
-		img: IMG_PREFIX + 'menu_btn.png',
-		freq: 1
+		var.process: 'center_on',
+		var.region: (940, 740, 120, 120),
+		var.img: IMG_PREFIX + 'menu_btn.png',
+		var.freq: 1
 	},
 	{
-		process: 'center_on',
-		region: (955, 710,170, 20),
-		img: IMG_PREFIX + 'system_menu.png',
-		freq: 1
+		var.process: 'center_on',
+		var.region: (955, 710,170, 20),
+		var.img: IMG_PREFIX + 'system_menu.png',
+		var.freq: 1
 	},
 	{
-		process: 'center_on',
-		region: (500, 400, 200, 30),
-		img: 'to_char_select.png',
-		freq: 1
+		var.process: 'center_on',
+		var.region: (500, 400, 200, 30),
+		var.img: 'to_char_select.png',
+		var.freq: 1
 	},
 		{
-		process: 'center_on',
-		region: (580, 230, 100, 30),
-		img: 'ok_btn.png',
-		freq: 1
+		var.process: 'center_on',
+		var.region: (580, 230, 100, 30),
+		var.img: 'ok_btn.png',
+		var.freq: 1
 	},
 ]
 
@@ -84,10 +76,10 @@ go_to_select_menu_v2 = [
 
 
 load_char = {
-	process : 'click',
-	x : 930,
-	y : 570,
-	delay : 1
+	var.process : 'click',
+	var.x : 930,
+	var.y : 570,
+	var.delay : 1
 }
 
 
@@ -136,27 +128,27 @@ def getBuffInstruction():
 
 to_select_char_menu = [
 		{
-			process: 'click',
-			x: 1005,
-			y: 773,
-			delay: 1
+			var.process: 'click',
+			var.x: 1005,
+			var.y: 773,
+			var.delay: 1
 		},
 		{
-			process: 'click',
-			x: 1005,
-			y: 723,
-			delay: 1
+			var.process: 'click',
+			var.x: 1005,
+			var.y: 723,
+			var.delay: 1
 		},
 		{
-			process: 'click',
-			x: 600,
-			y: 413,
-			delay: 1
+			var.process: 'click',
+			var.x: 600,
+			var.y: 413,
+			var.delay: 1
 		},
 		{
-			process: 'click',
-			x: 635,
-			y: 234,
-			delay: 1
+			var.process: 'click',
+			var.x: 635,
+			var.y: 234,
+			var.delay: 1
 		}
 	]
