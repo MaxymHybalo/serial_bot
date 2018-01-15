@@ -86,7 +86,7 @@ if __name__ == '__main__':
   # enhance_loops = 3
   # for i in range(1):
   # processInstruction(enhance.enhance())
-  print(enhance.enhance())
+  print(buff.getBuffInstruction())
   # processInstruction(buff.getBuffInstruction())
 
   print("Finished work")
