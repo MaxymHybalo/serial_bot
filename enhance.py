@@ -1,4 +1,4 @@
-import variables as var
+from variables import *
 
 START_POINT = (85, 85)
 MAX_H_CELLS = 10
@@ -34,10 +34,10 @@ def getClick(x, y):
 	x -= 1
 	y -= 1
 	return {
-		var.x: values[y][x][0],
-		var.y: values[y][x][1],
-		var.delay: 0.5,
-		var.process: 'dclick'
+		x: values[y][x][0],
+		y: values[y][x][1],
+		delay: 0.5,
+		process: 'dclick'
 	}
 
 def test():
@@ -68,8 +68,8 @@ def enhance():
 
 def click(_x, _y, _delay = 2):
 	return {
-		var.process: 'dclick',
-		var.x: _x,
-		var.y: _y,
-		var.delay: _delay
+		process: 'dclick',
+		x: _x,
+		y: _y,
+		delay: _delay
 	}
