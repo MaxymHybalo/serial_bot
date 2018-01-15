@@ -29,13 +29,12 @@ def getMatrix():
 
 
 values = getMatrix()
-
-def getClick(x, y):
-	x -= 1
-	y -= 1
+def getClick(_x, _y):
+	_x -= 1
+	_y -= 1
 	return {
-		x: values[y][x][0],
-		y: values[y][x][1],
+		x: values[_y][_x][0],
+		y: values[_y][_x][1],
 		delay: 0.5,
 		process: 'dclick'
 	}
@@ -48,7 +47,7 @@ def test():
 			iterator.append(getClick(x,y))
 	return iterator
 
-def _enchance(x, y):
+def _enchance_move(x, y):
 	return [getClick(x,y),
 			getClick(CUBE_X, CUBE_Y),
 			click(CLEAR_FIX[0], CLEAR_FIX[1], 0),
@@ -56,15 +55,20 @@ def _enchance(x, y):
 			click(BREAK_POINT[0], BREAK_POINT[1], 1)
 	 	]
 
-def enhance():
+def _enhance():
 	current_item_enhance = []
 	for col in range(START_ITEM_Y, MAX_V_CELLS):
 		start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
 		for line in range(start_line, MAX_H_CELLS):
 			# print(col, line)
-			current_item_enhance += _enchance(line, col)
+			current_item_enhance += _enchance_move(line, col)
 	return current_item_enhance
 
+def enhance():
+	loops = []
+	for i in range(ITEM_ENHANCE_CYCLE):
+		loops += _enhance()
+	return loops
 
 def click(_x, _y, _delay = 2):
 	return {
