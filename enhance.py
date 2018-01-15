@@ -1,20 +1,20 @@
 import variables as var
 
 START_POINT = (85, 85)
-MAX_H_CELLS = 6
-MAX_V_CELLS = 3
+MAX_H_CELLS = 10
+MAX_V_CELLS = 6
 
-CUBE_X = 1
+CUBE_X = 5
 CUBE_Y = 1
 
-START_ITEM_X = 2
-START_ITEM_Y = 1
+START_ITEM_X = 1
+START_ITEM_Y = 2
 
 ENHANCE_POINT = (132, 693)
 BREAK_POINT = (134, 628)
 CLEAR_FIX = (260, 605)
 
-ITEM_ENHANCE_CYCLE = 1
+ITEM_ENHANCE_CYCLE = 3
 delta = 35
 
 def getMatrix():
@@ -36,7 +36,7 @@ def getClick(x, y):
 	return {
 		var.x: values[y][x][0],
 		var.y: values[y][x][1],
-		var.delay: 1,
+		var.delay: 0.5,
 		var.process: 'dclick'
 	}
 
@@ -58,12 +58,11 @@ def _enchance(x, y):
 
 def enhance():
 	current_item_enhance = []
-	for i in range(ITEM_ENHANCE_CYCLE):
-		for col in range(START_ITEM_Y, MAX_V_CELLS):
-			start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
-			for line in range(start_line, MAX_H_CELLS):
-				# print(col, line)
-				current_item_enhance += _enchance(line, col)
+	for col in range(START_ITEM_Y, MAX_V_CELLS):
+		start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
+		for line in range(start_line, MAX_H_CELLS):
+			# print(col, line)
+			current_item_enhance += _enchance(line, col)
 	return current_item_enhance
 
 

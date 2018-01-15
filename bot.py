@@ -9,7 +9,7 @@ CLICK = b'C'
 PORT = 'COM4'
 BAUDRATE = 9600
 
-s = None
+s = serial.Serial(PORT, BAUDRATE)
 
 SCREEN_SIZE = ui.size()
 
@@ -19,7 +19,6 @@ X_DIRECT = ('X', 'Z')
 Y_DIRECT = ('Y', 'U')
 
 def run():
-    s = serial.Serial(PORT, BAUDRATE)
     s.timeout = 0.1
     if not s.is_open:
       s.open()
@@ -84,12 +83,9 @@ def recognize(data):
 if __name__ == '__main__':
 
   run()
-  processInstruction(enhance.enhance())
-  # processInstruction(buff.getBuffInstruction())
-  # test instruction
-  # enh = enhance.enhance()
-  # for i in enh:
-  #   print(i)
-
+  # enhance_loops = 3
+  # for i in range(1):
+  #   processInstruction(enhance.enhance())
+  processInstruction(buff.getBuffInstruction())
 
   print("Finished work")
