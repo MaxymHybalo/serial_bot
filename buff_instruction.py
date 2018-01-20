@@ -39,10 +39,10 @@ char_selector_cond = {
 		}
 
 
-def await_(delay):
+def await_(_delay):
 	return {
 		process: 'wait',
-		delay: delay
+		delay: _delay
 	}
 
 go_to_select_menu_v2 = [
