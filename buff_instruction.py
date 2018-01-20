@@ -1,4 +1,7 @@
 from variables import *
+import json
+
+CONFIG = 'buff_utils.json'
 
 def buffs(clicks, delays):
 	result = list()
@@ -83,24 +86,24 @@ load_char = {
 }
 
 
-def make_single_buff(id, positions, delays):
+def make_single_buff(id, positions, delays, cfg=None):
 	source =  [
-		char_selector_cond,
+		cfg['is_char_select'],
 		getBufferCommand(id),
-		load_char,
+		cfg['load_char'],
 		await_(8),
-	 ] + buffs(positions, delays) + go_to_select_menu_v2
+	 ] + buffs(positions, delays) + cfg['select_char_menu']
 
 	return source
 
 
-def make_reload_instruction(id):
+def make_reload_instruction(id, cfg=None):
 	return [
-		char_selector_cond,
+		cfg['is_char_select'],
 		getBufferCommand(id),
-		load_char,
+		cfg['load_char'],
 		await_(13)
-	] + go_to_select_menu_v2
+	] + cfg['select_char_menu']
 
 buff_squence = [
 	[4, [0], [2]],
@@ -114,11 +117,12 @@ buff_squence = [
 ]
 
 def instruction(sequence):
+	cfg = import_config()
 	istr = []
 	for e in sequence:
-		istr += make_single_buff(e[0], e[1],e[2])
+		istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
 	for e in sequence:
-		istr += make_reload_instruction(e[0])
+		istr += make_reload_instruction(e[0], cfg=cfg)
 	return istr
 
 
@@ -152,3 +156,9 @@ to_select_char_menu = [
 			delay: 1
 		}
 	]
+
+def import_config():
+	config = open(CONFIG, 'r')
+	configuration = config.read()
+	config.close()
+	return json.loads(configuration)
