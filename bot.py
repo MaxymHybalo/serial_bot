@@ -6,7 +6,7 @@ import enhance
 
 CLICK = b'C'
 
-PORT = 'COM4'
+PORT = 'COM5'
 BAUDRATE = 9600
 
 s = serial.Serial(PORT, BAUDRATE)
@@ -19,28 +19,51 @@ X_DIRECT = ('X', 'Z')
 Y_DIRECT = ('Y', 'U')
 
 def run():
-    s.timeout = 0.1
-    if not s.is_open:
-      s.open()
+  s.timeout = 0.1
+  if not s.is_open:
+    s.open()
 
 
 def move(t):
   s.write(t.encode())
 
 
-def search(goal, dim, direction):
-  coord = ui.position()[dim]
-  while not (coord <= goal + ACCURACY and coord >= goal - ACCURACY):
-    if coord >= goal + ACCURACY:
-      move(direction[1])
-    else:
-      move(direction[0])
-    coord = ui.position()[dim]
+def search(x,y,):
+  _x, _y = ui.position()
+  next='X'
+  isXPass = _isCoordLess(_x, x) and _isCoordGreater(_x, x)
+  isYPass = _isCoordLess(_y, y) and _isCoordGreater(_y, y)
+  while not (isXPass and isYPass):
+    if next == 'X':
+      if(_isCoordLess(_x, x)):
+        move(X_DIRECT[1])
+        next = 'Y' if not isYPass else 'X'
+      else:
+        move(X_DIRECT[0])
+        next = 'Y' if not isYPass else 'X'
+    if next == 'Y':
+      if(_isCoordLess(_y, y)):
+        move(Y_DIRECT[1])
+        next = 'X' if not isXPass else 'Y'
+      else:
+        move(Y_DIRECT[0])
+        next = 'X' if not isXPass else 'Y'
+    _x, _y = ui.position()
+    isXPass = _isCoordLess(_x, x) and _isCoordGreater(_x, x)
+    isYPass = _isCoordLess(_y, y) and _isCoordGreater(_y, y)
+
+
+def _isCoordLess(current, target):
+  return current >= target - ACCURACY
+
+
+def _isCoordGreater(current, target):
+  return current <= target + ACCURACY
+
 
 
 def click(x, y, delay):
-  search(x, 0, X_DIRECT)
-  search(y,1, Y_DIRECT)
+  search(x, y)
   s.write(b'C')
   time.sleep(delay)
 
@@ -81,11 +104,12 @@ def recognize(data):
   return value
 
 if __name__ == '__main__':
-
+  startTime = time.time()
   run()
   # print(buff.getBuffInstruction())
-  processInstruction(enhance.enhance())
+  # processInstruction(enhance.enhance())
   # prin/t(enhance.enhance())
   # processInstruction(buff.getBuffInstruction())
+  execTime = (time.time() - startTime)
 
-  print("Finished work")
+  print("Finished work, time:", execTime,'(sec) ', execTime / 60, '(min)')
