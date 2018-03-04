@@ -84,7 +84,8 @@ if __name__ == '__main__':
 
   run()
   # print(buff.getBuffInstruction())
+  processInstruction(enhance.enhance())
   # prin/t(enhance.enhance())
-  processInstruction(buff.getBuffInstruction())
+  # processInstruction(buff.getBuffInstruction())
 
   print("Finished work")
