@@ -58,7 +58,7 @@ def make_single_buff(id, positions, delays, cfg=None):
 		cfg['is_char_select'],
 		getBufferCommand(id),
 		cfg['load_char'],
-		await_(8),
+		await_(10),
 	 ] + buffs(positions, delays) + cfg['select_char_menu']
 
 	return source
@@ -78,8 +78,8 @@ def instruction(sequence):
 	istr = []
 	for e in sequence:
 		istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
-	# for e in sequence:
-	# 	istr += make_reload_instruction(e[0], cfg=cfg)
+	for e in sequence:
+		istr += make_reload_instruction(e[0], cfg=cfg)
 	return istr
 
 

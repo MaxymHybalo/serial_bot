@@ -6,7 +6,7 @@ import enhance
 
 CLICK = b'C'
 
-PORT = 'COM5'
+PORT = 'COM4'
 BAUDRATE = 9600
 
 s = serial.Serial(PORT, BAUDRATE)
@@ -109,7 +109,7 @@ if __name__ == '__main__':
   # print(buff.getBuffInstruction())
   # processInstruction(enhance.enhance())
   # prin/t(enhance.enhance())
-  # processInstruction(buff.getBuffInstruction())
+  processInstruction(buff.getBuffInstruction())
   execTime = (time.time() - startTime)
 
   print("Finished work, time:", execTime,'(sec) ', execTime / 60, '(min)')
