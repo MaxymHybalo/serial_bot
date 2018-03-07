@@ -51,18 +51,18 @@ def _enchance_move(x, y):
 			click(BREAK_POINT[0], BREAK_POINT[1], 1)
 		]
 
-def _enhance():
+def _enhance(move):
 	current_item_enhance = []
 	for line in range(START_ITEM_Y, MAX_V_CELLS + 1):
 		start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
 		for col in range(start_line, MAX_H_CELLS + 1):
-			current_item_enhance += _enchance_move(col, line)
+			current_item_enhance += move(col, line)
 	return current_item_enhance
 
 def enhance():
 	loops = []
 	for i in range(ITEM_ENHANCE_CYCLE):
-		loops += _enhance()
+		loops += _enhance(_enchance_move)
 	return loops
 
 def click(_x, _y, _delay = 2):
