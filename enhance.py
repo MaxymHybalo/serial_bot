@@ -28,8 +28,8 @@ def getMatrix():
 	return values
 
 
-values = getMatrix()
 def getClick(_x, _y):
+	values = getMatrix()
 	_x -= 1
 	_y -= 1
 	return {
@@ -40,6 +40,7 @@ def getClick(_x, _y):
 	}
 
 def test():
+	values = getMatrix()
 	print(values)
 	iterator = []
 	for x in range(len(values)):
