@@ -52,11 +52,11 @@ def _enchance_move(x, y):
 
 def _enhance():
 	current_item_enhance = []
-	for col in range(START_ITEM_Y, MAX_V_CELLS + 1):
+	for line in range(START_ITEM_Y, MAX_V_CELLS + 1):
 		start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
-		for line in range(start_line, MAX_H_CELLS + 1):
-			# print(col, line)
-			current_item_enhance += _enchance_move(line, col)
+		for col in range(start_line, MAX_H_CELLS + 1):
+			# print(line, col)
+			current_item_enhance += _enchance_move(col, line)
 	return current_item_enhance
 
 def enhance():
