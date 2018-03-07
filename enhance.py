@@ -1,6 +1,8 @@
 from variables import *
 
 START_POINT = (85, 85)
+
+# now consistent  with grid
 MAX_H_CELLS = 10
 MAX_V_CELLS = 10
 
@@ -39,14 +41,6 @@ def getClick(_x, _y):
 		process: 'dclick'
 	}
 
-def test():
-	values = getMatrix()
-	print(values)
-	iterator = []
-	for x in range(len(values)):
-		for y in range(len(values[x])):
-			iterator.append(getClick(x,y))
-	return iterator
 
 def _enchance_move(x, y):
 	return [getClick(x,y),
@@ -58,9 +52,9 @@ def _enchance_move(x, y):
 
 def _enhance():
 	current_item_enhance = []
-	for col in range(START_ITEM_Y, MAX_V_CELLS):
+	for col in range(START_ITEM_Y, MAX_V_CELLS + 1):
 		start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
-		for line in range(start_line, MAX_H_CELLS):
+		for line in range(start_line, MAX_H_CELLS + 1):
 			# print(col, line)
 			current_item_enhance += _enchance_move(line, col)
 	return current_item_enhance
