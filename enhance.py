@@ -17,15 +17,15 @@ ENHANCE_POINT = (132, 693)
 BREAK_POINT = (134, 628)
 CLEAR_FIX = (260, 605)
 
-delta = 35
+DELTA = 35
 
 def getMatrix():
 	values = []
 	for y in range(MAX_V_CELLS):
 		values.append([])
 		for x in range(MAX_H_CELLS):
-			calcX = delta * x + START_POINT[0]
-			calcY = delta * y + START_POINT[1]
+			calcX = DELTA * x + START_POINT[0]
+			calcY = DELTA * y + START_POINT[1]
 			values[y].append((calcX, calcY))
 	return values
 
