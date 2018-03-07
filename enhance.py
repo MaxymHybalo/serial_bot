@@ -1,22 +1,22 @@
 from variables import *
 
-START_POINT = (85, 85)
-
-# now consistent  with grid
-MAX_H_CELLS = 10
-MAX_V_CELLS = 10
-
 CUBE_X = 1
 CUBE_Y = 6
 
 START_ITEM_X = 2
 START_ITEM_Y = 6
 
+# now consistent  with grid
+MAX_H_CELLS = 10
+MAX_V_CELLS = 10
+
+ITEM_ENHANCE_CYCLE = 1 
+
+START_POINT = (85, 85)
 ENHANCE_POINT = (132, 693)
 BREAK_POINT = (134, 628)
 CLEAR_FIX = (260, 605)
 
-ITEM_ENHANCE_CYCLE = 1 
 delta = 35
 
 def getMatrix():
