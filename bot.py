@@ -44,11 +44,8 @@ if __name__ == '__main__':
   # run()
   # print(buff.getBuffInstruction())
   # processInstruction(enhance.enhance())
-  # print(enhance.enhance())
+  print(type(buff.getBuffInstruction()))
   # processInstruction(buff.getBuffInstruction())
-
-  configurator = Configurator('buff_utils.json')
-  configurator.generate_objects(configurator.import_config())
 
   execTime = (time.time() - startTime)
 

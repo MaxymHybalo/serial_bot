@@ -1,5 +1,6 @@
-from variables import *
-import json
+from configurator import Configurator
+from click import Click
+from wait import Wait
 
 CONFIG = 'buff_utils.json'
 
@@ -28,29 +29,36 @@ def buffs(clicks, delays):
 	return result
 
 def _build_buff(x, delay):
-	return {
-		'x': x,
-		'y': 745,
-		'delay': delay,
-		'process': 'click'
-	}
+	return Click(x, 745, delay=delay)
+	# return {
+	# 	'x': x,
+	# 	'y': 745,
+	# 	'delay': delay,
+	# 	'process': 'click'
+	# }
 
 def getBufferCommand(id):
 	zero_pos = 150
 	multiplier = 205 - 150
-	return {
-		process: 'click',
-		x: 850,
-		y: zero_pos + multiplier * id,
-		delay: 1
-	}
+	return Click(
+		850,
+		zero_pos + multiplier * id,
+		delay=1
+	)
+	# return {
+	# 	process: 'click',
+	# 	x: 850,
+	# 	y: zero_pos + multiplier * id,
+	# 	delay: 1
+	# }
 
 
-def await_(_delay):
-	return {
-		process: 'wait',
-		delay: _delay
-	}
+# def await_(_delay):
+# 	return Wait(_delay)
+# 	return {
+# 		process: 'wait',
+# 		delay: _delay
+# 	}
 
 
 def make_single_buff(id, positions, delays, cfg=None):
@@ -58,7 +66,7 @@ def make_single_buff(id, positions, delays, cfg=None):
 		cfg['is_char_select'],
 		getBufferCommand(id),
 		cfg['load_char'],
-		await_(10),
+		Wait(10),
 	 ] + buffs(positions, delays) + cfg['select_char_menu']
 
 	return source
@@ -69,15 +77,16 @@ def make_reload_instruction(id, cfg=None):
 		cfg['is_char_select'],
 		getBufferCommand(id),
 		cfg['load_char'],
-		await_(13)
+		Wait(13)
 	] + cfg['select_char_menu']
 
 
 def instruction(sequence):
-	cfg = import_config()
+	cfg = Configurator(CONFIG)
+	cfg = cfg.generate_objects()
 	istr = []
-	for e in sequence:
-		istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
+	# for e in sequence:
+		# istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
 	for e in sequence:
 		istr += make_reload_instruction(e[0], cfg=cfg)
 	return istr
@@ -85,10 +94,3 @@ def instruction(sequence):
 
 def getBuffInstruction():
 	return instruction(buff_squence)
-
-
-def import_config():
-	config = open(CONFIG, 'r')
-	configuration = config.read()
-	config.close()
-	return json.loads(configuration)

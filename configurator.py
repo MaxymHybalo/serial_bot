@@ -15,15 +15,15 @@ class Configurator:
         return json.loads(configuration)
 
 
-    def generate_objects(self, config):
+    def generate_objects(self):
+        config = self.import_config()
         generated = dict()
         for key, value in config.items():
             if type(value) is list:
                 generated[key] = self._from_list(value)
             else:
                 generated[key] = self._get_object(value)
-        print(generated)
-        
+        return generated        
 
     def _from_list(self, value):
         sub_list = list()
