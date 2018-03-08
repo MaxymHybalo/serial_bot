@@ -21,3 +21,6 @@ class Recognizer:
             'x': self.value[0] + self.value[2] / 2,
             'y': self.value[1] + self.value[3] / 2
         }
+
+    def __str__(self):
+        return 'image: ' + self.image + ' region: ' + str(self.region)

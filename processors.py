@@ -85,4 +85,3 @@ class InstructionProcessor:
         if click.process == 'dclick':
             self.serial.write(CLICK)
         time.sleep(click.delay)
-    

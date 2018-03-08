@@ -4,6 +4,7 @@ import enhance
 
 from processors import InstructionProcessor
 from click import Click
+from configurator import Configurator
 
 
 # def processInstruction(instruction):
@@ -46,8 +47,8 @@ if __name__ == '__main__':
   # print(enhance.enhance())
   # processInstruction(buff.getBuffInstruction())
 
-  processor = InstructionProcessor([Click(100,200), Click(320, 230, process="dclick")])
-  processor.process()
+  configurator = Configurator('buff_utils.json')
+  configurator.generate_objects(configurator.import_config())
 
   execTime = (time.time() - startTime)
 
