@@ -28,14 +28,10 @@ def buffs(clicks, delays):
 
 	return result
 
+
 def _build_buff(x, delay):
 	return Click(x, 745, delay=delay)
-	# return {
-	# 	'x': x,
-	# 	'y': 745,
-	# 	'delay': delay,
-	# 	'process': 'click'
-	# }
+
 
 def getBufferCommand(id):
 	zero_pos = 150
@@ -45,20 +41,6 @@ def getBufferCommand(id):
 		zero_pos + multiplier * id,
 		delay=1
 	)
-	# return {
-	# 	process: 'click',
-	# 	x: 850,
-	# 	y: zero_pos + multiplier * id,
-	# 	delay: 1
-	# }
-
-
-# def await_(_delay):
-# 	return Wait(_delay)
-# 	return {
-# 		process: 'wait',
-# 		delay: _delay
-# 	}
 
 
 def make_single_buff(id, positions, delays, cfg=None):
