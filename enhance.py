@@ -1,14 +1,14 @@
-from variables import *
+from click import Click
 
 CUBE_X = 1
-CUBE_Y = 6
+CUBE_Y = 1
 
-START_ITEM_X = 2
-START_ITEM_Y = 6
+START_ITEM_X = 1
+START_ITEM_Y = 2
 
 # now consistent  with grid
-MAX_H_CELLS = 10
-MAX_V_CELLS = 10
+MAX_H_CELLS = 2
+MAX_V_CELLS = 2
 
 ITEM_ENHANCE_CYCLE = 1 
 
@@ -34,21 +34,19 @@ def getClick(_x, _y):
 	values = getMatrix()
 	_x -= 1
 	_y -= 1
-	return {
-		x: values[_y][_x][0],
-		y: values[_y][_x][1],
-		delay: 0.5,
-		process: 'dclick'
-	}
+	return Click(values[_y][_x][0], values[_y][_x][1], process='dclick', delay=0.5)
 
 
 def _enchance_move(x, y):
+	clear_fix = Click(CLEAR_FIX[0], CLEAR_FIX[1], process='dclick', delay=0)
+	enhance_point = Click(ENHANCE_POINT[0], ENHANCE_POINT[1], process='dclick', delay=2)
+	break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=2)
 	return [
-			getClick(x,y),
-			getClick(CUBE_X, CUBE_Y),
-			click(CLEAR_FIX[0], CLEAR_FIX[1], 0),
-			click(ENHANCE_POINT[0], ENHANCE_POINT[1]),
-			click(BREAK_POINT[0], BREAK_POINT[1], 1)
+			getClick(x,y).instruction(),
+			getClick(CUBE_X, CUBE_Y).instruction(),
+			clear_fix.instruction(),
+			enhance_point.instruction(),
+			break_point.instruction()
 		]
 
 def _enhance(move):
@@ -65,10 +63,3 @@ def enhance():
 		loops += _enhance(_enchance_move)
 	return loops
 
-def click(_x, _y, _delay = 2):
-	return {
-		process: 'dclick',
-		x: _x,
-		y: _y,
-		delay: _delay
-	}
