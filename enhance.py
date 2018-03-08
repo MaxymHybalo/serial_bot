@@ -19,6 +19,12 @@ CLEAR_FIX = (260, 605)
 
 DELTA = 35
 
+# ferquently used clicks
+clear_fix = Click(CLEAR_FIX[0], CLEAR_FIX[1], process='dclick', delay=0)
+enhance_point = Click(ENHANCE_POINT[0], ENHANCE_POINT[1], process='dclick', delay=2)
+break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=2)
+
+
 def getMatrix():
 	values = []
 	for y in range(MAX_V_CELLS):
@@ -38,15 +44,13 @@ def getClick(_x, _y):
 
 
 def _enchance_move(x, y):
-	clear_fix = Click(CLEAR_FIX[0], CLEAR_FIX[1], process='dclick', delay=0)
-	enhance_point = Click(ENHANCE_POINT[0], ENHANCE_POINT[1], process='dclick', delay=2)
-	break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=2)
+	
 	return [
-			getClick(x,y).instruction(),
-			getClick(CUBE_X, CUBE_Y).instruction(),
-			clear_fix.instruction(),
-			enhance_point.instruction(),
-			break_point.instruction()
+			getClick(x,y),
+			getClick(CUBE_X, CUBE_Y),
+			clear_fix,
+			enhance_point,
+			break_point
 		]
 
 def _enhance(move):
