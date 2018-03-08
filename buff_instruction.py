@@ -85,8 +85,8 @@ def instruction(sequence):
 	cfg = Configurator(CONFIG)
 	cfg = cfg.generate_objects()
 	istr = []
-	# for e in sequence:
-		# istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
+	for e in sequence:
+		istr += make_single_buff(e[0], e[1],e[2], cfg=cfg)
 	for e in sequence:
 		istr += make_reload_instruction(e[0], cfg=cfg)
 	return istr

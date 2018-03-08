@@ -46,7 +46,8 @@ if __name__ == '__main__':
   # processInstruction(enhance.enhance())
   print(type(buff.getBuffInstruction()))
   # processInstruction(buff.getBuffInstruction())
-
+  processor = InstructionProcessor(buff.getBuffInstruction())
+  processor.process()
   execTime = (time.time() - startTime)
 
   print("Finished work, time:", execTime,'(sec) ', execTime / 60, '(min)')

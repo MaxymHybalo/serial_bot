@@ -7,7 +7,7 @@ from recognizer import Recognizer
 from wait import Wait
 CLICK = b'C'
 
-PORT = 'COM5'
+PORT = 'COM4'
 BAUDRATE = 9600
 
 X_DIRECT = ('X', 'Z')
@@ -29,10 +29,10 @@ class InstructionProcessor:
             if type(e) == Recognizer:
                 recognized = e.recognize()
                 if e.process == 'center_on':
-                    center = recognized.center_of()
+                    center = e.center_of()
                     self.make_click(Click(center['x'], center['y'], delay=1))
             if type(e) == Wait:
-                e.wait()
+                e.delay()
         self.serial.close()
 
 

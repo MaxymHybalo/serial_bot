@@ -3,7 +3,7 @@ import time
 
 class Recognizer:
 
-    def __init__(self, image, region, wait=1, process="center_on"):
+    def __init__(self, image, region, wait=1, process="recognize"):
         self.image = image
         self.region = region
         self.wait = wait
