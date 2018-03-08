@@ -16,6 +16,26 @@ ACCURACY = 3
 
 class InstructionProcessor:
 
+    def __init__(self, instructions):
+        self.instructions = instructions
+        self.serial = self._run_serial()
+
+    def process(self):
+        command = 0
+        for e in self.instructions:
+            command += 1
+            if type(e) == Click:
+                self.make_click(e)
+            if type(e) == Recognizer:
+                recognized = e.recognize()
+                if e.process == 'center_on':
+                    center = recognized.center_of()
+                    self.make_click(Click(center['x'], center['y'], delay=1))
+            if type(e) == Wait:
+                e.wait()
+        self.serial.close()
+
+
     def search(self, x, y):
         _x, _y = ui.position()
         next='X'
@@ -58,25 +78,6 @@ class InstructionProcessor:
         if not s.is_open:
             s.open()
         return s
-
-    def __init__(self, instructions):
-        self.instructions = instructions
-        self.serial = self._run_serial()
-
-    def process(self):
-        command = 0
-        for e in self.instructions:
-            command += 1
-            if type(e) == Click:
-                self.make_click(e)
-            if type(e) == Recognizer:
-                recognized = e.recognize()
-                if e.process == 'center_on':
-                    center = recognized.center_of()
-                    self.make_click(Click(center['x'], center['y'], delay=1))
-            if type(e) == Wait:
-                e.wait()
-        self.serial.close()
     
         # param click mean Click instance
     def make_click (self, click):
