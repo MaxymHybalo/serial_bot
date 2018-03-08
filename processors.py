@@ -3,7 +3,8 @@ import time
 import pyautogui as ui
 
 from click import Click
-
+from recognizer import Recognizer
+from wait import Wait
 CLICK = b'C'
 
 PORT = 'COM5'
@@ -65,8 +66,16 @@ class InstructionProcessor:
     def process(self):
         command = 0
         for e in self.instructions:
+            command += 1
             if type(e) == Click:
                 self.make_click(e)
+            if type(e) == Recognizer:
+                recognized = e.recognize()
+                if e.process == 'center_on':
+                    center = recognized.center_of()
+                    self.make_click(Click(center['x'], center['y'], delay=1))
+            if type(e) == Wait:
+                e.wait()
         self.serial.close()
     
         # param click mean Click instance
@@ -75,4 +84,5 @@ class InstructionProcessor:
         self.serial.write(CLICK)
         if click.process == 'dclick':
             self.serial.write(CLICK)
-        time.sleep(click.delay)  
+        time.sleep(click.delay)
+    
