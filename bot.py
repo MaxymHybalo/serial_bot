@@ -13,7 +13,7 @@ if __name__ == '__main__':
     # processInstruction(enhance.enhance())
     # processInstruction(buff.getBuffInstruction())
     # processor = InstructionProcessor(buff.getBuffInstruction())
-    processor = InstructionProcessor(enhance.combination())
+    processor = InstructionProcessor(enhance.enhance(enhance.combination))
 
     processor.process()
     execTime = (time.time() - startTime)
