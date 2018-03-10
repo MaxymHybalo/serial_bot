@@ -7,7 +7,7 @@ from recognizer import Recognizer
 from wait import Wait
 CLICK = b'C'
 
-PORT = 'COM4'
+PORT = 'COM5'
 BAUDRATE = 9600
 
 X_DIRECT = ('X', 'Z')
