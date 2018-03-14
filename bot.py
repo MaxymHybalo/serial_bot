@@ -16,9 +16,9 @@ if __name__ == '__main__':
     # processInstruction(buff.getBuffInstruction())
     # processor = InstructionProcessor(buff.getBuffInstruction())
     # processor = InstructionProcessor(Click(500, 300))
-    time.sleep(2)
-    img = ui.screenshot(region=(242, 32, 337, 480))
-    rec = Recognizer(img, None, **{'find_color': [[0], [0]]}, process='find')
+    # img = ui.screenshot(region=(242, 32, 337, 480))
+
+    rec = Recognizer('assets/inventory.JPG', None, **{'find_color': [[0], [0]]}, process='find')
     processor = InstructionProcessor([rec,])
     processor.process()
     execTime = (time.time() - startTime)
