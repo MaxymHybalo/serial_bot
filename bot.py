@@ -18,12 +18,12 @@ if __name__ == '__main__':
     # processor = InstructionProcessor(Click(500, 300))
     # img = ui.screenshot(region=(242, 32, 337, 480))
     kwargs = {
-        'roi': (0,0,280,480),
-        'color': ((0, 50, 50), (1,255,255)),
-        'kernel': (2,2)
+        'roi': (0, 0, 280, 480),
+        'color': ((0, 50, 50), (1, 255, 255)),
+        'kernel': (2, 2)
     }
     rec = Recognizer('assets/inventory.JPG', None, **kwargs, process='find')
-    processor = InstructionProcessor([rec,])
+    processor = InstructionProcessor([rec, Click(400,500)])
     processor.process()
     execTime = (time.time() - startTime)
 
