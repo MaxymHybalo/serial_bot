@@ -11,19 +11,20 @@ class Recognizer:
         self.region = region
         self.wait = wait
         self.process = process
-        self.properties = kwargs;
+        self.properties = kwargs
 
     def recognize(self):
-        self.value = ui.locateOnScreen(str(self.image), region= self.region)
-        while self.value is None:
+        value = ui.locateOnScreen(str(self.image), region=self.region)
+        while value is None:
             time.sleep(self.wait)
-            self.value = ui.locateOnScreen(str(self.image), region=self.region)
-        return self.value
+            value = ui.locateOnScreen(str(self.image), region=self.region)
+        return value
 
     def center_of(self):
+        location = self.recognize()
         return {
-            'x': self.value[0] + self.value[2] / 2,
-            'y': self.value[1] + self.value[3] / 2
+            'x': location[0] + location[2] / 2,
+            'y': location[1] + location[3] / 2
         }
 
     # return array of found corners of objects filtered by specific color
@@ -37,7 +38,7 @@ class Recognizer:
             self.image = self.image[:, :, ::-1]
         if 'roi' in self.properties:
             x, y, w, h = self.properties['roi']
-            self.image = self.image[y:y+h, x:x+h] # think about how to pass different locations
+            self.image = self.image[y:y+h, x:x+h]  # think about how to pass different locations
         # [[0, 50, 50], [1, 255, 255]] - red color example
         color = self.properties['color']
         self.image = self._extract_color(self.image, color)

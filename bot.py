@@ -23,7 +23,7 @@ if __name__ == '__main__':
         'kernel': (2, 2)
     }
     rec = Recognizer('assets/inventory.JPG', None, **kwargs, process='find')
-    processor = InstructionProcessor([rec, Click(400,500)])
+    processor = InstructionProcessor([rec,])
     processor.process()
     execTime = (time.time() - startTime)
 
