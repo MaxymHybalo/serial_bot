@@ -18,6 +18,7 @@ class InstructionProcessor:
         command = 0
         for e in self.instructions:
             command += 1
+            print('[' + command + '] ', e.process)
             if type(e) == Click:
                 e.make_click(self.serial)
             if type(e) == Recognizer:
