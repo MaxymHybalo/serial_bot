@@ -47,7 +47,7 @@ def enhance(flow):
     return loops
 
 
-def _get_matrix():
+def get_matrix():
     values = []
     for y in range(MAX_V_CELLS):
         values.append([])
@@ -59,7 +59,7 @@ def _get_matrix():
 
 
 def _get_click(_x, _y):
-    values = _get_matrix()
+    values = get_matrix()
     _x -= 1
     _y -= 1
     return Click(values[_y][_x][0], values[_y][_x][1], process='dclick', delay=0)
