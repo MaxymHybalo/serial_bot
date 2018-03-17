@@ -23,8 +23,8 @@ class Recognizer:
     def center_of(self):
         location = self.recognize()
         return {
-            'x': location [0] + location [2] / 2,
-            'y': location [1] + location [3] / 2
+            'x': location[0] + location[2] / 2,
+            'y': location[1] + location[3] / 2
         }
 
     # return array of found corners of objects filtered by specific color

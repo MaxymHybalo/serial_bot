@@ -27,10 +27,10 @@ class InstructionProcessor:
                     center_click.make_click(self.serial)
                 if e.process == 'find':
                     e.find()
-                else:
+                if e.process == 'recognize':
                     e.recognize()
-            if type(e) == Wait:
-                e.delay()
+                if type(e) == Wait:
+                    e.delay()
         if self.serial is not None:
             self.serial.close()
 
