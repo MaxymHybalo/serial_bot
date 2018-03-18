@@ -2,16 +2,16 @@ from click import Click
 from enhance_flow import EnhanceFlow
 
 CUBE_X = 1
-CUBE_Y = 1
+CUBE_Y = 5
 
-START_ITEM_X = 1
-START_ITEM_Y = 2
+START_ITEM_X = 2
+START_ITEM_Y = 5
 
 # now consistent  with grid
-MAX_H_CELLS = 11
+MAX_H_CELLS = 9
 MAX_V_CELLS = 11
 
-ITEM_ENHANCE_CYCLE = 1
+ITEM_ENHANCE_CYCLE = 4
 
 START_POINT = (85, 85)
 ENHANCE_POINT = (132, 693)
@@ -23,10 +23,10 @@ DELTA = 35
 # frequently used clicks
 clear_fix = Click(CLEAR_FIX[0], CLEAR_FIX[1], process='dclick', delay=0)
 enhance_point = Click(ENHANCE_POINT[0], ENHANCE_POINT[1], process='dclick', delay=2)
-break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=2)
+break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=0)
 comb_ok = Click(585, 440)
 
-
+# enhancement _enhance_move for enhancing, _open_move - for open items
 def enhancement():
     current_item_enhance = []
     for line in range(START_ITEM_Y, MAX_V_CELLS + 1):
@@ -62,7 +62,7 @@ def _get_click(_x, _y):
     values = get_matrix()
     _x -= 1
     _y -= 1
-    return Click(values[_y][_x][0], values[_y][_x][1], process='dclick', delay=0.5)
+    return Click(values[_y][_x][0], values[_y][_x][1], process='dclick', delay=0)
 
 
 def _enhance_move(x, y):
@@ -74,15 +74,26 @@ def _enhance_move(x, y):
         break_point
     )
 
+def _open_move(x,y):
+    return EnhanceFlow(
+        _get_click(x, y),
+        _get_click(CUBE_X, CUBE_Y),
+        clear_fix,
+        enhance_point,
+        break_point
+    )
 
 # x & y is tuples of two combination el
 def _combination_move(x, y):
     return EnhanceFlow(
         _get_click(x[0], x[1]),
-        __select_count(5),
+        __select_count(2),
+        __select_count(8),
+        __select_count(0),
         comb_ok,
         _get_click(y[0], y[1]),
         __select_count(7),
+        __select_count(0),
         comb_ok,
         enhance_point
     )

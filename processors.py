@@ -4,7 +4,7 @@ from click import Click
 from recognizer import Recognizer
 from wait import Wait
 
-PORT = 'COM5'
+PORT = 'COM4'
 BAUDRATE = 9600
 
 
@@ -18,7 +18,7 @@ class InstructionProcessor:
         command = 0
         for e in self.instructions:
             command += 1
-            print('[' + command + '] ', e.process)
+            print('[' + str(command) + '] ', e.process)
             if type(e) == Click:
                 e.make_click(self.serial)
             if type(e) == Recognizer:
@@ -30,8 +30,8 @@ class InstructionProcessor:
                     e.find()
                 if e.process == 'recognize':
                     e.recognize()
-                if type(e) == Wait:
-                    e.delay()
+            if type(e) == Wait:
+                e.delay()
         if self.serial is not None:
             self.serial.close()
 

@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # print(buff.getBuffInstruction())
     # processInstruction(enhance.enhance())
     # processInstruction(buff.getBuffInstruction())
-    # processor = InstructionProcessor(buff.getBuffInstruction())
+    processor = InstructionProcessor(buff.getBuffInstruction())
     # processor = InstructionProcessor(Click(500, 300))
     # img = ui.screenshot(region=(242, 32, 337, 480))
     kwargs = {
@@ -22,8 +22,8 @@ if __name__ == '__main__':
         'color': ((0, 50, 50), (1, 255, 255)),
         'kernel': (2, 2)
     }
-    rec = Recognizer('assets/inventory.JPG', None, **kwargs, process='find')
-    processor = InstructionProcessor([rec,])
+    # rec = Recognizer('assets/inventory.JPG', None, **kwargs, process='find')
+    # processor = InstructionProcessor([rec,])
     processor.process()
     execTime = (time.time() - startTime)
 
