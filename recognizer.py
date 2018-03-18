@@ -2,6 +2,7 @@ import pyautogui as ui
 import time
 import numpy as np
 import cv2
+import cv2_utils as utils
 
 
 class Recognizer:
@@ -42,20 +43,21 @@ class Recognizer:
         # [[0, 50, 50], [1, 255, 255]] - red color example
         color = self.properties['color']
         self.image = self._extract_color(self.image, color)
-
         self.image = cv2.cvtColor(self.image, cv2.COLOR_HSV2BGR)
 
         self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
-        ret, self.image = cv2.threshold(self.image, 120, 255, cv2.THRESH_BINARY)
+        lower_threshold = self.properties['threshold_lower'] if 'threshold_lower' in self.properties else 100
+        ret, self.image = cv2.threshold(self.image, lower_threshold, 255, cv2.THRESH_BINARY)
+
         # (2, 2) - example of kernel(form) instance
-        form = self.properties['kernel'] if 'kernel' in self.properties else (1, 1)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, form)
-        erode = cv2.morphologyEx(self.image, cv2.MORPH_OPEN, kernel)
-        dilate = erode
-        dilate = np.float32(dilate)
-        corners = cv2.goodFeaturesToTrack(dilate, 200, 0.01, 15)
+        if self.properties['kernel'] is not None:
+            form = self.properties['kernel'] if 'kernel' in self.properties else (1, 1)
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, form)
+            self.image = cv2.morphologyEx(self.image, cv2.MORPH_OPEN, kernel)
+
+        self.image = np.float32(self.image)
+        corners = cv2.goodFeaturesToTrack(self.image, 200, 0.01, 15)
         corners = np.int0(corners)
-        print(corners)
         return corners
 
     # color is array from first vector is lower color component, second is upper color component

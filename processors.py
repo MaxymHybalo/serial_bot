@@ -3,6 +3,7 @@ import serial
 from click import Click
 from recognizer import Recognizer
 from wait import Wait
+import cv2_utils as utils
 
 PORT = 'COM4'
 BAUDRATE = 9600
@@ -13,6 +14,7 @@ class InstructionProcessor:
     def __init__(self, instructions):
         self.instructions = instructions
         self.serial = self._run_serial()
+        self.storage = dict()
 
     def process(self):
         command = 0
@@ -27,13 +29,19 @@ class InstructionProcessor:
                     center_click = Click(center['x'], center['y'])
                     center_click.make_click(self.serial)
                 if e.process == 'find':
-                    e.find()
+                    self.storage[str(e.properties['name'])] = e.find()
                 if e.process == 'recognize':
                     e.recognize()
             if type(e) == Wait:
                 e.delay()
         if self.serial is not None:
             self.serial.close()
+
+    def show_storage_at(self, image):
+        for k,v in self.storage.items():
+            image = utils.draw_corners(image, v)
+            print(k,':',v)
+        utils.show(image, name='results')
 
     @staticmethod
     def _run_serial():
