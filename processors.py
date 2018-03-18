@@ -24,7 +24,7 @@ class InstructionProcessor:
             if type(e) == Recognizer:
                 if e.process == 'center_on':
                     center = e.center_of()
-                    center_click = Click(center['x'], center['y'], delay=1)
+                    center_click = Click(center['x'], center['y'])
                     center_click.make_click(self.serial)
                 if e.process == 'find':
                     e.find()
