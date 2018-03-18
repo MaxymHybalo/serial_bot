@@ -14,7 +14,7 @@ if __name__ == '__main__':
     # print(buff.getBuffInstruction())
     # processInstruction(enhance.enhance())
     # processInstruction(buff.getBuffInstruction())
-    processor = InstructionProcessor(buff.getBuffInstruction())
+    processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
     # processor = InstructionProcessor(Click(500, 300))
     # img = ui.screenshot(region=(242, 32, 337, 480))
     kwargs = {
