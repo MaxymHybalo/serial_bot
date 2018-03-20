@@ -1,6 +1,6 @@
 import json
-from recognizer import Recognizer
-from click import Click
+from processes.recognizer import Recognizer
+from processes.click import Click
 
 
 class Configurator:

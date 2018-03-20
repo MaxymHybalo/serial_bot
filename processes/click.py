@@ -1,5 +1,5 @@
 import pyautogui as ui
-from wait import Wait
+from processes.wait import Wait
 
 
 CLICK = b'C'

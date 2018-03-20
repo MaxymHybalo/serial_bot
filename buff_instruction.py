@@ -1,6 +1,6 @@
-from configurator import Configurator
-from click import Click
-from wait import Wait
+from utils.configurator import Configurator
+from processes.click import Click
+from processes.wait import Wait
 
 CONFIG = 'buff_utils.json'
 

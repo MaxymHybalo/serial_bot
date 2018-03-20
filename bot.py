@@ -1,9 +1,7 @@
 import time
-import buff_instruction as buff
-import enhance
 
 from processors import InstructionProcessor
-from recognizer import Recognizer
+from processes.recognizer import Recognizer
 
 if __name__ == '__main__':
     startTime = time.time()

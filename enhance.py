@@ -1,5 +1,5 @@
-from click import Click
-from enhance_flow import EnhanceFlow
+from processes.click import Click
+from processes.enhance_flow import EnhanceFlow
 
 CUBE_X = 1
 CUBE_Y = 5

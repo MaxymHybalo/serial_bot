@@ -1,9 +1,9 @@
 import serial
 
-from click import Click
-from recognizer import Recognizer
-from wait import Wait
-import cv2_utils as utils
+from processes.click import Click
+from processes.recognizer import Recognizer
+from processes.wait import Wait
+from utils import cv2_utils as utils
 
 PORT = 'COM4'
 BAUDRATE = 9600
