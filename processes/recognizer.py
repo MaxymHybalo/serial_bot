@@ -38,7 +38,7 @@ class Recognizer:
             self.image = self.image[:, :, ::-1]
         if 'roi' in self.properties:
             x, y, w, h = self.properties['roi']
-            self.image = self.image[y:y+h, x:x+h]  # think about how to pass different locations
+            self.image = self.image[y:y+h, x:x+w]  # think about how to pass different locations
         # [[0, 50, 50], [1, 255, 255]] - red color example
         color = self.properties['color']
         self.image = self._extract_color(self.image, color)

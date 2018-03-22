@@ -3,6 +3,7 @@ import serial
 from processes.click import Click
 from processes.recognizer import Recognizer
 from processes.wait import Wait
+from processes.items_handler import ItemsHandler
 from utils import cv2_utils as utils
 
 PORT = 'COM4'
@@ -34,6 +35,10 @@ class InstructionProcessor:
                     e.recognize()
             if type(e) == Wait:
                 e.delay()
+            if type(e) == ItemsHandler:
+                e.set_items(self.storage[e.items_name])
+                e.set_grid(self.storage[e.grid_name])
+                e.handle()
         if self.serial is not None:
             self.serial.close()
 
