@@ -1,6 +1,9 @@
 import utils.cv2_utils as utils
 import numpy as np
 
+ITEM_WIDTH = 35
+ITEM_HEIGHT = 36
+
 class ItemsHandler:
 
     def __init__(self, items_name, grid_name):
@@ -17,11 +20,23 @@ class ItemsHandler:
         grid = self._make_items_grid()
         grid[:,0] += start_point[0]
         grid[:, 1] += start_point[1]
-        print(grid)
-        for g in grid:
-            image = utils.draw_rect(image, g, 35, 36);
-        # image = utils.draw_corners(image, grid, [0, 0, 255])
-        utils.show(image)
+        self.grid = grid
+        target = self.find_cells()
+        print(len(target))
+        # for g in target:
+        #     image = utils.draw_rect(image, g, 35, 36);
+        # utils.show(image)
+
+    def find_cells(self):
+        filled_cells = []
+        for g in self.grid:
+            in_dim = lambda d, point, accuracy: point < d < point + accuracy
+            detected = list(filter(
+                lambda x: in_dim(x[0], g[0], ITEM_WIDTH) and in_dim(x[1], g[1], ITEM_HEIGHT),
+                self.items.squeeze().tolist()))
+            if len(detected) > 0:
+                filled_cells.append(g.tolist())
+        return filled_cells
 
     def _find_grid_start_point(self):
         self.grid = self.grid.squeeze()

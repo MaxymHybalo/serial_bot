@@ -9,7 +9,7 @@ if __name__ == '__main__':
     # following object used as example for recognizer
     items_find_properties = {
         'roi': (0, 0, 330, 480),
-        'color': ((0, 50, 50), (1, 255, 255)),
+        'color': ((0, 50, 50), (2, 255, 255)),
         'kernel': (2, 2),
         'name': 'items_points',
         'threshold_lower': 120
