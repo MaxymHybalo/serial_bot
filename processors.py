@@ -6,7 +6,7 @@ from processes.wait import Wait
 from processes.items_handler import ItemsHandler
 from utils import cv2_utils as utils
 
-PORT = 'COM4'
+PORT = 'COM9'
 BAUDRATE = 9600
 
 

@@ -2,27 +2,6 @@ from processes.click import Click
 from processes.enhance_flow import EnhanceFlow
 from utils.configurator import Configurator
 
-# CUBE_X = 1
-# CUBE_Y = 5
-#
-# START_ITEM_X = 2
-# START_ITEM_Y = 5
-#
-# # now consistent  with grid
-# MAX_H_CELLS = 9
-# MAX_V_CELLS = 11
-#
-# ITEM_ENHANCE_CYCLE = 4
-#
-# START_POINT = (85, 85)
-# ENHANCE_POINT = (132, 693)
-# BREAK_POINT = (134, 628)
-# CLEAR_FIX = (260, 605)
-#
-# DELTA = 35
-
-# frequently used clicks
-
 
 class Enhancer:
 
@@ -64,8 +43,8 @@ class Enhancer:
 
     def _enhance_move(self, cell):
         return EnhanceFlow(
-            self._get_click(cell[0], cell[1]),
-            self._get_click(self.config['cube']['x'], self.config['cube']['y']),
+            Click(cell[0], cell[1]),
+            Click(self.config['cube']['x'], self.config['cube']['y']),
             self.clear_fix,
             self.enhance_point,
             self.break_point
