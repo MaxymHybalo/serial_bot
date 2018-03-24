@@ -19,5 +19,6 @@ pyserial==3.4
 python-dateutil==2.6.1
 PyTweening==1.0.3
 pytz==2018.3
+PyYAML==3.12
 six==1.11.0
 wrapt==1.10.11
