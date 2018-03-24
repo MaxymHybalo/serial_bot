@@ -1,4 +1,6 @@
 import json
+import yaml
+
 from processes.recognizer import Recognizer
 from processes.click import Click
 
@@ -47,3 +49,9 @@ class Configurator:
             )
         if process == 'click':
             return Click(cfg['x'], cfg['y'], delay=cfg['delay'])
+
+    def from_yaml(self):
+        data = {}
+        with open(self.filepath, 'r') as stream:
+            data= yaml.load(stream)
+        return data

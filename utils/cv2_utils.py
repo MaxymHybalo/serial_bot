@@ -9,8 +9,11 @@ def draw_corners(image, corners, color=255):
     if type(image) is str:
         image = get_image(image)
     for c in corners:
-        x, y = c.ravel()
-        cv2.circle(image, (x, y), 2, color, 1)
+        if type(c) not in [tuple, list]:
+            x, y = c.ravel()
+        else:
+            x, y = c
+        cv2.circle(image, (x, y), 2, color, 2)
     return image
 
 

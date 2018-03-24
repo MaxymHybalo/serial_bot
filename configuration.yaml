@@ -1,0 +1,36 @@
+enhance:
+  cube:
+    x: 1
+    y: 1
+  start_item:
+    x: 2
+    y: 1
+  cycles: 1
+#  scope property mean left minimal point for enhance and right maximum point
+  scope:
+    start:
+      - 3
+      - 3
+    end:
+      - 8
+      - 11
+  max:
+    horizontal: 9
+    vertical: 11
+  points:
+    start:
+      - 85
+      - 85
+    enhance:
+      - 132
+      - 693
+    break:
+      - 134
+      - 628
+    clear:
+      - 260
+      - 605
+    combination:
+      - 585
+      - 440
+  delta: 35

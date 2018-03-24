@@ -1,120 +1,138 @@
 from processes.click import Click
 from processes.enhance_flow import EnhanceFlow
+from utils.configurator import Configurator
 
-CUBE_X = 1
-CUBE_Y = 5
-
-START_ITEM_X = 2
-START_ITEM_Y = 5
-
-# now consistent  with grid
-MAX_H_CELLS = 9
-MAX_V_CELLS = 11
-
-ITEM_ENHANCE_CYCLE = 4
-
-START_POINT = (85, 85)
-ENHANCE_POINT = (132, 693)
-BREAK_POINT = (134, 628)
-CLEAR_FIX = (260, 605)
-
-DELTA = 35
+# CUBE_X = 1
+# CUBE_Y = 5
+#
+# START_ITEM_X = 2
+# START_ITEM_Y = 5
+#
+# # now consistent  with grid
+# MAX_H_CELLS = 9
+# MAX_V_CELLS = 11
+#
+# ITEM_ENHANCE_CYCLE = 4
+#
+# START_POINT = (85, 85)
+# ENHANCE_POINT = (132, 693)
+# BREAK_POINT = (134, 628)
+# CLEAR_FIX = (260, 605)
+#
+# DELTA = 35
 
 # frequently used clicks
-clear_fix = Click(CLEAR_FIX[0], CLEAR_FIX[1], process='dclick', delay=0)
-enhance_point = Click(ENHANCE_POINT[0], ENHANCE_POINT[1], process='dclick', delay=2)
-break_point = Click(BREAK_POINT[0], BREAK_POINT[1], process='dclick', delay=0)
-comb_ok = Click(585, 440)
-
-# enhancement _enhance_move for enhancing, _open_move - for open items
-def enhancement():
-    current_item_enhance = []
-    for line in range(START_ITEM_Y, MAX_V_CELLS + 1):
-        start_line = 1 if (len(current_item_enhance) > 0) else START_ITEM_X
-        for col in range(start_line, MAX_H_CELLS + 1):
-            current_item_enhance += _enhance_move(col, line).get_flow()
-    return current_item_enhance
 
 
-def combination():
-    return _combination_move((1, 11), (2, 11)).get_flow()
+class Enhancer:
+
+    def __init__(self, config):
+        self.config = Configurator(config)
+        self.config = self.config.from_yaml()
+        self.config = self.config['enhance']
+        points = self.config['points']
+        self.clear_fix = Click(points['clear'][0], points['clear'][1], process='dclick')
+        self.enhance_point = Click(points['enhance'][0], points['enhance'][1], process='dclick', delay=2)
+        self.break_point = Click(points['break'][0], points['break'][1], process='dclick')
+        self.comb_ok = Click(points['combination'][0], points['combination'][1])
+
+    # enhancement _enhance_move for enhancing, _open_move - for open items
+    def enhancement(self):
+        # firstly get enhancement matrix
+        matrix = self._slice_matrix_by_config()
+        current_item_enhance = []
+        for line in matrix:
+            for cell in line:
+                current_item_enhance += self._enhance_move(cell).get_flow()
+        return current_item_enhance
+
+    def _slice_matrix_by_config(self):
+        scope = self.config['scope']
+        max_x = self.config['max']['horizontal']
+        first_line = scope['start']
+        last_line = scope['end']
+        matrix = self.get_matrix()
+        result = []
+        first_line_points = matrix[first_line[1] - 1][first_line[0] - 1: max_x]  # get first line
+        result.append(first_line_points)
+        body = matrix[first_line[1]:last_line[1] - 1]
+        for b in body:
+            result.append(b)
+        last_line_points = matrix[last_line[1] - 1][:last_line[0]]
+        result.append(last_line_points)
+        return result
+
+    def _enhance_move(self, cell):
+        return EnhanceFlow(
+            self._get_click(cell[0], cell[1]),
+            self._get_click(self.config['cube']['x'], self.config['cube']['y']),
+            self.clear_fix,
+            self.enhance_point,
+            self.break_point
+        )
+
+    def enhance(self, flow):
+        loops = []
+        for i in range(self.config['cycles']):
+            loops += flow()
+        return loops
+
+    def _get_click(self, _x, _y):
+        values = self.get_matrix()
+        _x -= 1
+        _y -= 1
+        return Click(values[_y][_x][0], values[_y][_x][1], process='dclick')
+
+    def get_matrix(self):
+        values = []
+        for y in range(self.config['max']['vertical']):
+            values.append([])
+            for x in range(self.config['max']['horizontal']):
+                delta = self.config['delta']
+                start_point = self.config['points']['start']
+                calc_x = delta * x + start_point[0]
+                calc_y = delta * y + start_point[1]
+                values[y].append((calc_x, calc_y))
+        return values
+#
+# def combination():
+#     return _combination_move((1, 11), (2, 11)).get_flow()
+#
 
 
-def enhance(flow):
-    loops = []
-    for i in range(ITEM_ENHANCE_CYCLE):
-        loops += flow()
-    return loops
-
-
-def get_matrix():
-    values = []
-    for y in range(MAX_V_CELLS):
-        values.append([])
-        for x in range(MAX_H_CELLS):
-            calcX = DELTA * x + START_POINT[0]
-            calcY = DELTA * y + START_POINT[1]
-            values[y].append((calcX, calcY))
-    return values
-
-
-def _get_click(_x, _y):
-    values = get_matrix()
-    _x -= 1
-    _y -= 1
-    return Click(values[_y][_x][0], values[_y][_x][1], process='dclick', delay=0)
-
-
-def _enhance_move(x, y):
-    return EnhanceFlow(
-        _get_click(x, y),
-        _get_click(CUBE_X, CUBE_Y),
-        clear_fix,
-        enhance_point,
-        break_point
-    )
-
-def _open_move(x,y):
-    return EnhanceFlow(
-        _get_click(x, y),
-        _get_click(CUBE_X, CUBE_Y),
-        clear_fix,
-        enhance_point,
-        break_point
-    )
-
-# x & y is tuples of two combination el
-def _combination_move(x, y):
-    return EnhanceFlow(
-        _get_click(x[0], x[1]),
-        __select_count(2),
-        __select_count(8),
-        __select_count(0),
-        comb_ok,
-        _get_click(y[0], y[1]),
-        __select_count(7),
-        __select_count(0),
-        comb_ok,
-        enhance_point
-    )
-
-
-def __select_count(digit):
-    point = __combination_digit_grid(digit)
-    return Click(point[0], point[1])
-
-
-def __combination_digit_grid(digit):
-    one = [638, 422]
-    delta = 20
-    if digit > 3:
-        one[1] -= delta
-    if digit > 6:
-        one[1] -= delta
-    if digit in [8, 5, 2]:
-        one[0] += delta
-    if digit in [9, 6, 3]:
-        one[0] += delta
-    if digit == 0:
-        one = [658, 442]
-    return one
+#
+# # x & y is tuples of two combination el
+# def _combination_move(x, y):
+#     return EnhanceFlow(
+#         _get_click(x[0], x[1]),
+#         __select_count(2),
+#         __select_count(8),
+#         __select_count(0),
+#         comb_ok,
+#         _get_click(y[0], y[1]),
+#         __select_count(7),
+#         __select_count(0),
+#         comb_ok,
+#         enhance_point
+#     )
+#
+#
+# def __select_count(digit):
+#     point = __combination_digit_grid(digit)
+#     return Click(point[0], point[1])
+#
+#
+# def __combination_digit_grid(digit):
+#     one = [638, 422]
+#     delta = 20
+#     if digit > 3:
+#         one[1] -= delta
+#     if digit > 6:
+#         one[1] -= delta
+#     if digit in [8, 5, 2]:
+#         one[0] += delta
+#     if digit in [9, 6, 3]:
+#         one[0] += delta
+#     if digit == 0:
+#         one = [658, 442]
+#     return one
