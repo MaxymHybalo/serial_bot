@@ -52,9 +52,13 @@ class InstructionProcessor:
     def _run_serial():
         try:
             s = serial.Serial(PORT, BAUDRATE)
-            s.timeout = 0.1
+            s.timeout = 0.01
+            if s.is_open:
+                s.close()
             if not s.is_open:
+                print('[SERIAL OPENED at: ', PORT, ']')
                 s.open()
         except serial.SerialException:
+            print('Serial Error')
             s = None
         return s

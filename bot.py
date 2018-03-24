@@ -26,11 +26,10 @@ if __name__ == '__main__':
     # items = Recognizer('assets/inventory.JPG', None, **items_find_properties, process='find')
     # grid = Recognizer('assets/inventory.JPG', None, **grid_shape_find_properties, process='find')
     # handler = ItemsHandler(items_find_properties['name'], grid_shape_find_properties['name'])
-    process = InstructionProcessor([Click(199, 299),])
     # ENHANCEMENT
-    # enhancer = Enhancer('configuration.yaml')
-    # processor = InstructionProcessor(enhancer.enhance(enhancer.enhancement))
-    # processor.process()
+    enhancer = Enhancer('configuration.yaml')
+    processor = InstructionProcessor(enhancer.enhance(enhancer.enhancement))
+    processor.process()
 
     execTime = (time.time() - startTime)
 
