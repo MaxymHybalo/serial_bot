@@ -15,17 +15,17 @@ class ItemsHandler:
 
     # image params used only to tracking, in future will be removed
     def handle(self):
-        image = utils.draw_corners('assets/inventory.JPG', self.items, [255, 0, 100])
+        image = utils.draw_corners('assets/i5.JPG', self.items, [255, 0, 100])
         start_point = self._find_grid_start_point()
         grid = self._make_items_grid()
         grid[:,0] += start_point[0]
         grid[:, 1] += start_point[1]
         self.grid = grid
         target = self.find_cells()
-        print(len(target))
-        # for g in target:
-        #     image = utils.draw_rect(image, g, 35, 36);
-        # utils.show(image)
+        for g in target:
+            image = utils.draw_rect(image, g, 35, 36);
+        utils.show(image)
+        return target
 
     def find_cells(self):
         filled_cells = []
