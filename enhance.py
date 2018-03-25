@@ -9,11 +9,6 @@ class Enhancer:
         self.config = Configurator(config)
         self.config = self.config.from_yaml()
         self.config = self.config['enhance']
-        points = self.config['points']
-        self.clear_fix = Click(points['clear'][0], points['clear'][1], process='dclick')
-        self.enhance_point = Click(points['enhance'][0], points['enhance'][1], process='dclick', delay=2)
-        self.break_point = Click(points['break'][0], points['break'][1], process='dclick')
-        self.comb_ok = Click(points['combination'][0], points['combination'][1])
 
     # enhancement _enhance_move for enhancing, _open_move - for open items
     def enhancement(self):
@@ -42,13 +37,7 @@ class Enhancer:
         return result
 
     def _enhance_move(self, cell):
-        return EnhanceFlow(
-            Click(cell[0], cell[1]),
-            Click(self.config['cube']['x'], self.config['cube']['y']),
-            self.clear_fix,
-            self.enhance_point,
-            self.break_point
-        )
+        return EnhanceFlow(cell, self.config)
 
     def enhance(self, flow):
         loops = []
