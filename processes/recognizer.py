@@ -32,13 +32,14 @@ class Recognizer:
     def find(self):
         if type(self.image) is str:
             self.image = cv2.imread(self.image)
-        else:
+            if 'roi' in self.properties:
+                x, y, w, h = self.properties['roi']
+                self.image = self.image[y:y + h, x:x + w]  # think about how to pass different locations
+        elif self.image is None:
+            self.image = ui.screenshot(region=self.properties['roi'])
             # convert to cv2 format
             self.image = np.array(self.image)
             self.image = self.image[:, :, ::-1]
-        if 'roi' in self.properties:
-            x, y, w, h = self.properties['roi']
-            self.image = self.image[y:y+h, x:x+w]  # think about how to pass different locations
         # [[0, 50, 50], [1, 255, 255]] - red color example
         color = self.properties['color']
         self.image = self._extract_color(self.image, color)

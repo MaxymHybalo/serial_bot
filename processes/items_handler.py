@@ -15,8 +15,9 @@ class ItemsHandler:
 
     # image params used only to tracking, in future will be removed
     def handle(self):
-        image = utils.draw_corners('assets/i5.JPG', self.items, [255, 0, 100])
+        image = utils.draw_corners([80, 20, 340, 515], self.items, [255, 0, 100])
         start_point = self._find_grid_start_point()
+        print(start_point)
         grid = self._make_items_grid()
         grid[:,0] += start_point[0]
         grid[:, 1] += start_point[1]

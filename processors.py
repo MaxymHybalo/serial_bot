@@ -12,9 +12,9 @@ BAUDRATE = 9600
 
 class InstructionProcessor:
 
-    def __init__(self, instructions):
+    def __init__(self, instructions, serial=None):
         self.instructions = instructions
-        self.serial = self._run_serial()
+        self.serial = self._run_serial() if serial is None else serial
         self.storage = dict()
 
     def process(self):
@@ -38,15 +38,19 @@ class InstructionProcessor:
             if type(e) == ItemsHandler:
                 e.set_items(self.storage[e.items_name])
                 e.set_grid(self.storage[e.grid_name])
-                e.handle()
+                self.storage['targets'] = e.handle()
+
         if self.serial is not None:
             self.serial.close()
 
     def show_storage_at(self, image):
-        for k,v in self.storage.items():
+        for k, v in self.storage.items():
             image = utils.draw_corners(image, v)
-            print(k,':',v)
-        utils.show(image, name='results')
+            utils.show(image, name='results')
+
+    def show_storage(self):
+        for key, value in self.storage.items():
+            print(key, ' : ', value)
 
     @staticmethod
     def _run_serial():
