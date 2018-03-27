@@ -4,6 +4,7 @@ from enhance import Enhancer
 from processes.recognizer import Recognizer
 from processes.items_handler import ItemsHandler
 from processes.click import  Click
+from processes.nested_process import NestedProcessor
 import utils.cv2_utils as utils
 if __name__ == '__main__':
     startTime = time.time()
@@ -24,17 +25,18 @@ if __name__ == '__main__':
         'threshold_lower': 30,
         'name': 'grid_points'
     }
-    items = Recognizer(None, None, **items_find_properties, process='find')
-    grid = Recognizer(None, None, **grid_shape_find_properties, process='find')
-    handler = ItemsHandler(items_find_properties['name'], grid_shape_find_properties['name'])
-    processor = InstructionProcessor([items, grid, handler])
+    # items = Recognizer(None, None, **items_find_properties, process='find')
+    # grid = Recognizer(None, None, **grid_shape_find_properties, process='find')
+    # handler = ItemsHandler(items_find_properties['name'], grid_shape_find_properties['name'])
+    nested = NestedProcessor([Click(500, 500)])
+    processor = InstructionProcessor([Click(200, 200), nested])
     processor.process()
     targets = processor.storage['targets']
     # image = utils.get_image('assets/i5.JPG')
-    image = utils.get_image(roi)
-    for t in targets:
-        image = utils.draw_rect(image, t, 36,36)
-    utils.show(image)
+    # image = utils.get_image(roi)
+    # for t in targets:
+    #     image = utils.draw_rect(image, t, 36,36)
+    # utils.show(image)
     # ENHANCEMENT
     # enhancer = Enhancer('configuration.yaml')
     # processor = InstructionProcessor(enhancer.enhance(enhancer.enhancement))

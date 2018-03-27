@@ -4,6 +4,7 @@ from processes.click import Click
 from processes.recognizer import Recognizer
 from processes.wait import Wait
 from processes.items_handler import ItemsHandler
+from processes.nested_process import NestedProcessor
 from utils import cv2_utils as utils
 
 PORT = 'COM9'
@@ -12,13 +13,14 @@ BAUDRATE = 9600
 
 class InstructionProcessor:
 
-    def __init__(self, instructions, serial=None):
+    def __init__(self, instructions):
         self.instructions = instructions
-        self.serial = self._run_serial() if serial is None else serial
+        self.serial = self._run_serial()
         self.storage = dict()
 
     def process(self):
         command = 0
+        print(self.instructions)
         for e in self.instructions:
             command += 1
             print('[' + str(command) + '] ', e.process)
@@ -39,6 +41,9 @@ class InstructionProcessor:
                 e.set_items(self.storage[e.items_name])
                 e.set_grid(self.storage[e.grid_name])
                 self.storage['targets'] = e.handle()
+            if type(e) == NestedProcessor:
+                self.serial.close()
+                e.handle()
 
         if self.serial is not None:
             self.serial.close()
