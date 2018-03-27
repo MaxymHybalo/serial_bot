@@ -1,0 +1,21 @@
+    roi = [80, 20, 340, 515]
+    items_find_properties = {
+        'roi': roi,
+        'color': ((0, 150, 150), (3, 255, 255)),
+        'kernel': (2, 2),
+        'name': 'items_points',
+        'threshold_lower': 130
+    }
+    grid_shape_find_properties = {
+        'roi': roi,
+        'color': ((80, 69, 100), (94, 255, 255)),
+        'kernel': None,
+        'threshold_lower': 30,
+        'name': 'grid_points'
+    }
+items = Recognizer(None, None, **items_find_properties, process='find')
+grid = Recognizer(None, None, **grid_shape_find_properties, process='find')
+handler = ItemsHandler(items_find_properties['name'], grid_shape_find_properties['name'])
+
+
+
