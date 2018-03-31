@@ -42,9 +42,10 @@ class Enhancer:
         return result
 
     def _enhance_move(self, cell):
+        cube_click = self._get_click(self.config['cube']['x'], self.config['cube']['y'])
         return EnhanceFlow(
-            Click(cell[0], cell[1]),
-            Click(self.config['cube']['x'], self.config['cube']['y']),
+            Click(cell[0], cell[1], process='dclick'),
+            cube_click,
             self.clear_fix,
             self.enhance_point,
             self.break_point
