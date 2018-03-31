@@ -1,3 +1,4 @@
+# TODO move point such 'enhance' to global scope
 enhance:
   cube:
     x: 1
@@ -31,3 +32,22 @@ enhance:
       - 585
       - 440
   delta: 35
+combination:
+  cell_0:
+    - 1
+    - 1
+  cell_1:
+    - 1
+    - 1
+  one_point:
+    - 638
+    - 422
+  zero_point:
+    - 658
+    - 442
+  enhance:
+  - 132
+  - 693
+  dial_ok:
+    - 585
+    - 440

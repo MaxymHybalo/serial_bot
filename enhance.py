@@ -1,5 +1,6 @@
 from processes.click import Click
 from processes.enhance_flow import EnhanceFlow
+from processes.combination_flow import CombinationFlow
 from utils.configurator import Configurator
 
 
@@ -8,6 +9,7 @@ class Enhancer:
     def __init__(self, config):
         self.config = Configurator(config)
         self.config = self.config.from_yaml()
+        self.combination_cfg = self.config['combination']
         self.config = self.config['enhance']
 
     # enhancement _enhance_move for enhancing, _open_move - for open items
@@ -37,18 +39,7 @@ class Enhancer:
         return result
 
     def _enhance_move(self, cell):
-<<<<<<< HEAD
-        cube_click = self._get_click(self.config['cube']['x'], self.config['cube']['y'])
-        return EnhanceFlow(
-            Click(cell[0], cell[1], process='dclick'),
-            cube_click,
-            self.clear_fix,
-            self.enhance_point,
-            self.break_point
-        )
-=======
         return EnhanceFlow(cell, self.config)
->>>>>>> f198e75894716115fb04f542c0b69d19788adbda
 
     def enhance(self, flow):
         loops = []
@@ -73,45 +64,9 @@ class Enhancer:
                 calc_y = delta * y + start_point[1]
                 values[y].append((calc_x, calc_y))
         return values
-#
-# def combination():
-#     return _combination_move((1, 11), (2, 11)).get_flow()
-#
 
-
-#
-# # x & y is tuples of two combination el
-# def _combination_move(x, y):
-#     return EnhanceFlow(
-#         _get_click(x[0], x[1]),
-#         __select_count(2),
-#         __select_count(8),
-#         __select_count(0),
-#         comb_ok,
-#         _get_click(y[0], y[1]),
-#         __select_count(7),
-#         __select_count(0),
-#         comb_ok,
-#         enhance_point
-#     )
-#
-#
-# def __select_count(digit):
-#     point = __combination_digit_grid(digit)
-#     return Click(point[0], point[1])
-#
-#
-# def __combination_digit_grid(digit):
-#     one = [638, 422]
-#     delta = 20
-#     if digit > 3:
-#         one[1] -= delta
-#     if digit > 6:
-#         one[1] -= delta
-#     if digit in [8, 5, 2]:
-#         one[0] += delta
-#     if digit in [9, 6, 3]:
-#         one[0] += delta
-#     if digit == 0:
-#         one = [658, 442]
-#     return one
+    def combination(self):
+        matrix = self.get_matrix()
+        config = self.combination_cfg
+        cells = [matrix[config['cell_0']], matrix[config['cell_1']]]
+        return CombinationFlow(cells, self.combination_cfg).get_flow()
