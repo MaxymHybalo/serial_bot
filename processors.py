@@ -3,8 +3,7 @@ import serial
 from processes.click import Click
 from processes.recognizer import Recognizer
 from processes.wait import Wait
-from processes.items_handler import ItemsHandler
-from utils import cv2_utils as utils
+from processes.nested_process import NestedProcessor
 
 PORT = 'COM9'
 BAUDRATE = 9600
@@ -35,18 +34,16 @@ class InstructionProcessor:
                     e.recognize()
             if type(e) == Wait:
                 e.delay()
-            if type(e) == ItemsHandler:
-                e.set_items(self.storage[e.items_name])
-                e.set_grid(self.storage[e.grid_name])
+            if type(e) == NestedProcessor:
+                self.serial.close()
                 e.handle()
+
         if self.serial is not None:
             self.serial.close()
 
-    def show_storage_at(self, image):
-        for k,v in self.storage.items():
-            image = utils.draw_corners(image, v)
-            print(k,':',v)
-        utils.show(image, name='results')
+    def show_storage(self):
+        for key, value in self.storage.items():
+            print(key, ' : ', value)
 
     @staticmethod
     def _run_serial():
