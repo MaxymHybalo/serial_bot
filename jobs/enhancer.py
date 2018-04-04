@@ -1,5 +1,5 @@
 from utils.configurator import Configurator
-
+from jobs.grid_layout import Grid
 
 class Enhancer:
 
@@ -9,13 +9,13 @@ class Enhancer:
     def process(self):
         print(self.__grid_identifier())
         grid_image = self.__grid_identifier()
-
+        Grid(grid_image)
 
 
 
     def __grid_identifier(self):
         path = self.config['recognize']['prefix']['path']
-        prefix = self.config['recognize']['prefix']['path']
+        prefix = self.config['recognize']['prefix']['image_suffix']
         image = self.config['recognize']['grid']['image']
         return path + image + prefix
 

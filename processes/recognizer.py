@@ -14,14 +14,22 @@ class Recognizer:
         self.properties = kwargs
 
     def recognize(self):
-        value = ui.locateOnScreen(str(self.image), region=self.region)
+        if self.region is not None:
+            value = ui.locateOnScreen(str(self.image), region=self.region)
+        else:
+            value = ui.locateOnScreen(str(self.image))
         while value is None:
             time.sleep(self.wait)
-            value = ui.locateOnScreen(str(self.image), region=self.region)
+            if self.region is not None:
+                value = ui.locateOnScreen(str(self.image), region=self.region)
+            else:
+                print(self.image)
+                value = ui.locateOnScreen(str(self.image))
         return value
 
     def center_of(self):
         location = self.recognize()
+        print(location)
         return {
             'x': location[0] + location[2] / 2,
             'y': location[1] + location[3] / 2
