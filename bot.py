@@ -1,16 +1,17 @@
 import time
-from enhance import Enhancer
-from processors import InstructionProcessor
-import buff_instruction as buff
+from jobs.enhancer import Enhancer
+from processes.object_processor import ObjectProcessor
+
 if __name__ == '__main__':
     startTime = time.time()
-    # processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
+
+
 
     # ENHANCEMENT
-    enhancer = Enhancer('configuration.yaml')
-    processor = InstructionProcessor(enhancer.enhance(enhancer.combination))
+    enhancer = Enhancer('enhancer.config.v2.yaml')
+    processor = ObjectProcessor(enhancer)
 
-    processor.process()
+    processor.handle()
 
     execTime = (time.time() - startTime)
 

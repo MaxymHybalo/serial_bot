@@ -9,6 +9,7 @@ PORT = 'COM7'
 BAUDRATE = 9600
 
 
+# TODO make extension class for serial delivery
 class InstructionProcessor:
 
     def __init__(self, instructions):

@@ -1,0 +1,6 @@
+recognize:
+  prefix:
+    path: 'assets/'
+    image_suffix: '.png'
+  grid:
+    image: 'grid_identifier'
