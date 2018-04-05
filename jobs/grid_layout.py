@@ -11,5 +11,8 @@ class Grid:
         rect = Recognizer(self.identifier, None).recognize()
         start = (rect[0], rect[1] + rect[3])
         end = (rect[0] + rect[2], rect[1] + rect[3])
-        utils.log_image({'rect': start})
+        utils.log_image({
+            'rect': rect,
+            'circle': [start, end]
+            })
         return (start, end)

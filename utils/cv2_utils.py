@@ -4,6 +4,7 @@ import numpy as np
 
 COLOR = (0, 255, 0)
 THINKNESS = 2
+ITERABLE_TYPES = [list, tuple]
 
 def get_image(imagepath):
     if type(imagepath) is str:
@@ -25,15 +26,42 @@ def draw_corners(image, corners, color=255):
         cv2.circle(image, (x, y), 2, color, 2)
     return image
 
-
-def draw_rect(image, rect):
-    x, y, w, h = rect
-    cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THINKNESS)
+def _draw(image, shape, value):
+    if type(value) in ITERABLE_TYPES:
+        for v in value:
+            image = shape(image, value)
+    else:
+        image = shape(image, value)
     return image
 
-def draw_circle(image, circle):
-    x, y, r = circle
+# def draw_rect(image, rect):
+#     if type(rect) in ITERABLE_TYPES:
+#         for r in rect:
+#             x, y, w, h = r
+#             cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THINKNESS)
+#     else:
+#         x, y, w, h = rect
+#         cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THINKNESS)
+#     return image
+
+# def draw_circle(image, circle):
+#     if type(circle) in ITERABLE_TYPES:
+#         for c in circle:
+#             x, y, r = c
+#             cv2.circle(image, (x,y), r, COLOR, THINKNESS)
+#     else:
+#         x, y, r = circle
+#         cv2.circle(image, (x,y), r, COLOR, THINKNESS)
+#     return image
+
+def _rect(image, rect):
+    x, y, w, h = rect
+    cv2.rectangle(image, (x,y), (x+w, y+h), COLOR, THINKNESS)
+
+def _circle(image, circle):
+    x,y, r = circle
     cv2.circle(image, (x,y), r, COLOR, THINKNESS)
+
 
 def make_image(region=None):
     if region is None:
@@ -51,7 +79,7 @@ def log_image(**kwargs):
     image = make_image()
     for key, value in kwargs:
         if key is 'rect':
-            image = draw_rect(image, value)
+            image = _draw(image, _rect, value)
         if key is 'circle':
-            image = draw_circle
+            image = _draw(image, _circle, value)
     show(image)
