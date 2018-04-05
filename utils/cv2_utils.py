@@ -26,14 +26,19 @@ def draw_corners(image, corners, color=255):
     return image
 
 
-def draw_rect(image, point, w, h):
-    point = np.array(point)
-    cv2.rectangle(image, tuple(point.tolist()), (point[0] + w, point[1] + h), (0, 255, 179), 2);
+def draw_rect(image, rect):
+    x, y, w, h = rect
+    cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 179), 2)
     return image
 
 
+def make_image(region=None):
+    if region is None:
+        image = ui.screenshot('test.png')
+        return np.array(image)[:, :, ::-1].copy()
+
+
 def show(image, name='image'):
-    image = get_image(image)
     cv2.imshow(name, image)
     cv2.waitKey(0)
     cv2.destroyAllWindows()
