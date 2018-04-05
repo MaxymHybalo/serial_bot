@@ -4,6 +4,7 @@ import numpy as np
 import cv2
 import utils.cv2_utils as utils
 
+
 class Recognizer:
 
     def __init__(self, image, region, wait=1, process="recognize", **kwargs):
@@ -29,10 +30,10 @@ class Recognizer:
 
     def center_of(self):
         location = self.recognize()
-        print(location)
+        center = ui.center(location)
         return {
-            'x': location[0] + location[2] / 2,
-            'y': location[1] + location[3] / 2
+            'x': center[0],
+            'y': center[1]
         }
 
     # return array of found corners of objects filtered by specific color
