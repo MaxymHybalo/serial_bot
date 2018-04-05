@@ -6,7 +6,10 @@ class Grid:
     def __init__(self, identifier):
         self.identifier = identifier
         start = self.__find_grid_entry()
-        utils.log_image({'rect': start})
 
     def __find_grid_entry(self):
-        return Recognizer(self.identifier, None).recognize()
+        rect = Recognizer(self.identifier, None).recognize()
+        start = (rect[0], rect[1] + rect[3])
+        end = (rect[0] + rect[2], rect[1] + rect[3])
+        utils.log_image({'rect': start})
+        return (start, end)
