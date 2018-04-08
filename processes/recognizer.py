@@ -1,13 +1,14 @@
+import logging
 import pyautogui as ui
 import time
 import numpy as np
 import cv2
-import utils.cv2_utils as utils
 
 
 class Recognizer:
 
     def __init__(self, image, region, wait=1, process="recognize", **kwargs):
+        self.log = logging.getLogger('recognizer')
         self.image = image
         self.region = region
         self.wait = wait
@@ -15,6 +16,7 @@ class Recognizer:
         self.properties = kwargs
 
     def recognize(self):
+        self.log.debug('Try to recognize')
         if self.region is not None:
             value = ui.locateOnScreen(str(self.image), region=self.region)
         else:
@@ -24,8 +26,8 @@ class Recognizer:
             if self.region is not None:
                 value = ui.locateOnScreen(str(self.image), region=self.region)
             else:
-                print(self.image)
                 value = ui.locateOnScreen(str(self.image))
+        self.log.debug('Recognized: {0}'.format(value))
         return value
 
     def center_of(self):
