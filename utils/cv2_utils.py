@@ -3,8 +3,7 @@ import pyautogui as ui
 import numpy as np
 
 COLOR = (0, 255, 0)
-THICKNESS = 2
-ITERABLE_TYPES = [list, tuple]
+THICKNESS = 1
 
 
 def get_image(imagepath):
@@ -28,13 +27,9 @@ def draw_corners(image, corners, color=255):
     return image
 
 
-def _draw(image, shape, value):
-    if type(value) in ITERABLE_TYPES:
-        for v in value:
-            image = shape(image, value)
-    else:
-        image = shape(image, value)
-    return image
+# def _draw(image, shape, value):
+#     image = shape(image, value)
+#     return image
 
 # def draw_rect(image, rect):
 #     if type(rect) in ITERABLE_TYPES:
@@ -57,14 +52,24 @@ def _draw(image, shape, value):
 #     return image
 
 
-def _rect(image, rect):
-    x, y, w, h = rect
-    cv2.rectangle(image, (x,y), (x+w, y+h), COLOR, THICKNESS)
+def _rect(image, rect, iterate):
+    if iterate is 'rect':
+        for r in rect:
+            x, y, w, h = r
+            cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THICKNESS)
+    else:
+        x, y, w, h = rect
+        cv2.rectangle(image, (x, y), (x+w, y+h), COLOR, THICKNESS)
 
 
-def _circle(image, circle):
-    x,y, r = circle
-    cv2.circle(image, (x,y), r, COLOR, THICKNESS)
+def _circle(image, circle, iterate):
+    if iterate is 'circle':
+        for c in circle:
+            x, y, r = c
+            cv2.circle(image, (x, y), r, COLOR, THICKNESS)
+    else:
+        x, y, r = circle
+        cv2.circle(image, (x, y), r, COLOR, THICKNESS)
 
 
 def make_image(region=None):
@@ -81,9 +86,14 @@ def show(image, name='image'):
 
 def log_image(**kwargs):
     image = make_image()
-    for key, value in kwargs:
+    if 'multi' in kwargs:
+        iterate = kwargs['multi']
+        print('iterate', iterate)
+    else:
+        iterate = None
+    for key, value in kwargs.items():
         if key is 'rect':
-            image = _draw(image, _rect, value)
+            _rect(image, value, iterate)
         if key is 'circle':
-            image = _draw(image, _circle, value)
+            _circle(image, value, iterate)
     show(image)
