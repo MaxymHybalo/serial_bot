@@ -18,6 +18,7 @@ class ObjectProcessor:
     @staticmethod
     def _run_serial():
         try:
+            logging.critical('Trying connect to Arduino via {0}'.format(PORT))
             s = serial.Serial(PORT, BAUDRATE)
             s.timeout = 0.01
             if s.is_open:
