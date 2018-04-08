@@ -3,8 +3,9 @@ import pyautogui as ui
 import numpy as np
 
 COLOR = (0, 255, 0)
-THINKNESS = 2
+THICKNESS = 2
 ITERABLE_TYPES = [list, tuple]
+
 
 def get_image(imagepath):
     if type(imagepath) is str:
@@ -25,6 +26,7 @@ def draw_corners(image, corners, color=255):
             x, y = c
         cv2.circle(image, (x, y), 2, color, 2)
     return image
+
 
 def _draw(image, shape, value):
     if type(value) in ITERABLE_TYPES:
@@ -54,13 +56,15 @@ def _draw(image, shape, value):
 #         cv2.circle(image, (x,y), r, COLOR, THINKNESS)
 #     return image
 
+
 def _rect(image, rect):
     x, y, w, h = rect
-    cv2.rectangle(image, (x,y), (x+w, y+h), COLOR, THINKNESS)
+    cv2.rectangle(image, (x,y), (x+w, y+h), COLOR, THICKNESS)
+
 
 def _circle(image, circle):
     x,y, r = circle
-    cv2.circle(image, (x,y), r, COLOR, THINKNESS)
+    cv2.circle(image, (x,y), r, COLOR, THICKNESS)
 
 
 def make_image(region=None):
