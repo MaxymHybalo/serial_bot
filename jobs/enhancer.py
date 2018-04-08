@@ -10,7 +10,7 @@ class Enhancer:
 
     def process(self):
         grid_image = self.__grid_identifier()
-        Grid(grid_image)
+        Grid(grid_image, self.config['recognize']['grid']['size'])
 
     def __grid_identifier(self):
         path = self.config['recognize']['prefix']['path']
