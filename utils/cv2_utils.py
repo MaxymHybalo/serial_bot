@@ -52,7 +52,9 @@ def _circle(image, circle, iterate):
 def make_image(region=None):
     if region is None:
         image = ui.screenshot('test.png')
-        return np.array(image)[:, :, ::-1].copy()
+    else:
+        image = ui.screenshot(region=region)
+    return np.array(image)[:, :, ::-1].copy()
 
 
 def show(image, name='image'):
