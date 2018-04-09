@@ -16,9 +16,12 @@ class Enhancer:
         # End of inventory
         # TODO: In case when not exist any EOI
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
-        # centerMock = grid.get_center_of(5, 5)
+        cube = self.config['enhancement']['cube']
+        scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
+        # centerMock = grid.get_center_of(eoi[0], eoi[1])
         # point = [centerMock[0], centerMock[1], 4]
-        # utils.log_image(**{'circle': point})
+        # utils.log_image(**{'rect': cube})
+
 
     def _image_path(self, image):
         path = self.config['recognize']['prefix']['path']

@@ -17,6 +17,17 @@ class Grid:
         self.inventory_region = self.__inventory_region()
         self.matix_rects = self.generate_rectangles(self.start)
 
+    def slice_inventory(self, start, end):
+        start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
+        end_line = self.matix_rects[end[1] - 1][:end[0]]
+        body = self.matix_rects[start[1]:end[1]-1]
+        print(body)
+        body.append(start_line)
+        body.append(end_line)
+        self.__visualize_rect_matrix(body)
+        # utils.log_image(**{'rect': body, 'multi':'rect'})
+        return None
+
     def get_center_of(self, col, row):
         """
         :param col: column of item
@@ -35,11 +46,15 @@ class Grid:
         return self.matix_rects[row - 1][col - 1]
 
     def find_position(self, target):
+        """
+        :param target: path to item image
+        :return: col and row of found
+        """
         self.log.debug('Find target at inventory')
         rect = Recognizer(target, region=self.inventory_region).recognize()
         target_col = (rect[0] - self.start[0] - self.col + 2)/ITEM_WIDTH
         target_row = (rect[1] - self.start[1] - self.row)/(ITEM_HEIGHT + 2)
-        startless = [int(target_col), int(target_row)]
+        startless = [int(target_col) + 1, int(target_row) + 1]
         self.log.debug('Found target at position: {0}'.format(startless))
         return startless
 
