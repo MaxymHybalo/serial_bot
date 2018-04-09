@@ -14,7 +14,23 @@ class Grid:
         self.identifier = identifier
         self.col, self.row = size
         self.matix_rects = self.generate_rectangles()
-        self.__visualize_rect_matrix(self.matix_rects)
+
+    def get_center_of(self, col, row):
+        """
+        :param col: column of item
+        :param row: row of item
+        :return: center coordinates of item cell
+        """
+        item = self.matix_rects[row - 1][col - 1]
+        return int(item[0] + item[2] / 2), int(item[1] + item[3] / 2)
+
+    def get_region_of(self, col, row):
+        """
+        :param col: column of item position
+        :param row: row of item position
+        :return: rectangle of item area
+        """
+        return self.matix_rects[row - 1][col - 1]
 
     def generate_rectangles(self):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
