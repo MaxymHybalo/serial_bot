@@ -14,6 +14,7 @@ class Enhancer:
         grid_image = self._image_path(self.config['recognize']['grid']['image'])
         grid = Grid(grid_image, self.config['recognize']['grid']['size'])
         # End of inventory
+        # TODO: In case when not exist any EOI
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         # centerMock = grid.get_center_of(5, 5)
         # point = [centerMock[0], centerMock[1], 4]
