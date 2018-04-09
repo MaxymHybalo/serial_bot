@@ -13,7 +13,9 @@ class Grid:
         self.log = logging.getLogger('grid')
         self.identifier = identifier
         self.col, self.row = size
-        self.matix_rects = self.generate_rectangles()
+        self.start, _ = self.__find_grid_entry()
+        self.inventory_region = self.__inventory_region()
+        self.matix_rects = self.generate_rectangles(self.start)
 
     def get_center_of(self, col, row):
         """
@@ -32,9 +34,17 @@ class Grid:
         """
         return self.matix_rects[row - 1][col - 1]
 
-    def generate_rectangles(self):
+    def find_position(self, target):
+        self.log.debug('Find target at inventory')
+        rect = Recognizer(target, region=self.inventory_region).recognize()
+        target_col = (rect[0] - self.start[0] - self.col + 2)/ITEM_WIDTH
+        target_row = (rect[1] - self.start[1] - self.row)/(ITEM_HEIGHT + 2)
+        startless = [int(target_col), int(target_row)]
+        self.log.debug('Found target at position: {0}'.format(startless))
+        return startless
+
+    def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
-        start, _ = self.__find_grid_entry()
         start = [i + 1 for i in start]
         x, y, _ = start
         cols = [c for c in range(self.col)]
@@ -52,6 +62,10 @@ class Grid:
         end = (rect[0] + rect[2], rect[1] + rect[3], 3)
         self.log.debug('Found grid entry at: {0}'.format(start))
         return start, end
+
+    def __inventory_region(self):
+        return [self.start[0], self.start[1], self.col * (ITEM_WIDTH + 1) + self.col,
+         self.row * (ITEM_HEIGHT + 2) + self.row]
 
     def __visualize_rect_matrix(self, matrix):
         self.log.debug('Start visualizing')

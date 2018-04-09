@@ -7,3 +7,4 @@ recognize:
     size:
       - 9
       - 11
+    eoi: 'end_of_inventory'

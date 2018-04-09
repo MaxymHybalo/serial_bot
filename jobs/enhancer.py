@@ -11,17 +11,18 @@ class Enhancer:
         self.config = Configurator(configpath).from_yaml()
 
     def process(self):
-        grid_image = self.__grid_identifier()
+        grid_image = self._image_path(self.config['recognize']['grid']['image'])
         grid = Grid(grid_image, self.config['recognize']['grid']['size'])
+        # End of inventory
+        eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         # centerMock = grid.get_center_of(5, 5)
         # point = [centerMock[0], centerMock[1], 4]
         # utils.log_image(**{'circle': point})
 
-    def __grid_identifier(self):
+    def _image_path(self, image):
         path = self.config['recognize']['prefix']['path']
         prefix = self.config['recognize']['prefix']['image_suffix']
-        image = self.config['recognize']['grid']['image']
-        full_path = path + image + prefix
+        full_path = path + image+ prefix
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
 
