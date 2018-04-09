@@ -18,15 +18,11 @@ class Enhancer:
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         cube = self.config['enhancement']['cube']
         scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
-        # centerMock = grid.get_center_of(eoi[0], eoi[1])
-        # point = [centerMock[0], centerMock[1], 4]
-        # utils.log_image(**{'rect': cube})
-
 
     def _image_path(self, image):
         path = self.config['recognize']['prefix']['path']
         prefix = self.config['recognize']['prefix']['image_suffix']
-        full_path = path + image+ prefix
+        full_path = path + image + prefix
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
 

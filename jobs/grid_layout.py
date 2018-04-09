@@ -18,15 +18,14 @@ class Grid:
         self.matix_rects = self.generate_rectangles(self.start)
 
     def slice_inventory(self, start, end):
+        self.log.debug('Try slice scope {0}:{1}'.format(start, end))
         start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
-        end_line = self.matix_rects[end[1] - 1][:end[0]]
+        end_line = self.matix_rects[end[1] - 1][:end[0] - 1]
         body = self.matix_rects[start[1]:end[1]-1]
-        print(body)
         body.append(start_line)
         body.append(end_line)
-        self.__visualize_rect_matrix(body)
-        # utils.log_image(**{'rect': body, 'multi':'rect'})
-        return None
+        self.log.debug('Sliced scope')
+        return body
 
     def get_center_of(self, col, row):
         """
@@ -51,7 +50,7 @@ class Grid:
         :return: col and row of found
         """
         self.log.debug('Find target at inventory')
-        rect = Recognizer(target, region=self.inventory_region).recognize()
+        rect = Recognizer(target, self.inventory_region).recognize()
         target_col = (rect[0] - self.start[0] - self.col + 2)/ITEM_WIDTH
         target_row = (rect[1] - self.start[1] - self.row)/(ITEM_HEIGHT + 2)
         startless = [int(target_col) + 1, int(target_row) + 1]
@@ -79,8 +78,8 @@ class Grid:
         return start, end
 
     def __inventory_region(self):
-        return [self.start[0], self.start[1], self.col * (ITEM_WIDTH + 1) + self.col,
-         self.row * (ITEM_HEIGHT + 2) + self.row]
+        return [self.start[0] - 1, self.start[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
+         self.row * (ITEM_HEIGHT + 2) + self.row + 1]
 
     def __visualize_rect_matrix(self, matrix):
         self.log.debug('Start visualizing')

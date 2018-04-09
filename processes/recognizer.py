@@ -30,6 +30,11 @@ class Recognizer:
         self.log.debug('Recognized: {0}'.format(value))
         return value
 
+    def recognize_all(self):
+        if self.region is not None:
+            return ui.locateAllOnScreen(self.image, region=self.region)
+        return ui.locateAllOnScreen(self.image,)
+
     def center_of(self):
         location = self.recognize()
         center = ui.center(location)
