@@ -18,6 +18,14 @@ class Enhancer:
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         cube = self.config['enhancement']['cube']
         scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
+        self.__fetch_scope_mask(scope)
+        self.log.debug('End Enhancer process')
+
+    def __fetch_scope_mask(self, scope):
+        self.log.debug('Start fetching a images')
+        # TODO try get region of all inventory and then split to parts
+        result = list(map(lambda col: list(map(lambda cell: utils.make_image(region=cell), col)), scope))
+        self.log.debug('End fetching a images')
 
     def _image_path(self, image):
         path = self.config['recognize']['prefix']['path']

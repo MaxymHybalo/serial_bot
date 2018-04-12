@@ -21,8 +21,11 @@ class Grid:
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
         start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
         end_line = self.matix_rects[end[1] - 1][:end[0] - 1]
-        body = self.matix_rects[start[1]:end[1]-1]
+        body = list()
         body.append(start_line)
+        center = self.matix_rects[start[1]:end[1]-1]
+        for c in center:
+            body.append(c)
         body.append(end_line)
         self.log.debug('Sliced scope')
         return body

@@ -49,11 +49,14 @@ def _circle(image, circle, iterate):
         cv2.circle(image, (x, y), r, COLOR, THICKNESS)
 
 
-def make_image(region=None):
+def make_image(src=None, region=None):
     if region is None:
-        image = ui.screenshot('test.png')
+        image = ui.screenshot(src)
     else:
-        image = ui.screenshot(region=region)
+        if src is not None:
+            image = ui.screenshot(src, region=region)
+        else:
+            image = ui.screenshot(region=region)
     return np.array(image)[:, :, ::-1].copy()
 
 
