@@ -9,12 +9,13 @@ class Enhancer:
     def __init__(self, configpath):
         self.log = logging.getLogger('enhancer')
         self.config = Configurator(configpath).from_yaml()
+        # TODO think to make decorator for this option
         self.debug = self.config['debug']
         print(self.debug)
 
     def process(self):
         grid_image = self._image_path(self.config['recognize']['grid']['image'])
-        grid = Grid(grid_image, self.config['recognize']['grid']['size'])
+        grid = Grid(grid_image, self.config['recognize']['grid']['size'], debug=self.debug)
         # End of inventory
         # TODO: In case when not exist any EOI
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))

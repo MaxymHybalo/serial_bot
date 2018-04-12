@@ -8,6 +8,7 @@ THICKNESS = 1
 
 log = logging.getLogger('image-utils')
 
+
 def get_image(imagepath):
     if type(imagepath) is str:
         return cv2.imread(imagepath)
@@ -67,6 +68,11 @@ def show(image, name='image'):
 
 
 def log_image(**kwargs):
+    """
+    :param kwargs:
+        file - flag save image to file, value is string with file name
+    :return:
+    """
     image = make_image()
     if 'multi' in kwargs:
         iterate = kwargs['multi']
@@ -80,4 +86,8 @@ def log_image(**kwargs):
         if key is 'circle':
             log.debug('Draw circle: {0}'.format(value))
             _circle(image, value, iterate)
-    show(image)
+    if 'file' in kwargs:
+        log.debug('Save image to {0}'.format(kwargs['file']))
+        cv2.imwrite(kwargs['file'], image)
+    else:
+        show(image)

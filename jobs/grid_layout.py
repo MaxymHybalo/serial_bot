@@ -9,7 +9,8 @@ MARGIN = 1
 
 class Grid:
 
-    def __init__(self, identifier, size):
+    def __init__(self, identifier, size, debug=False):
+        self.debug = debug
         self.log = logging.getLogger('grid')
         self.identifier = identifier
         self.col, self.row = size
@@ -28,6 +29,8 @@ class Grid:
             body.append(c)
         body.append(end_line)
         self.log.debug('Sliced scope')
+        if self.debug:
+            self.write_2nd_rects(body, 'log/scope_of_inventory.png')
         return body
 
     def get_center_of(self, col, row):
@@ -71,6 +74,8 @@ class Grid:
                 map(lambda col: [x + (ITEM_WIDTH + MARGIN) * col + col, y + (ITEM_HEIGHT + MARGIN + 1) * row + row,
                                  ITEM_WIDTH + 1, ITEM_HEIGHT + 1], cols)), rows))
         self.log.debug('Rectangles generated')
+        if self.debug:
+            self.write_2nd_rects(rectangles, 'log/inventory_items_matrix.png')
         return rectangles
 
     def __find_grid_entry(self):
@@ -81,8 +86,12 @@ class Grid:
         return start, end
 
     def __inventory_region(self):
-        return [self.start[0] - 1, self.start[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
-         self.row * (ITEM_HEIGHT + 2) + self.row + 1]
+        self.log.debug('Find inventory region')
+        region = [self.start[0] - 1, self.start[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
+                  self.row * (ITEM_HEIGHT + 2) + self.row + 1]
+        if self.debug:
+            utils.log_image(**{'rect': region, 'file': 'log/inventory_region.png'})
+        return region
 
     def __visualize_rect_matrix(self, matrix):
         self.log.debug('Start visualizing')
@@ -91,3 +100,10 @@ class Grid:
             rects += row
         utils.log_image(**{'rect': rects, 'multi': 'rect'})
         self.log.debug('Visualization ended')
+
+    @staticmethod
+    def write_2nd_rects(matrix, filename):
+        rects = []
+        for r in matrix:
+            rects += r
+        utils.log_image(**{'rect': rects, 'multi': 'rect', 'file': filename})
