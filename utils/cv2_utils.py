@@ -1,10 +1,13 @@
+import logging
 import cv2
 import pyautogui as ui
 import numpy as np
 
 COLOR = (0, 255, 0)
-THINKNESS = 2
-ITERABLE_TYPES = [list, tuple]
+THICKNESS = 1
+
+log = logging.getLogger('image-utils')
+
 
 def get_image(imagepath):
     if type(imagepath) is str:
@@ -26,47 +29,36 @@ def draw_corners(image, corners, color=255):
         cv2.circle(image, (x, y), 2, color, 2)
     return image
 
-def _draw(image, shape, value):
-    if type(value) in ITERABLE_TYPES:
-        for v in value:
-            image = shape(image, value)
+
+def _rect(image, rect, iterate):
+    if iterate is 'rect':
+        for r in rect:
+            x, y, w, h = r
+            cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THICKNESS)
     else:
-        image = shape(image, value)
-    return image
-
-# def draw_rect(image, rect):
-#     if type(rect) in ITERABLE_TYPES:
-#         for r in rect:
-#             x, y, w, h = r
-#             cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THINKNESS)
-#     else:
-#         x, y, w, h = rect
-#         cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THINKNESS)
-#     return image
-
-# def draw_circle(image, circle):
-#     if type(circle) in ITERABLE_TYPES:
-#         for c in circle:
-#             x, y, r = c
-#             cv2.circle(image, (x,y), r, COLOR, THINKNESS)
-#     else:
-#         x, y, r = circle
-#         cv2.circle(image, (x,y), r, COLOR, THINKNESS)
-#     return image
-
-def _rect(image, rect):
-    x, y, w, h = rect
-    cv2.rectangle(image, (x,y), (x+w, y+h), COLOR, THINKNESS)
-
-def _circle(image, circle):
-    x,y, r = circle
-    cv2.circle(image, (x,y), r, COLOR, THINKNESS)
+        x, y, w, h = rect
+        cv2.rectangle(image, (x, y), (x+w, y+h), COLOR, THICKNESS)
 
 
-def make_image(region=None):
+def _circle(image, circle, iterate):
+    if iterate is 'circle':
+        for c in circle:
+            x, y, r = c
+            cv2.circle(image, (x, y), r, COLOR, THICKNESS)
+    else:
+        x, y, r = circle
+        cv2.circle(image, (x, y), r, COLOR, THICKNESS)
+
+
+def make_image(src=None, region=None):
     if region is None:
-        image = ui.screenshot('test.png')
-        return np.array(image)[:, :, ::-1].copy()
+        image = ui.screenshot(src)
+    else:
+        if src is not None:
+            image = ui.screenshot(src, region=region)
+        else:
+            image = ui.screenshot(region=region)
+    return np.array(image)[:, :, ::-1].copy()
 
 
 def show(image, name='image'):
@@ -76,10 +68,26 @@ def show(image, name='image'):
 
 
 def log_image(**kwargs):
+    """
+    :param kwargs:
+        file - flag save image to file, value is string with file name
+    :return:
+    """
     image = make_image()
-    for key, value in kwargs:
+    if 'multi' in kwargs:
+        iterate = kwargs['multi']
+        log.debug('Multiple {0}\'s'.format(iterate))
+    else:
+        iterate = None
+    for key, value in kwargs.items():
         if key is 'rect':
-            image = _draw(image, _rect, value)
+            log.debug('Draw rectangle: {0}'.format(value))
+            _rect(image, value, iterate)
         if key is 'circle':
-            image = _draw(image, _circle, value)
-    show(image)
+            log.debug('Draw circle: {0}'.format(value))
+            _circle(image, value, iterate)
+    if 'file' in kwargs:
+        log.debug('Save image to {0}'.format(kwargs['file']))
+        cv2.imwrite(kwargs['file'], image)
+    else:
+        show(image)
