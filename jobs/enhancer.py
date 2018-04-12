@@ -9,6 +9,8 @@ class Enhancer:
     def __init__(self, configpath):
         self.log = logging.getLogger('enhancer')
         self.config = Configurator(configpath).from_yaml()
+        self.debug = self.config['debug']
+        print(self.debug)
 
     def process(self):
         grid_image = self._image_path(self.config['recognize']['grid']['image'])

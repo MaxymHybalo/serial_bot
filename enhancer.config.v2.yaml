@@ -13,3 +13,5 @@ recognize:
       - 9
       - 11
     eoi: 'end_of_inventory'
+# make some images
+debug: true
