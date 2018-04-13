@@ -21,10 +21,10 @@ class Grid:
     def slice_inventory(self, start, end):
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
         start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
-        end_line = self.matix_rects[end[1] - 1][:end[0] - 1]
+        end_line = self.matix_rects[end[1]][:end[0]]
         body = list()
         body.append(start_line)
-        center = self.matix_rects[start[1]:end[1]-1]
+        center = self.matix_rects[start[1]:end[1]]
         for c in center:
             body.append(c)
         body.append(end_line)
@@ -56,12 +56,15 @@ class Grid:
         :return: col and row of found
         """
         self.log.debug('Find target at inventory')
-        rect = Recognizer(target, self.inventory_region).recognize()
-        target_col = (rect[0] - self.start[0] - self.col + 2)/ITEM_WIDTH
-        target_row = (rect[1] - self.start[1] - self.row)/(ITEM_HEIGHT + 2)
-        startless = [int(target_col) + 1, int(target_row) + 1]
-        self.log.debug('Found target at position: {0}'.format(startless))
-        return startless
+        rect = list(Recognizer(target, self.inventory_region).recognize())
+        rect[0], rect[1], rect[2], rect[3] = rect[0] - 2, rect[1] - 2, ITEM_WIDTH + 1, ITEM_HEIGHT + 1
+        for row in self.matix_rects:
+            if rect in row:
+                x, y = row.index(list(rect)), self.matix_rects.index(row)
+        self.log.debug('Found target at position: {0}'.format([x, y]))
+        if self.debug:
+            self.write_2nd_rects(self.matix_rects[y][x], 'log/eoi.png', singlerect=True)
+        return x, y
 
     def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
@@ -102,8 +105,11 @@ class Grid:
         self.log.debug('Visualization ended')
 
     @staticmethod
-    def write_2nd_rects(matrix, filename):
-        rects = []
-        for r in matrix:
-            rects += r
-        utils.log_image(**{'rect': rects, 'multi': 'rect', 'file': filename})
+    def write_2nd_rects(matrix, filename, singlerect=False):
+        if singlerect:
+            utils.log_image(**{'rect': matrix, 'file': filename})
+        else:
+            rects = []
+            for r in matrix:
+                rects += r
+            utils.log_image(**{'rect': rects, 'multi': 'rect', 'file': filename})
