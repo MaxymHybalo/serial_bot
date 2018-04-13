@@ -63,7 +63,7 @@ class Grid:
                 x, y = row.index(list(rect)), self.matix_rects.index(row)
         self.log.debug('Found target at position: {0}'.format([x, y]))
         if self.debug:
-            self.write_2nd_rects(self.matix_rects[y][x], 'log/eoi.png', singlerect=True)
+            self.write_2nd_rects(self.matix_rects[y][x], 'log/eoi.png', single_rect=True)
         return x, y
 
     def generate_rectangles(self, start):
@@ -105,8 +105,8 @@ class Grid:
         self.log.debug('Visualization ended')
 
     @staticmethod
-    def write_2nd_rects(matrix, filename, singlerect=False):
-        if singlerect:
+    def write_2nd_rects(matrix, filename, single_rect=False):
+        if single_rect:
             utils.log_image(**{'rect': matrix, 'file': filename})
         else:
             rects = []

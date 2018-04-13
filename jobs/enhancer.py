@@ -15,7 +15,7 @@ class Enhancer:
     def process(self):
         grid_image = self._image_path(self.config['recognize']['grid']['image'])
         grid = Grid(grid_image, self.config['recognize']['grid']['size'], debug=self.debug)
-        # End of inventory
+        # EOI: End Of Inventory
         # TODO: In case when not exist any EOI
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         cube = self.config['enhancement']['cube']
