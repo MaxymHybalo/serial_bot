@@ -16,9 +16,10 @@ class Drawer:
         self.image = utils.make_image()
         for s in self.shapes:
             s.draw(self.image)
-        x, y, w, h = self.region
-        roi = self.image[y:y+h, x:x+w]
-        utils.show(roi)
+        if self.region:
+            x, y, w, h = self.region
+            self.image = self.image[y:y+h, x:x+w]
+        utils.show(self.image)
 
     def save(self):
         self.log.debug('Save image to {0}'.format(self.file))
