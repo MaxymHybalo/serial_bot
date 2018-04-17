@@ -2,6 +2,9 @@ import logging
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
+from utils.drawer import Drawer
+from shapes.shape import Shape
+from shapes.rect import Rect
 
 
 class Enhancer:
@@ -21,6 +24,7 @@ class Enhancer:
         cube = self.config['enhancement']['cube']
         scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
         self.__fetch_scope_mask(scope)
+        self.__draw_point(grid.get_region_of(cube[0], cube[1]), grid.get_region_of(eoi[0] + 1, eoi[1] + 1), scope)
         self.log.debug('End Enhancer process')
 
     def __fetch_scope_mask(self, scope):
@@ -36,4 +40,16 @@ class Enhancer:
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
 
-
+    def __draw_point(self, cube, eoi, scope):
+        self.log.debug('Draw global picture')
+        cube = Rect(cube, Shape((41, 103, 248), 1))
+        eoi = Rect(eoi, Shape((236, 221, 87), 1))
+        body = []
+        for row in scope:
+            for cell in row:
+                body.append(Rect(cell, Shape((115, 228, 95), 1)))
+        body.append(cube)
+        body.append(eoi)
+        drawer = Drawer(body, 'log/all_in_one.png')
+        drawer.draw()
+        drawer.save()
