@@ -63,6 +63,8 @@ def make_image(src=None, region=None):
 
 def show(image, name='image'):
     cv2.imshow(name, image)
+    width, height = ui.size()
+    cv2.moveWindow(name, int(width / 2), int(height / 2))
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
