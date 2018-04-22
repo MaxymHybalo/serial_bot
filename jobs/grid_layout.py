@@ -56,7 +56,7 @@ class Grid:
         :return: col and row of found
         """
         self.log.debug('Find target at inventory')
-        rect = list(Recognizer(target, self.inventory_region).recognize())
+        rect = list(Recognizer(target, self.inventory_region, wait=0).recognize())
         rect[0], rect[1], rect[2], rect[3] = rect[0] - 2, rect[1] - 2, ITEM_WIDTH + 1, ITEM_HEIGHT + 1
         for row in self.matix_rects:
             if rect in row:
@@ -82,7 +82,7 @@ class Grid:
         return rectangles
 
     def __find_grid_entry(self):
-        rect = Recognizer(self.identifier, None).recognize()
+        rect = Recognizer(self.identifier, None, wait=0).recognize()
         start = (rect[0], rect[1] + rect[3], 3)
         end = (rect[0] + rect[2], rect[1] + rect[3], 3)
         self.log.debug('Found grid entry at: {0}'.format(start))

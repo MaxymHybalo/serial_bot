@@ -17,16 +17,10 @@ class Recognizer:
 
     def recognize(self):
         self.log.debug('Try to recognize')
-        if self.region is not None:
-            value = ui.locateOnScreen(str(self.image), region=self.region)
-        else:
-            value = ui.locateOnScreen(str(self.image))
+        value = ui.locateOnScreen(str(self.image), region=self.region)
         while value is None:
             time.sleep(self.wait)
-            if self.region is not None:
-                value = ui.locateOnScreen(str(self.image), region=self.region)
-            else:
-                value = ui.locateOnScreen(str(self.image))
+            value = ui.locateOnScreen(str(self.image), region=self.region)
         self.log.debug('Recognized: {0}'.format(value))
         return value
 
