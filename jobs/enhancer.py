@@ -15,6 +15,17 @@ class Enhancer:
         # TODO think to make decorator for this option
         self.debug = self.config['debug']
 
+    def write_state(get_state):
+        def wrapper(self):
+            draw = self.__draw_point
+            grid, scope, cube, eoi = get_state(self)
+            cube_roi = grid.get_region_of(cube[0], cube[1])
+            eoi_roi = grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
+            draw(cube_roi, eoi_roi, scope, grid.inventory_region)
+            self.log.debug('Draw state')
+        return wrapper
+
+    @write_state
     def process(self):
         grid_image = self._image_path(self.config['recognize']['grid']['image'])
         grid = Grid(grid_image, self.config['recognize']['grid']['size'], debug=self.debug)
@@ -23,13 +34,8 @@ class Enhancer:
         cube = self.config['enhancement']['cube']
         scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
         self.__fetch_scope_mask(scope)
-        if eoi:
-            self.__draw_point(grid.get_region_of(cube[0], cube[1]), grid.get_region_of(eoi[0] + 1, eoi[1] + 1), scope,
-                              grid.inventory_region)
-        else:
-            self.__draw_point(grid.get_region_of(cube[0], cube[1]), eoi, scope,
-                              grid.inventory_region)
         self.log.debug('End Enhancer process')
+        return grid, scope, cube, eoi
 
     def __fetch_scope_mask(self, scope):
         self.log.debug('Start fetching a images')
@@ -57,3 +63,6 @@ class Enhancer:
         drawer = Drawer(body, 'log/all_in_one.png', roi)
         drawer.draw()
         drawer.save()
+
+
+
