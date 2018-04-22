@@ -7,6 +7,7 @@ ITEM_HEIGHT = 33
 MARGIN = 1
 
 
+# todo change debug to image log, decorate it
 class Grid:
 
     def __init__(self, identifier, size, debug=False):
