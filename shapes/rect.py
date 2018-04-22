@@ -16,5 +16,6 @@ class Rect(Shape):
             super().__init__(shape.color, shape.thinkness)
 
     def draw(self, image):
-        x, y, w, h = self.rect
-        cv2.rectangle(image, (x, y), (x + w, y + h), self.color, self.thinkness)
+        if self.rect:
+            x, y, w, h = self.rect
+            cv2.rectangle(image, (x, y), (x + w, y + h), self.color, self.thinkness)

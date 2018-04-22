@@ -15,9 +15,12 @@ class Recognizer:
         self.process = process
         self.properties = kwargs
 
-    def recognize(self):
+    def recognize(self, once=False):
         self.log.debug('Try to recognize')
         value = ui.locateOnScreen(str(self.image), region=self.region)
+        if once:
+            self.log.debug('Recognized once: {0}'.format(value))
+            return value
         while value is None:
             time.sleep(self.wait)
             value = ui.locateOnScreen(str(self.image), region=self.region)

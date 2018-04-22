@@ -21,12 +21,14 @@ class Grid:
     def slice_inventory(self, start, end):
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
         start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
-        end_line = self.matix_rects[end[1]][:end[0]]
+        if not end:
+            end = [9, 10]
         body = list()
         body.append(start_line)
         center = self.matix_rects[start[1]:end[1]]
         for c in center:
             body.append(c)
+        end_line = self.matix_rects[end[1]][:end[0]]
         body.append(end_line)
         self.log.debug('Sliced scope')
         if self.debug:
@@ -56,7 +58,10 @@ class Grid:
         :return: col and row of found
         """
         self.log.debug('Find target at inventory')
-        rect = list(Recognizer(target, self.inventory_region, wait=0).recognize())
+        insertion = Recognizer(target, self.inventory_region, wait=0).recognize(once=True)
+        if insertion is None:
+            return None
+        rect = list(insertion)
         rect[0], rect[1], rect[2], rect[3] = rect[0] - 2, rect[1] - 2, ITEM_WIDTH + 1, ITEM_HEIGHT + 1
         for row in self.matix_rects:
             if rect in row:

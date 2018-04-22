@@ -19,13 +19,16 @@ class Enhancer:
         grid_image = self._image_path(self.config['recognize']['grid']['image'])
         grid = Grid(grid_image, self.config['recognize']['grid']['size'], debug=self.debug)
         # EOI: End Of Inventory
-        # TODO: In case when not exist any EOI
         eoi = grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
         cube = self.config['enhancement']['cube']
         scope = grid.slice_inventory([cube[0] + 1, cube[1]], eoi)
         self.__fetch_scope_mask(scope)
-        self.__draw_point(grid.get_region_of(cube[0], cube[1]), grid.get_region_of(eoi[0] + 1, eoi[1] + 1), scope,
-                          grid.inventory_region)
+        if eoi:
+            self.__draw_point(grid.get_region_of(cube[0], cube[1]), grid.get_region_of(eoi[0] + 1, eoi[1] + 1), scope,
+                              grid.inventory_region)
+        else:
+            self.__draw_point(grid.get_region_of(cube[0], cube[1]), eoi, scope,
+                              grid.inventory_region)
         self.log.debug('End Enhancer process')
 
     def __fetch_scope_mask(self, scope):
