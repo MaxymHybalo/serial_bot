@@ -1,7 +1,7 @@
 import serial
 import logging
 
-PORT = 'COM7'
+PORT = 'COM9'
 BAUDRATE = 9600
 
 

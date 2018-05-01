@@ -13,5 +13,9 @@ recognize:
       - 9
       - 11
     eoi: 'end_of_inventory'
+  enhance:
+    menu: 'enhance_menu'
+    slot: 'enhance_main_slot'
+    make: 'make_enhance'
 # make some images
 debug: true

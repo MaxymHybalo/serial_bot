@@ -1,10 +1,11 @@
 import logging
 import time
+import pyautogui as ui
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
 from utils.drawer import draw_state
-
+from processes.click import Click
 
 # todo make test for changes at inventory and highlight it
 class Enhancer:
@@ -25,7 +26,7 @@ class Enhancer:
 
     def process(self, serial):
         # grid, scope, cube, eoi = self.state()
-        self.enhance()
+        self.enhance(serial)
         self.log.debug('End Enhancer process')
 
 
@@ -41,9 +42,19 @@ class Enhancer:
         self.log.debug('Inventory state proceed')
         return grid, scope, cube, eoi
 
-    def enhance(self):
+    def enhance(self, serial):
         grid, scope, cube, eoi = self.state()
         before = self.__fetch_scope_mask(scope)
+        menu = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['menu']))
+        menu = Click(menu[0], menu[1])
+        main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
+        main_slot = Click(main_slot[0], main_slot[1], process='dlick')
+        make = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['make']))
+        make = Click(make[0], make[1], delay=2)
+        self.log.debug('End base point init')
+        print(cube)
+        # menu.make_click(serial)
+        print('MAIN: ', menu)
         # time.sleep(4)
         # grid, scope, cube, eoi = self.state()
         # after = self.__fetch_scope_mask(scope)

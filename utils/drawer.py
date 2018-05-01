@@ -21,7 +21,7 @@ class Drawer:
         if self.region:
             x, y, w, h = self.region
             self.image = self.image[y:y+h, x:x+w]
-        utils.show(self.image)
+        # utils.show(self.image)
 
     def save(self):
         self.log.debug('Save image to {0}'.format(self.file))
