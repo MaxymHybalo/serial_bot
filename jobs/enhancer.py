@@ -1,5 +1,6 @@
 import logging
 import time
+import numpy as np
 import pyautogui as ui
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
@@ -55,18 +56,23 @@ class Enhancer:
         cube = Rect(grid.get_region_of(cube[0], cube[1])).click()
         self.log.debug('End base point init')
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        for row_id, row in enumerate(scope):
-            for col_id, col in enumerate(row):
-                self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
-                item = Rect(col).click()
-                item.make_click(serial)
-                cube.make_click(serial)
-                make.make_click(serial)
-                main_slot.make_click(serial)
+        print("|||||||||||||||||||||||||")
+        time.sleep(2)
+        # TODO uncomment when compare ends
+        # for row_id, row in enumerate(scope):
+        #     for col_id, col in enumerate(row):
+        #         self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
+        #         item = Rect(col).click()
+        #         item.make_click(serial)
+        #         cube.make_click(serial)
+        #         make.make_click(serial)
+        #         main_slot.make_click(serial)
 
         # menu.make_click(serial)
-        # grid, scope, cube, eoi = self.state()
-        # after = self.__fetch_scope_mask(scope)
+        grid, scope, cube, eoi = self.state()
+        after = self.__fetch_scope_mask(scope)
+        broken = find_subtraction(before, after)
+        self.log.debug('Broken items: {0}'.format(broken))
 
     def __fetch_scope_mask(self, scope):
         self.log.debug('Start fetching a images')
@@ -82,3 +88,11 @@ class Enhancer:
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
 
+
+def find_subtraction(before, after):
+    changed = []
+    for row_id, row in enumerate(before):
+        for col_id, col in enumerate(row):
+            if not np.array_equal(after[row_id][col_id], col):
+                changed.append([row_id, col_id])
+    return changed
