@@ -6,6 +6,7 @@ from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
 from utils.drawer import draw_state
 from processes.click import Click
+from shapes.rect import Rect
 
 # todo make test for changes at inventory and highlight it
 class Enhancer:
@@ -51,11 +52,19 @@ class Enhancer:
         main_slot = Click(main_slot[0], main_slot[1], process='dlick')
         make = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['make']))
         make = Click(make[0], make[1], delay=2)
+        cube = Rect(grid.get_region_of(cube[0], cube[1])).click()
         self.log.debug('End base point init')
-        print(cube)
+        self.log.info('Start enhancing from {0}'.format(len(scope)))
+        for row_id, row in enumerate(scope):
+            for col_id, col in enumerate(row):
+                self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
+                item = Rect(col).click()
+                item.make_click(serial)
+                cube.make_click(serial)
+                make.make_click(serial)
+                main_slot.make_click(serial)
+
         # menu.make_click(serial)
-        print('MAIN: ', menu)
-        # time.sleep(4)
         # grid, scope, cube, eoi = self.state()
         # after = self.__fetch_scope_mask(scope)
 
@@ -72,6 +81,4 @@ class Enhancer:
         full_path = path + image + prefix
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
-
-
 

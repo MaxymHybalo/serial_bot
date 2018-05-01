@@ -21,20 +21,20 @@ class Grid:
 
     def slice_inventory(self, start, end):
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
+        slice = list()
         start_line = self.matix_rects[start[1] - 1][start[0] - 1:self.col]
-        if not end:
-            end = [9, 10]
-        body = list()
-        body.append(start_line)
-        center = self.matix_rects[start[1]:end[1]]
+        slice.append(start_line)
+        center = []
+        if end:
+            end_line = self.matix_rects[end[1]][:end[0]]
+            center = self.matix_rects[start[1]:end[1]]
+            slice.append(end_line)
+        else:
+            center = self.matix_rects[start[1]:11]
         for c in center:
-            body.append(c)
-        end_line = self.matix_rects[end[1]][:end[0]]
-        body.append(end_line)
-        self.log.debug('Sliced scope')
-        if self.debug:
-            self.write_2nd_rects(body, 'log/scope_of_inventory.png')
-        return body
+            slice.append(c)
+        self.write_2nd_rects(slice, 'testslice.png')
+        return slice
 
     def get_center_of(self, col, row):
         """

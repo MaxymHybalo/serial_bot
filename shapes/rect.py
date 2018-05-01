@@ -1,4 +1,5 @@
 from shapes.shape import Shape
+from processes.click import Click
 import cv2
 
 
@@ -14,6 +15,10 @@ class Rect(Shape):
             super().__init__(DEFAULT_COLOR, DEFAULT_THINKNESS)
         else:
             super().__init__(shape.color, shape.thinkness)
+
+    def click(self):
+        x, y, w, h = self.rect
+        return Click(x+w/2, y+h/2, process='dclick')
 
     def draw(self, image):
         if self.rect:
