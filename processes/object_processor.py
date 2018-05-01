@@ -13,7 +13,7 @@ class ObjectProcessor:
         logging.getLogger()
 
     def handle(self):
-        self.target.process()
+        self.target.process(self.serial)
 
     @staticmethod
     def _run_serial():
