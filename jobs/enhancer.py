@@ -50,23 +50,21 @@ class Enhancer:
         menu = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['menu']))
         menu = Click(menu[0], menu[1])
         main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
-        main_slot = Click(main_slot[0], main_slot[1], process='dlick')
+        main_slot = Click(main_slot[0], main_slot[1], process='dclick')
         make = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['make']))
         make = Click(make[0], make[1], delay=2)
         cube = Rect(grid.get_region_of(cube[0], cube[1])).click()
         self.log.debug('End base point init')
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        print("|||||||||||||||||||||||||")
-        time.sleep(2)
         # TODO uncomment when compare ends
-        # for row_id, row in enumerate(scope):
-        #     for col_id, col in enumerate(row):
-        #         self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
-        #         item = Rect(col).click()
-        #         item.make_click(serial)
-        #         cube.make_click(serial)
-        #         make.make_click(serial)
-        #         main_slot.make_click(serial)
+        for row_id, row in enumerate(scope):
+            for col_id, col in enumerate(row):
+                self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
+                item = Rect(col).click()
+                item.make_click(serial)
+                cube.make_click(serial)
+                make.make_click(serial)
+                main_slot.make_click(serial)
 
         # menu.make_click(serial)
         grid, scope, cube, eoi = self.state()
