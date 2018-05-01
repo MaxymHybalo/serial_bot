@@ -8,7 +8,7 @@ def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG,
                         format=log_format,
-                        datefmt='%d-%m %H:%M')
+                        datefmt='%d-%m %H:%M:%S')
 
 
 if __name__ == '__main__':
