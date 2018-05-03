@@ -15,6 +15,7 @@ class Enhancer:
     def __init__(self, configpath):
         self.log = logging.getLogger('enhancer')
         self.config = Configurator(configpath).from_yaml()
+        self.serial = None
 
     def write_state(state):
         def wrapper(self):
@@ -27,8 +28,8 @@ class Enhancer:
         return wrapper
 
     def process(self, serial):
-        # grid, scope, cube, eoi = self.state()
-        self.enhance(serial)
+        self.serial = serial
+        self.enhance()
         self.log.debug('End Enhancer process')
 
 
@@ -44,11 +45,23 @@ class Enhancer:
         self.log.debug('Inventory state proceed')
         return grid, scope, cube, eoi
 
-    def enhance(self, serial):
+    def enhance(self):
         grid, scope, cube, eoi = self.state()
+        # menu = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['menu']))
+        # menu = Click(menu[0], menu[1])
         before = self.__fetch_scope_mask(scope)
-        menu = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['menu']))
-        menu = Click(menu[0], menu[1])
+        self.do_flow(scope, cube, grid)
+        grid, scope, cube, eoi = self.state()
+        after = self.__fetch_scope_mask(scope)
+        broken = find_subtraction(before, after)
+        self.log.debug('Broken items: {0}'.format(broken))
+        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
+        cube_roi = grid.get_region_of(cube[0], cube[1])
+        eoi_roi = grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
+        draw_state(cube_roi, eoi_roi, scope, grid.inventory_region, broken=broken)
+        print(broken)
+
+    def do_flow(self, scope, cube, grid):
         main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
         main_slot = Click(main_slot[0], main_slot[1], process='dclick')
         make = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['make']))
@@ -56,21 +69,14 @@ class Enhancer:
         cube = Rect(grid.get_region_of(cube[0], cube[1])).click()
         self.log.debug('End base point init')
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        # TODO uncomment when compare ends
         for row_id, row in enumerate(scope):
             for col_id, col in enumerate(row):
                 self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
                 item = Rect(col).click()
-                item.make_click(serial)
-                cube.make_click(serial)
-                make.make_click(serial)
-                main_slot.make_click(serial)
-
-        # menu.make_click(serial)
-        grid, scope, cube, eoi = self.state()
-        after = self.__fetch_scope_mask(scope)
-        broken = find_subtraction(before, after)
-        self.log.debug('Broken items: {0}'.format(broken))
+                item.make_click(self.serial)
+                cube.make_click(self.serial)
+                make.make_click(self.serial)
+                main_slot.make_click(self.serial)
 
     def __fetch_scope_mask(self, scope):
         self.log.debug('Start fetching a images')

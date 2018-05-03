@@ -28,14 +28,16 @@ class Drawer:
         cv2.imwrite(self.file, self.image)
 
 
-def draw_state(cube, eoi, scope, roi):
+def draw_state(cube, eoi, scope, roi, broken=[]):
     logging.debug('Draw global picture')
     cube = Rect(cube, Shape((41, 103, 248), 1))
     eoi = Rect(eoi, Shape((236, 221, 87), 1))
     body = []
     for row in scope:
         for cell in row:
-            body.append(Rect(cell, Shape((115, 228, 95), 1)))
+            body.append(Rect(cell, Shape((115, 228, 95), 2)))
+    for e in broken:
+        body.append(Rect(e, Shape((102, 0, 255), 2)))
     body.append(cube)
     body.append(eoi)
     drawer = Drawer(body, 'log/all_in_one.png', roi)
