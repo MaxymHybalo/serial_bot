@@ -1,7 +1,7 @@
 enhancement:
   cube:
-    - 9
-    - 10
+    - 7
+    - 1
   cycles: 1
 recognize:
   prefix:
@@ -17,5 +17,10 @@ recognize:
     menu: 'enhance_menu'
     slot: 'enhance_main_slot'
     make: 'make_enhance'
+    close: 'enhance_close'
+  remove:
+    menu: 'remove_menu'
+    clear: 'clear'
+    confirm: 'confirm'
 # make some images
 debug: true

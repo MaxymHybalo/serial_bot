@@ -49,17 +49,19 @@ class Enhancer:
 
     def enhance(self):
         scope, eoi = self.state()
-        # menu = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['menu']))
-        # menu = Click(menu[0], menu[1])
-        points = self.base_clicks()
+        self._click_at_target(self.config['recognize']['enhance']['menu'])
         before = self.__fetch_scope_mask(scope)
-        for i in range(0, 2):
-            self.do_flow(scope, points['make'], points['slot'])
+        points = self.base_clicks()
+        self.do_flow(scope, points['make'], points['slot'])
         scope, eoi = self.state()
         after = self.__fetch_scope_mask(scope)
         broken = find_subtraction(before, after)
         self.log.debug('Broken items: {0}'.format(broken))
         broken = list(map(lambda e: scope[e[0]][e[1]], broken))
+        if broken:
+            self._click_at_target(self.config['recognize']['enhance']['close'])
+            self._remove_broken(broken)
+
         # TODO move to some decorator
         cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
         eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
@@ -79,6 +81,16 @@ class Enhancer:
                 make.make_click(self.serial)
                 main_slot.make_click(self.serial)
 
+    def _remove_broken(self, broken):
+        self._click_at_target(self.config['recognize']['remove']['menu'])
+        for i, b in enumerate(broken):
+            c = Rect(b).click()
+            c.make_click(self.serial)
+            if i % 25:
+                self.log.debug('Remove partially')
+                self._click_at_target(self.config['recognize']['remove']['clear'])
+        # self._click_at_target(self.config['recognize']['remove']['confirm'])
+
     def base_clicks(self):
         main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
         main_slot = Click(main_slot[0], main_slot[1], process='dclick')
@@ -88,6 +100,12 @@ class Enhancer:
             'make': make,
             'slot': main_slot
         }
+
+    def _click_at_target(self, target):
+        click = ui.locateCenterOnScreen(self._image_path(target))
+        click = Click(click[0], click[1])
+        click.make_click(self.serial)
+        self.log.debug('Click at {0}'.format(target))
 
     def __fetch_scope_mask(self, scope):
         self.log.debug('Start fetching a images')
