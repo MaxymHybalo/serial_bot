@@ -71,6 +71,7 @@ class Enhancer:
     def do_flow(self, scope, make, main_slot):
         self.log.debug('End base point init')
         self.log.info('Start enhancing from {0}'.format(len(scope)))
+        cube = None
         for row_id, row in enumerate(scope):
             for col_id, col in enumerate(row):
                 self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
@@ -80,15 +81,16 @@ class Enhancer:
                 cube.make_click(self.serial)
                 make.make_click(self.serial)
                 main_slot.make_click(self.serial)
+        cube.make_click(self.serial)
 
     def _remove_broken(self, broken):
         self._click_at_target(self.config['recognize']['remove']['menu'])
         for i, b in enumerate(broken):
             c = Rect(b).click()
             c.make_click(self.serial)
-            if i % 25:
-                self.log.debug('Remove partially')
-                self._click_at_target(self.config['recognize']['remove']['clear'])
+            # if i % 25:
+            #     self.log.debug('Remove partially')
+            #     self._click_at_target(self.config['recognize']['remove']['clear'])
         # self._click_at_target(self.config['recognize']['remove']['confirm'])
 
     def base_clicks(self):
@@ -128,4 +130,6 @@ def find_subtraction(before, after):
         for col_id, col in enumerate(row):
             if not np.array_equal(after[row_id][col_id], col):
                 changed.append([row_id, col_id])
+                utils.show(col, name="before")
+                utils.show(after[row_id][col_id], name="after")
     return changed
