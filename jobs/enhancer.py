@@ -49,24 +49,21 @@ class Enhancer:
 
     def enhance(self):
         scope, eoi = self.state()
+
         self._click_at_target(self.config['recognize']['enhance']['menu'])
+        # need some delay?
         before = self.__fetch_scope_mask(scope)
+
         points = self.base_clicks()
         self.do_flow(scope, points['make'], points['slot'])
-        scope, eoi = self.state()
-        after = self.__fetch_scope_mask(scope)
-        broken = find_subtraction(before, after)
-        self.log.debug('Broken items: {0}'.format(broken))
-        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
-        if broken:
-            self._click_at_target(self.config['recognize']['enhance']['close'])
-            self._remove_broken(broken)
+
+        self._click_at_target(self.config['recognize']['enhance']['close'])
+        self._remove_broken(before)
 
         # TODO move to some decorator
         cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
         eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
-        draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, broken=broken)
-        print(broken)
+        draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region)
 
     def do_flow(self, scope, make, main_slot):
         self.log.debug('End base point init')
@@ -81,17 +78,19 @@ class Enhancer:
                 cube.make_click(self.serial)
                 make.make_click(self.serial)
                 main_slot.make_click(self.serial)
+        cube.process = 'click'
         cube.make_click(self.serial)
 
-    def _remove_broken(self, broken):
+    def _remove_broken(self, before):
         self._click_at_target(self.config['recognize']['remove']['menu'])
+        scope, _ = self.state()
+        mask_state = self.__fetch_scope_mask(scope)
+        broken = find_subtraction(before, mask_state)
+        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
         for i, b in enumerate(broken):
             c = Rect(b).click()
             c.make_click(self.serial)
-            # if i % 25:
-            #     self.log.debug('Remove partially')
-            #     self._click_at_target(self.config['recognize']['remove']['clear'])
-        # self._click_at_target(self.config['recognize']['remove']['confirm'])
+        print(broken)
 
     def base_clicks(self):
         main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
@@ -130,6 +129,13 @@ def find_subtraction(before, after):
         for col_id, col in enumerate(row):
             if not np.array_equal(after[row_id][col_id], col):
                 changed.append([row_id, col_id])
-                utils.show(col, name="before")
-                utils.show(after[row_id][col_id], name="after")
+                # utils.show(col, 'before')
+                # utils.show(after[row_id][col_id], 'after')
+            else:
+                __remove_from_subtraction(col, changed)
     return changed
+
+
+def __remove_from_subtraction(item, subtraction):
+    if item in subtraction:
+        subtraction.pop(subtraction.index(item))
