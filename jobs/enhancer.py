@@ -51,14 +51,15 @@ class Enhancer:
         scope, eoi = self.state()
 
         self._click_at_target(self.config['recognize']['enhance']['menu'])
-        # need some delay?
         before = self.__fetch_scope_mask(scope)
-
         points = self.base_clicks()
         self.do_flow(scope, points['make'], points['slot'])
-
-        self._click_at_target(self.config['recognize']['enhance']['close'])
-        self._remove_broken(before)
+        after = self.__fetch_scope_mask(scope)
+        broken = find_subtraction(before, after)
+        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
+        if broken:
+            self._click_at_target(self.config['recognize']['enhance']['close'])
+            self._remove_broken(broken)
 
         # TODO move to some decorator
         cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
@@ -68,29 +69,33 @@ class Enhancer:
     def do_flow(self, scope, make, main_slot):
         self.log.debug('End base point init')
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        cube = None
+        cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()
+        cube.process = 'click'
+        cube.make_click(self.serial)
+        cube.process = 'dclick'
         for row_id, row in enumerate(scope):
             for col_id, col in enumerate(row):
                 self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
                 item = Rect(col).click()
                 item.make_click(self.serial)
-                cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()
                 cube.make_click(self.serial)
                 make.make_click(self.serial)
                 main_slot.make_click(self.serial)
         cube.process = 'click'
         cube.make_click(self.serial)
+        main_slot.make_click(self.serial)
 
-    def _remove_broken(self, before):
-        self._click_at_target(self.config['recognize']['remove']['menu'])
-        scope, _ = self.state()
-        mask_state = self.__fetch_scope_mask(scope)
-        broken = find_subtraction(before, mask_state)
-        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
-        for i, b in enumerate(broken):
+    def _remove_broken(self, broken):
+        remove_points = self.config['recognize']['remove']
+        self._click_at_target(remove_points['menu'])
+        for b in broken:
             c = Rect(b).click()
             c.make_click(self.serial)
-        print(broken)
+        self._click_at_target(remove_points['clear'])
+        # time.sleep(0.5)
+        self._click_at_target(remove_points['confirm'])
+        self._click_at_target(remove_points['close'])
+        self.log.critical('Removed: {0}'.format(len(broken)))
 
     def base_clicks(self):
         main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
@@ -129,10 +134,8 @@ def find_subtraction(before, after):
         for col_id, col in enumerate(row):
             if not np.array_equal(after[row_id][col_id], col):
                 changed.append([row_id, col_id])
-                # utils.show(col, 'before')
-                # utils.show(after[row_id][col_id], 'after')
-            else:
-                __remove_from_subtraction(col, changed)
+                utils.show(col, 'before')
+                utils.show(after[row_id][col_id], 'after')
     return changed
 
 
