@@ -31,7 +31,8 @@ class Enhancer:
 
     def process(self, serial):
         self.serial = serial
-        self.enhance()
+        for i in range(self.config['enhancement']['cycles']):
+            self.enhance()
         self.log.debug('End Enhancer process')
 
 
@@ -92,7 +93,7 @@ class Enhancer:
             c = Rect(b).click()
             c.make_click(self.serial)
         self._click_at_target(remove_points['clear'])
-        # time.sleep(0.5)
+        time.sleep(0.5)
         self._click_at_target(remove_points['confirm'])
         self._click_at_target(remove_points['close'])
         self.log.critical('Removed: {0}'.format(len(broken)))
@@ -134,8 +135,8 @@ def find_subtraction(before, after):
         for col_id, col in enumerate(row):
             if not np.array_equal(after[row_id][col_id], col):
                 changed.append([row_id, col_id])
-                utils.show(col, 'before')
-                utils.show(after[row_id][col_id], 'after')
+                # utils.show(col, 'before')
+                # utils.show(after[row_id][col_id], 'after')
     return changed
 
 
