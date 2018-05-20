@@ -1,7 +1,7 @@
 enhancement:
   cube:
-    - 5
-    - 9
+    - 1
+    - 4
   cycles: 1
 recognize:
   prefix:
