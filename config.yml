@@ -1,0 +1,8 @@
+mode: 'enhance'
+#mode: 'buff'
+enhancer: 'enhancer.config'
+
+
+serial:
+  port: 9
+  baudrate: 9600
