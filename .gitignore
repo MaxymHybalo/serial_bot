@@ -1,3 +1,6 @@
 assets/
 __pycache__/
 .idea/
+log/
+serial_env/
+.vscode/

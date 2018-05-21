@@ -1,0 +1,27 @@
+enhancement:
+  cube:
+    - 1
+    - 4
+  cycles: 1
+recognize:
+  prefix:
+    path: 'assets/'
+    image_suffix: '.png'
+  grid:
+    image: 'grid_identifier'
+    size:
+      - 9
+      - 11
+    eoi: 'end_of_inventory'
+  enhance:
+    menu: 'enhance_menu'
+    slot: 'enhance_main_slot'
+    make: 'make_enhance'
+    close: 'enhance_close'
+  remove:
+    menu: 'remove_menu'
+    clear: 'clear'
+    confirm: 'confirm'
+    close: 'close_remove_menu'
+# make some images
+debug: true

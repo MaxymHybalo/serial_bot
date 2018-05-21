@@ -1,17 +1,29 @@
 import time
-from enhance import Enhancer
-from processors import InstructionProcessor
-import buff_instruction as buff
+import logging
+from jobs.enhancer import Enhancer
+from processes.object_processor import ObjectProcessor
+
+
+def configure_logger():
+    log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
+    logging.basicConfig(level=logging.DEBUG,
+                        format=log_format,
+                        datefmt='%d-%m %H:%M:%S')
+
+
 if __name__ == '__main__':
     startTime = time.time()
-    processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
+
+    configure_logger()
+    logging.getLogger()
 
     # ENHANCEMENT
-    enhancer = Enhancer('configuration.yaml')
-    # processor = InstructionProcessor(enhancer.enhance(enhancer.combination))
+    enhancer = Enhancer('enhancer.config.v2.yaml')
+    processor = ObjectProcessor(enhancer)
 
-    processor.process()
+
+    processor.handle()
 
     execTime = (time.time() - startTime)
-
-    print("Finished work, time:", execTime, '(sec) ', execTime / 60, '(min)')
+    finalMessage = "Finished work, time: {0} (sec), {1} (min)".format(execTime, execTime / 60)
+    logging.info(finalMessage)
