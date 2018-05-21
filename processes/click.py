@@ -64,3 +64,6 @@ class Click:
     @staticmethod
     def _move(serial, t):
         serial.write(t.encode())
+
+    def __str__(self):
+        return "x: " + str(self.x) + " y: " + str(self.y)

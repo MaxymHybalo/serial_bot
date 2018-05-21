@@ -2,16 +2,16 @@
 enhance:
   cube:
     x: 1
-    y: 7
-  cycles: 2
+    y: 1
+  cycles: 16
 #  scope property mean left minimal point for enhance and right maximum point
   scope:
     start:
       - 2
-      - 7
+      - 1
     end:
-      - 7
-      - 10
+      - 9
+      - 11
   max:
     horizontal: 9
     vertical: 11
