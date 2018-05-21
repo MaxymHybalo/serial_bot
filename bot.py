@@ -33,5 +33,3 @@ if __name__ == '__main__':
     execTime = (time.time() - startTime)
     finalMessage = "Finished work, time: {0} (sec), {1} (min)".format(execTime, execTime / 60)
     logging.info(finalMessage)
-
-

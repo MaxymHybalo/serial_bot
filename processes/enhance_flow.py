@@ -20,10 +20,10 @@ class EnhanceFlow:
         self.clear_fix = Click(points['clear'][0], points['clear'][1], process='dclick')
         self.enhance_point = Click(points['enhance'][0], points['enhance'][1], process='dclick', delay=2)
         self.break_point = Click(points['break'][0], points['break'][1], process='dclick')
-        self.comb_ok = Click(points['combination'][0], points['combination'][1])
 
     def get_flow(self):
-        cube = Click(self.cell[0], self.cell[1])
-        item = Click(self.config['cube']['x'], self.config['cube']['y']),
-
+        item = Click(self.cell[0], self.cell[1], process='dclick')
+        cX = (self.config['cube']['x'] - 1) * self.config['delta'] + self.config['points']['start'][0]
+        cY = (self.config['cube']['y'] - 1) * self.config['delta'] + self.config['points']['start'][1]
+        cube = Click(cX, cY, process='dclick')
         return [item, cube] + self.submit_enhance()
