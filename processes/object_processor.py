@@ -2,7 +2,7 @@ import serial
 import logging
 
 
-class ObjectProcessor:
+class ProcessInitializer:
 
     def __init__(self, target, config):
         self.target = target

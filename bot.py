@@ -2,7 +2,7 @@ import time
 import logging
 from utils.configurator import Configurator
 from jobs.enhancer import Enhancer
-from processes.object_processor import ObjectProcessor
+from processes.object_processor import ProcessInitializer
 
 
 def configure_logger():
@@ -25,7 +25,7 @@ if __name__ == '__main__':
 
     if config['mode'] == 'enhance':
         enhancer = Enhancer(config['enhancer'] + '.yml')
-        processor = ObjectProcessor(enhancer, config['serial'])
+        processor = ProcessInitializer(enhancer, config['serial'])
         processor.handle()
 
     # ENHANCEMENT

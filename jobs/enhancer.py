@@ -1,12 +1,11 @@
 import logging
 import time
 import numpy as np
-import pyautogui as ui
+from processes.recognizer import Recognizer
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
 from utils.drawer import draw_state
-from processes.click import Click
 from shapes.rect import Rect
 
 
@@ -39,10 +38,9 @@ class Enhancer:
     @write_state
     def state(self):
         self.log.debug('Getting inventory state')
-        grid_image = self._image_path(self.config['recognize']['grid']['image'])
+        grid_image = self.image_path(self.config['recognize']['grid']['image'])
         self.grid = Grid(grid_image, self.config['recognize']['grid']['size'])
-        # EOI: End Of Inventory
-        eoi = self.grid.find_position(self._image_path(self.config['recognize']['grid']['eoi']))
+        eoi = self.grid.find_position(self.image_path(self.config['recognize']['grid']['eoi']))
         self.cube = self.config['enhancement']['cube']
         scope = self.grid.slice_inventory([self.cube[0] + 1, self.cube[1]], eoi)
         self.log.debug('Inventory state proceed')
@@ -51,27 +49,24 @@ class Enhancer:
     def enhance(self):
         scope, eoi = self.state()
 
-        self._click_at_target(self.config['recognize']['enhance']['menu'])
-        before = self.__fetch_scope_mask(scope)
-        points = self.base_clicks()
-        self.do_flow(scope, points['make'], points['slot'])
-        after = self.__fetch_scope_mask(scope)
+        self.click_at_target(self.config['recognize']['enhance']['menu'])
+        before = self.fetch_scope_mask(scope)
+        self.do_flow(scope)
+        after = self.fetch_scope_mask(scope)
         broken = find_subtraction(before, after)
         broken = list(map(lambda e: scope[e[0]][e[1]], broken))
         if broken:
-            self._click_at_target(self.config['recognize']['enhance']['close'])
-            self._remove_broken(broken)
+            self.click_at_target(self.config['recognize']['enhance']['close'])
+            self.remove_broken(broken)
 
         # TODO move to some decorator
         cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
         eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
         draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region)
 
-    def do_flow(self, scope, make, main_slot):
-        self.log.debug('End base point init')
+    def do_flow(self, scope):
+        make, main, cube = self._init_flow()
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()
-        cube.process = 'click'
         cube.make_click(self.serial)
         cube.process = 'dclick'
         for row_id, row in enumerate(scope):
@@ -81,47 +76,51 @@ class Enhancer:
                 item.make_click(self.serial)
                 cube.make_click(self.serial)
                 make.make_click(self.serial)
-                main_slot.make_click(self.serial)
+                main.make_click(self.serial)
         cube.process = 'click'
         cube.make_click(self.serial)
-        main_slot.make_click(self.serial)
+        main.make_click(self.serial)
 
-    def _remove_broken(self, broken):
+    def _init_flow(self):
+        make = self.click_at_target(self.config['recognize']['enhance']['make'], make=False)
+        make.delay = 2
+        make.process = 'click'
+        main = self.click_at_target(self.config['recognize']['enhance']['slot'], make=False)
+        cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()
+        cube.process = 'click'
+        return make, main, cube
+
+    def remove_broken(self, broken):
         remove_points = self.config['recognize']['remove']
-        self._click_at_target(remove_points['menu'])
-        for b in broken:
-            c = Rect(b).click()
-            c.make_click(self.serial)
-        self._click_at_target(remove_points['clear'])
+        self.click_at_target(remove_points['menu'])
+        self.select_broken(broken)
+        self.click_at_target(remove_points['clear'])
         time.sleep(0.5)
-        self._click_at_target(remove_points['confirm'])
-        self._click_at_target(remove_points['close'])
+        self.click_at_target(remove_points['confirm'])
+        self.click_at_target(remove_points['close'])
         self.log.critical('Removed: {0}'.format(len(broken)))
 
-    def base_clicks(self):
-        main_slot = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['slot']))
-        main_slot = Click(main_slot[0], main_slot[1], process='dclick')
-        make = ui.locateCenterOnScreen(self._image_path(self.config['recognize']['enhance']['make']))
-        make = Click(make[0], make[1], delay=2)
-        return {
-            'make': make,
-            'slot': main_slot
-        }
+    def select_broken(self, broken):
+        for b in broken:
+            Rect(b).click().make_click(self.serial)
 
-    def _click_at_target(self, target):
-        click = ui.locateCenterOnScreen(self._image_path(target))
-        click = Click(click[0], click[1])
-        click.make_click(self.serial)
-        self.log.debug('Click at {0}'.format(target))
+    def click_at_target(self, target, make=True):
+        click = Recognizer(self.image_path(target), region=None)\
+            .recognize(once=True)
+        click = Rect(click).click()
+        if make:
+            click.make_click(self.serial)
+            self.log.debug('Click at {0}'.format(target))
+        return click
 
-    def __fetch_scope_mask(self, scope):
+    # TODO try get region of all inventory and then split to parts
+    def fetch_scope_mask(self, scope):
         self.log.debug('Start fetching a images')
-        # TODO try get region of all inventory and then split to parts
         result = list(map(lambda col: list(map(lambda cell: utils.make_image(region=cell), col)), scope))
         self.log.debug('End fetching a images')
         return result
 
-    def _image_path(self, image):
+    def image_path(self, image):
         path = self.config['recognize']['prefix']['path']
         prefix = self.config['recognize']['prefix']['image_suffix']
         full_path = path + image + prefix
@@ -138,8 +137,3 @@ def find_subtraction(before, after):
                 # utils.show(col, 'before')
                 # utils.show(after[row_id][col_id], 'after')
     return changed
-
-
-def __remove_from_subtraction(item, subtraction):
-    if item in subtraction:
-        subtraction.pop(subtraction.index(item))
