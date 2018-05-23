@@ -25,13 +25,15 @@ if __name__ == '__main__':
 
     config = load_config()
 
+    processor = None
+
     if config['mode'] == 'enhance':
         enhancer = Enhancer(config['enhancer'] + '.yml')
         processor = ProcessInitializer(enhancer, config['serial'])
-        processor.handle()
     if config['mode'] == 'buff':
         processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
 
+    processor.handle()
     # ENHANCEMENT
 
     execTime = (time.time() - startTime)
