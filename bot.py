@@ -3,6 +3,8 @@ import logging
 from utils.configurator import Configurator
 from jobs.enhancer import Enhancer
 from processes.object_processor import ProcessInitializer
+from processors import InstructionProcessor
+import buff_instruction as buff
 
 
 def configure_logger():
@@ -27,6 +29,8 @@ if __name__ == '__main__':
         enhancer = Enhancer(config['enhancer'] + '.yml')
         processor = ProcessInitializer(enhancer, config['serial'])
         processor.handle()
+    if config['mode'] == 'buff':
+        processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
 
     # ENHANCEMENT
 
