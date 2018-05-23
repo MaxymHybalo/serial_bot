@@ -28,7 +28,7 @@ class Drawer:
         cv2.imwrite(self.file, self.image)
 
 
-def draw_state(cube, eoi, scope, roi, broken=[]):
+def draw_state(cube, eoi, scope, roi, broken=[], file=None):
     logging.debug('Draw global picture')
     cube = Rect(cube, Shape((41, 103, 248), 1))
     eoi = Rect(eoi, Shape((236, 221, 87), 1))
@@ -40,6 +40,7 @@ def draw_state(cube, eoi, scope, roi, broken=[]):
         body.append(Rect(e, Shape((102, 0, 255), 2)))
     body.append(cube)
     body.append(eoi)
-    drawer = Drawer(body, 'log/all_in_one.png', roi)
+    file = 'log/all_in_one.png' if not file else file
+    drawer = Drawer(body, file, roi)
     drawer.draw()
     drawer.save()

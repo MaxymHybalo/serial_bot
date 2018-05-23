@@ -1,5 +1,6 @@
 import logging
 import time
+import datetime
 import numpy as np
 from processes.recognizer import Recognizer
 from utils.configurator import Configurator
@@ -18,12 +19,17 @@ class Enhancer:
         self.cube = None
         self.grid = None
 
+        self.now = datetime.datetime.now()
+        self.round = 0
+
     def write_state(state):
         def wrapper(self):
+            name = self.logged_image_name('before')
+            self.log.debug('Cycle pre-enhance state name {0}'.format(name))
             scope, eoi = state(self)
             cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
             eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
-            draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region)
+            draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, file=name)
             self.log.debug('Draw state')
             return scope, eoi
         return wrapper
@@ -31,6 +37,7 @@ class Enhancer:
     def process(self, serial):
         self.serial = serial
         for i in range(self.config['enhancement']['cycles']):
+            self.round = i
             self.enhance()
         self.log.debug('End Enhancer process')
 
@@ -55,14 +62,11 @@ class Enhancer:
         after = self.fetch_scope_mask(scope)
         broken = find_subtraction(before, after)
         broken = list(map(lambda e: scope[e[0]][e[1]], broken))
+        self.write_after(scope, eoi, broken)
+
         if broken:
             self.click_at_target(self.config['recognize']['enhance']['close'])
             self.remove_broken(broken)
-
-        # TODO move to some decorator
-        cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
-        eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
-        draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
@@ -126,6 +130,17 @@ class Enhancer:
         full_path = path + image + prefix
         self.log.debug('Grid identifier: {0}'.format(full_path))
         return full_path
+
+    def logged_image_name(self, moment):
+        return 'log/' + moment + '_cycle_' + str(self.round) + '_' + str(self.now.year) + '_' + str(self.now.month) \
+               + '_' + str(self.now.day) + '.png '
+
+    def write_after(self, scope, eoi, broken):
+        # TODO move to some decorator
+        cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
+        eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
+        name = self.logged_image_name('after')
+        draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, broken=broken, file=name)
 
 
 def find_subtraction(before, after):
