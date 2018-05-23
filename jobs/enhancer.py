@@ -133,7 +133,7 @@ class Enhancer:
 
     def logged_image_name(self, moment):
         return 'log/' + moment + '_cycle_' + str(self.round) + '_' + str(self.now.year) + '_' + str(self.now.month) \
-               + '_' + str(self.now.day) + '.png '
+               + '_' + str(self.now.day) + '_' + str(self.now.hour) + '_' + str(self.now.minute) + '.png '
 
     def write_after(self, scope, eoi, broken):
         # TODO move to some decorator
