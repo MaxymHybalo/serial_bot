@@ -4,5 +4,5 @@ enhancer: 'enhancer.config'
 
 
 serial:
-  port: 9
+  port: 7
   baudrate: 9600
