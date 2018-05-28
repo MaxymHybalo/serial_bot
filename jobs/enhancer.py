@@ -36,7 +36,8 @@ class Enhancer:
 
     def process(self, serial):
         self.serial = serial
-        for i in range(self.config['enhancement']['cycles']):
+        cycles = int(self.config['enhancement']['cycles'])
+        for i in range(cycles):
             self.round = i
             self.enhance()
         self.log.debug('End Enhancer process')
@@ -49,6 +50,7 @@ class Enhancer:
         self.grid = Grid(grid_image, self.config['recognize']['grid']['size'])
         eoi = self.grid.find_position(self.image_path(self.config['recognize']['grid']['eoi']))
         self.cube = self.config['enhancement']['cube']
+        self.cube = list(map(lambda x: int(x)))
         scope = self.grid.slice_inventory([self.cube[0] + 1, self.cube[1]], eoi)
         self.log.debug('Inventory state proceed')
         return scope, eoi
