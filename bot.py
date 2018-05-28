@@ -28,7 +28,6 @@ def run():
     if config['mode'] == 'enhance':
         enhancer = Enhancer(config['enhancer'] + '.yml')
         processor = ProcessInitializer(enhancer, config['serial'])
-        processor.proc
         processor.handle()
 
     if config['mode'] == 'buff':

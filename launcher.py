@@ -35,7 +35,7 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['mode'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, handlers.set_mode(message.text.split(' ')))
+    bot.send_message(message.chat.id, handlers.set_mode(message.text.split(' '), CONFIG_FILE))
 
 
 @bot.message_handler(func=lambda message: True)

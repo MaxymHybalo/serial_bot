@@ -56,6 +56,9 @@ class Configurator:
             data= yaml.load(stream)
         return data
 
+    def dump_yaml(self, data):
+        yaml.dump(data, open(self.filepath, 'w'))
+
     @staticmethod
     def pretty_print(message, type='json'):
         parse = str(message)
