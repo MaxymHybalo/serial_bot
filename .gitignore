@@ -4,5 +4,6 @@ __pycache__/
 log/
 serial_env/
 .vscode/
-
+*.png
 config.yml
+enhancer.config.yml
