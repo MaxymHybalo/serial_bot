@@ -35,11 +35,11 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['mode'])
 def send_welcome(message):
-    mode = message.text.split(' ')
-    if len(mode) <= 1:
-        bot.send_message(message.chat.id, 'You forget give me mode name')
-        return
-    mode = mode[1]
+    mode = validate(message, message.chat.id)
+    if len(mode) > 1:
+        mode = mode[1]
+    else:
+        return None
     bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
 
 
@@ -51,9 +51,40 @@ def send_welcome(message):
     bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
 
 
+@bot.message_handler(commands=['run'])
+def send_run(message):
+    bot.send_message(message.chat.id, 'Okay, just run for you this')
+    final = handlers.run_bot()
+    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(final/60))
+
+
+@bot.message_handler(commands=['cube'])
+def send_run(message):
+    mode = validate(message, message.chat.id)
+    if len(mode) > 1:
+        mode = handlers.set_cube(mode, config)
+    bot.send_message(message.chat.id, 'Maybe I update cube position')
+
+
+@bot.message_handler(commands=['cycles'])
+def send_run(message):
+    mode = validate(message, message.chat.id)
+    if len(mode) > 1:
+        mode = handlers.set_cycles(mode, config)
+    bot.send_message(message.chat.id, 'Maybe I update cycles count')
+
+
+
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
     bot.send_message(message.chat.id, 'Try use another command')
+
+
+def validate(params, id):
+    mode = params.text.split(' ')
+    if len(mode) <= 1:
+        bot.send_message(id,'You forget give me mode name')
+    return mode
 
 
 bot.polling()

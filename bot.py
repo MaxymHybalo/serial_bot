@@ -17,7 +17,7 @@ def run():
     config = load_config()
 
     if config['mode'] == 'enhance':
-        enhancer = Enhancer(config['enhancer'] + '.yml')
+        enhancer = Enhancer(config['enhancer'])
         processor = ProcessInitializer(enhancer, config['serial'])
         processor.handle()
 
