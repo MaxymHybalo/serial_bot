@@ -22,7 +22,7 @@ def run():
         processor.handle()
 
     if config['mode'] == 'buff':
-        processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
+        processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
         processor.process()
 
     exec_time = (time.time() - start_time)
