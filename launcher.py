@@ -35,7 +35,20 @@ def send_welcome(message):
 
 @bot.message_handler(commands=['mode'])
 def send_welcome(message):
-    bot.send_message(message.chat.id, handlers.set_mode(message.text.split(' '), CONFIG_FILE))
+    mode = message.text.split(' ')
+    if len(mode) <= 1:
+        bot.send_message(message.chat.id, 'You forget give me mode name')
+        return
+    mode = mode[1]
+    bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
+
+
+@bot.message_handler(commands=['buff'])
+def send_welcome(message):
+    handlers.set_mode('buff', CONFIG_FILE)
+    bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
+    final = handlers.run_bot()
+    bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
 
 
 @bot.message_handler(func=lambda message: True)

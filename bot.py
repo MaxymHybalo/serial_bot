@@ -7,22 +7,13 @@ from processors import InstructionProcessor
 import buff_instruction as buff
 
 
-def configure_logger():
-    log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
-    logging.basicConfig(level=logging.DEBUG,
-                        format=log_format,
-                        datefmt='%d-%m %H:%M:%S')
-
-
 def load_config():
     return Configurator('config.yml').from_yaml()
 
 
 def run():
     start_time = time.time()
-    configure_logger()
-    logging.getLogger()
-
+    log = logging.getLogger('bot')
     config = load_config()
 
     if config['mode'] == 'enhance':
@@ -36,7 +27,8 @@ def run():
 
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
-    logging.info(final_message)
+    log.info(final_message)
+    return exec_time
 
 
 if __name__ == '__main__':

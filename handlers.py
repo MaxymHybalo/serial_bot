@@ -1,4 +1,5 @@
 from utils.configurator import Configurator
+import bot
 
 AVAILABLE_MODES = ['buff', 'enhance']
 
@@ -8,9 +9,6 @@ def get_config(config):
 
 
 def set_mode(mode, config):
-    if len(mode) <= 1:
-        return 'You forget give me mode name'
-    mode = mode[1]
     configurator = Configurator(config)
     config = configurator.from_yaml()
     if mode not in AVAILABLE_MODES:
@@ -19,3 +17,6 @@ def set_mode(mode, config):
     configurator.dump_yaml(config)
     return 'I change mode to ' + mode
 
+
+def run_bot():
+    return bot.run()
