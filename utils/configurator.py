@@ -55,3 +55,13 @@ class Configurator:
         with open(self.filepath, 'r') as stream:
             data= yaml.load(stream)
         return data
+
+    @staticmethod
+    def pretty_print(message, type='json'):
+        parse = str(message)
+        parse = parse.replace('\'', '\"')
+        parse = parse.replace('None', '\"None\"')
+        parse = parse.replace('False', '\"False\"')
+        parse = parse.replace('True', '\"True\"')
+        parse = json.loads(parse)
+        print(json.dumps(parse, indent=4, sort_keys=True))

@@ -18,24 +18,27 @@ def load_config():
     return Configurator('config.yml').from_yaml()
 
 
-if __name__ == '__main__':
-    startTime = time.time()
+def run():
+    start_time = time.time()
     configure_logger()
     logging.getLogger()
 
     config = load_config()
 
-    processor = None
-
     if config['mode'] == 'enhance':
         enhancer = Enhancer(config['enhancer'] + '.yml')
         processor = ProcessInitializer(enhancer, config['serial'])
+        processor.proc
+        processor.handle()
+
     if config['mode'] == 'buff':
         processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.farm_buff_sequence, reload=True))
+        processor.process()
 
-    processor.handle()
-    # ENHANCEMENT
+    exec_time = (time.time() - start_time)
+    final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
+    logging.info(final_message)
 
-    execTime = (time.time() - startTime)
-    finalMessage = "Finished work, time: {0} (sec), {1} (min)".format(execTime, execTime / 60)
-    logging.info(finalMessage)
+
+if __name__ == '__main__':
+    run()
