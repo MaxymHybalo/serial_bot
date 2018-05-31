@@ -74,6 +74,13 @@ def send_run(message):
     bot.send_message(message.chat.id, 'Maybe I update cycles count')
 
 
+@bot.message_handler(commands=['make'])
+def send_run(message):
+    mode = validate(message, message.chat.id)
+    if len(mode) > 1:
+        mode = handlers.make(mode, config)
+    bot.send_message(message.chat.id, mode)
+
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
@@ -83,7 +90,7 @@ def echo_all(message):
 def validate(params, id):
     mode = params.text.split(' ')
     if len(mode) <= 1:
-        bot.send_message(id,'You forget give me mode name')
+        bot.send_message(id, 'You forget give me mode name')
     return mode
 
 

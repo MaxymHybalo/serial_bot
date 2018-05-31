@@ -70,8 +70,7 @@ def make_reload_instruction(index, cfg=None):
 
 
 def instruction(sequence, reload):
-    cfg = Configurator(CONFIG)
-    cfg = cfg.generate_objects()
+    cfg = _config()
     order = []
     for e in sequence:
         order += make_single_buff(e[0], e[1], e[2], cfg=cfg)
@@ -81,5 +80,22 @@ def instruction(sequence, reload):
     return order
 
 
+def to_reload(is_return=False):
+    cfg = _config()
+    print(cfg)
+    if is_return:
+        from processes.recognizer import Recognizer
+        from shapes.rect import Rect
+        click = Recognizer('assets/return_scroll.png', region=None).recognize()
+        click = Rect(click).click()
+        return [click, Wait(11)] + cfg['select_char_menu']
+    return cfg['select_char_menu']
+
+
 def get_buff_instruction(sequence=full_buff_sequence, reload=False):
     return instruction(sequence, reload)
+
+
+def _config():
+    cfg = Configurator(CONFIG)
+    return cfg.generate_objects()

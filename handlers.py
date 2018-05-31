@@ -1,7 +1,9 @@
 from utils.configurator import Configurator
 import bot
+from processors import InstructionProcessor
+from buff_instruction import to_reload
 
-AVAILABLE_MODES = ['buff', 'enhance']
+AVAILABLE_MODES = ['buff', 'enhance', 'make']
 
 
 def get_config(config):
@@ -30,6 +32,15 @@ def set_cycles(params, config):
     config = configurator.from_yaml()
     config['enhancement']['cycles'] = params[1]
     configurator.dump_yaml(config)
+
+
+def make(params, config):
+    params = params[1]
+    if params == 'reload':
+        procesor = InstructionProcessor(to_reload(is_return=True))
+        bot.run(procesor)
+    print(params)
+    return 'Ok!'
 
 
 def run_bot():

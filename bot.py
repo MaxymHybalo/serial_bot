@@ -11,7 +11,7 @@ def load_config():
     return Configurator('config.yml').from_yaml()
 
 
-def run():
+def run(external_processor):
     start_time = time.time()
     log = logging.getLogger('bot')
     config = load_config()
@@ -24,6 +24,8 @@ def run():
     if config['mode'] == 'buff':
         processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
         processor.process()
+    if config['mode'] == 'make':
+        external_processor.process()
 
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)

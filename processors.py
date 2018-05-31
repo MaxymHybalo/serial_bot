@@ -56,7 +56,7 @@ class InstructionProcessor:
             if not s.is_open:
                 print('[SERIAL OPENED at: ', PORT, ']')
                 s.open()
-        except serial.SerialException:
-            print('Serial Error')
+        except serial.SerialException as e:
+            print('Serial Error', e)
             s = None
         return s
