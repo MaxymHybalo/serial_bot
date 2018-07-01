@@ -61,14 +61,14 @@ class Enhancer:
         self.click_at_target(self.config['recognize']['enhance']['menu'])
         before = self.fetch_scope_mask(scope)
         self.do_flow(scope)
-        after = self.fetch_scope_mask(scope)
-        broken = find_subtraction(before, after)
-        broken = list(map(lambda e: scope[e[0]][e[1]], broken))
-        self.write_after(scope, eoi, broken)
-
-        if broken:
-            self.click_at_target(self.config['recognize']['enhance']['close'])
-            self.remove_broken(broken)
+        # after = self.fetch_scope_mask(scope)
+        # broken = find_subtraction(before, after)
+        # broken = list(map(lambda e: scope[e[0]][e[1]], broken))
+        # self.write_after(scope, eoi, broken)
+        #
+        # if broken:
+        #     self.click_at_target(self.config['recognize']['enhance']['close'])
+        #     self.remove_broken(broken)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
@@ -89,7 +89,7 @@ class Enhancer:
 
     def _init_flow(self):
         make = self.click_at_target(self.config['recognize']['enhance']['make'], make=False)
-        make.delay = 2
+        make.delay = 1
         make.process = 'click'
         main = self.click_at_target(self.config['recognize']['enhance']['slot'], make=False)
         cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()

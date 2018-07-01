@@ -63,7 +63,7 @@ class Grid:
         if insertion is None:
             return None
         rect = list(insertion)
-        rect[0], rect[1], rect[2], rect[3] = rect[0] - 2, rect[1] - 2, ITEM_WIDTH + 1, ITEM_HEIGHT + 1
+        rect[0], rect[1], rect[2], rect[3] = rect[0] - 1, rect[1] - 2, ITEM_WIDTH + 1, ITEM_HEIGHT + 1
         for row in self.matix_rects:
             if rect in row:
                 x, y = row.index(list(rect)), self.matix_rects.index(row)
