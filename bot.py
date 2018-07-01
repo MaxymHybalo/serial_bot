@@ -11,7 +11,7 @@ def load_config():
     return Configurator('config.yml').from_yaml()
 
 
-def run(external_processor):
+def run(external_processor=None):
     start_time = time.time()
     log = logging.getLogger('bot')
     config = load_config()
