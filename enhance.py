@@ -70,5 +70,5 @@ class Enhancer:
         config = self.combination_cfg
         cell0 = config['cell_0']
         cell1 = config['cell_1']
-        cells = [matrix[cell0[1] - 1][cell0[0] - 1], matrix[cell1[1] - 1][cell1[0] - 1]]
+        cells = [[cell0[0], cell0[1]], [cell1[0], cell1[1]]]
         return CombinationFlow(cells, self.combination_cfg).get_flow()

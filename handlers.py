@@ -3,7 +3,7 @@ import bot
 from processors import InstructionProcessor
 from buff_instruction import to_reload
 
-AVAILABLE_MODES = ['buff', 'enhance', 'make']
+AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination']
 
 
 def get_config(config):

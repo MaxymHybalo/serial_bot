@@ -21,7 +21,7 @@ class CombinationFlow:
             self.__select_count(7),
             self.__select_count(0),
             Click(self.config['dial_ok'][0], self.config['dial_ok'][1]),
-            Click(self.config['enhance'][0], self.config['enhance'][1], delay=2)
+            Click(self.config['enhance'][0], self.config['enhance'][1], delay=1)
         ]
 
     def __select_count(self, digit):

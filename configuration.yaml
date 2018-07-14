@@ -3,7 +3,7 @@ enhance:
   cube:
     x: 1
     y: 1
-  cycles: 16
+  cycles: 99
 #  scope property mean left minimal point for enhance and right maximum point
   scope:
     start:
@@ -34,11 +34,11 @@ enhance:
   delta: 35
 combination:
   cell_0:
-    - 1
-    - 11
+    - 429
+    - 449
   cell_1:
-    - 2
-    - 11
+    - 467
+    - 448
   one_point:
     - 638
     - 422
@@ -46,8 +46,8 @@ combination:
     - 658
     - 442
   enhance:
-    - 132
-    - 693
+    - 339
+    - 490
   dial_ok:
     - 585
     - 440
