@@ -31,6 +31,9 @@ def run(external_processor=None):
         combinate = Combinator('configuration.yaml')
         processor = InstructionProcessor(combinate.enhance(combinate.combination))
         processor.process()
+    if config['mode'] == 'return':
+        processor = InstructionProcessor(buff.to_reload(is_return=True))
+        processor.process()
 
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)

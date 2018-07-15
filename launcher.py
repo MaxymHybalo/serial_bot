@@ -24,17 +24,17 @@ bot = telebot.TeleBot(config['token'])
 
 
 @bot.message_handler(commands=['start'])
-def send_welcome(message):
+def start(message):
     bot.send_message(message.chat.id, 'Oh, it\'s work!')
 
 
 @bot.message_handler(commands=['config'])
-def send_welcome(message):
+def config_handler(message):
     bot.send_message(message.chat.id, handlers.get_config(config))
 
 
 @bot.message_handler(commands=['mode'])
-def send_welcome(message):
+def mode_handler(message):
     mode = validate(message, message.chat.id)
     if len(mode) > 1:
         mode = mode[1]
@@ -44,7 +44,7 @@ def send_welcome(message):
 
 
 @bot.message_handler(commands=['buff'])
-def send_welcome(message):
+def buff_handler(message):
     handlers.set_mode('buff', CONFIG_FILE)
     bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
     final = handlers.run_bot()
@@ -52,34 +52,41 @@ def send_welcome(message):
 
 
 @bot.message_handler(commands=['run'])
-def send_run(message):
+def run_handler(message):
     bot.send_message(message.chat.id, 'Okay, just run for you this')
     final = handlers.run_bot()
     bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(final/60))
 
 
 @bot.message_handler(commands=['cube'])
-def send_run(message):
+def cube_handler(message):
     mode = validate(message, message.chat.id)
     if len(mode) > 1:
-        mode = handlers.set_cube(mode, config)
+        handlers.set_cube(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cube position')
 
 
 @bot.message_handler(commands=['cycles'])
-def send_run(message):
+def cycles_handler(message):
     mode = validate(message, message.chat.id)
     if len(mode) > 1:
-        mode = handlers.set_cycles(mode, config)
+        handlers.set_cycles(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cycles count')
 
 
 @bot.message_handler(commands=['make'])
-def send_run(message):
+def make_handler(message):
     mode = validate(message, message.chat.id)
     if len(mode) > 1:
         mode = handlers.make(mode, config)
     bot.send_message(message.chat.id, mode)
+
+
+@bot.message_handler(commands=['return'])
+def return_handler(message):
+    handlers.set_mode('return', CONFIG_FILE)
+    handlers.run_bot()
+    bot.send_message(message.chat.id, 'Okay! Return')
 
 
 @bot.message_handler(func=lambda message: True)
