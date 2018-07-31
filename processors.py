@@ -5,11 +5,15 @@ from processes.recognizer import Recognizer
 from processes.wait import Wait
 from processes.nested_process import NestedProcessor
 
+
+# TODO move to config file
 PORT = 'COM7'
 BAUDRATE = 9600
 
 
 # TODO make extension class for serial delivery
+# TODO show_storage remove
+
 class InstructionProcessor:
 
     def __init__(self, instructions):
@@ -46,6 +50,7 @@ class InstructionProcessor:
         for key, value in self.storage.items():
             print(key, ' : ', value)
 
+    # TODO make base class for process itializer and process intializer and make there this class
     @staticmethod
     def _run_serial():
         try:
