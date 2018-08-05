@@ -4,7 +4,7 @@ from utils.configurator import Configurator
 from jobs.enhancer import Enhancer
 from processes.object_processor import ProcessInitializer
 from enhance import Enhancer as Combinator
-from processors import InstructionProcessor
+from processes.instruction_processor import InstructionProcessor
 import buff_instruction as buff
 
 
@@ -23,16 +23,16 @@ def run(external_processor=None):
         processor.handle()
 
     if config['mode'] == 'buff':
-        processor = InstructionProcessor(buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
+        processor = InstructionProcessor(config['serial'], buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
         processor.process()
     if config['mode'] == 'make':
         external_processor.process()
     if config['mode'] == 'combination':
         combinate = Combinator('configuration.yaml')
-        processor = InstructionProcessor(combinate.enhance(combinate.combination))
+        processor = InstructionProcessor(config['serial'], combinate.enhance(combinate.combination))
         processor.process()
     if config['mode'] == 'return':
-        processor = InstructionProcessor(buff.to_reload(is_return=True))
+        processor = InstructionProcessor(config['serial'], buff.to_reload(is_return=True))
         processor.process()
 
     exec_time = (time.time() - start_time)

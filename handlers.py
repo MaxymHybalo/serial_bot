@@ -1,6 +1,6 @@
 from utils.configurator import Configurator
 import bot
-from processors import InstructionProcessor
+from processes.instruction_processor import InstructionProcessor
 from buff_instruction import to_reload
 
 AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return']
@@ -37,9 +37,8 @@ def set_cycles(params, config):
 def make(params, config):
     params = params[1]
     if params == 'reload':
-        procesor = InstructionProcessor(to_reload(is_return=True))
+        procesor = InstructionProcessor(config['serial'], to_reload(is_return=True))
         bot.run(procesor)
-    print(params)
     return 'Ok!'
 
 
