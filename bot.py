@@ -2,6 +2,7 @@ import time
 import logging
 from utils.configurator import Configurator
 from jobs.enhancer import Enhancer
+from jobs.buffer import Buffer
 from processes.object_processor import ProcessInitializer
 from enhance import Enhancer as Combinator
 from processes.instruction_processor import InstructionProcessor
@@ -21,10 +22,9 @@ def run(external_processor=None):
         enhancer = Enhancer(config['enhancer'])
         processor = ProcessInitializer(enhancer, config['serial'])
         processor.handle()
-
     if config['mode'] == 'buff':
-        processor = InstructionProcessor(config['serial'], buff.get_buff_instruction(sequence=buff.full_buff_sequence, reload=True))
-        processor.process()
+        processor = ProcessInitializer(Buffer(config['buffer']), config['serial'])
+        processor.handle()
     if config['mode'] == 'make':
         external_processor.process()
     if config['mode'] == 'combination':

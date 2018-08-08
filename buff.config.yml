@@ -1,0 +1,6 @@
+asset_preffix: 'assets/window'
+markers:
+  selector: 'char_selector_marker.png'
+  menu: 'menu_marker.png'
+  moon: 'moon_marker.png'
+  window: 'window_marker.png'
