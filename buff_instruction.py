@@ -7,7 +7,7 @@ from processes.wait import Wait
 # Abstract things:
 # 1. Move some features to global scope (window detection, splits, etc)
 # features for buff 2.0:
-# 0. Add in Arduiono sketch keyboard support
+# 0. Add in Arduiono sketch keyboard support                                +
 # 1. Autodetect window
 # 2. Split window to usefull zones
 # 3. Start from 'in game mode'
@@ -15,6 +15,9 @@ from processes.wait import Wait
 # 5. Use keywords for buffing
 # In game enhacement
 # 1. Add cast and run speed
+# 
+# Base points, and demensions
+# Game window start position dy=5, dx=3, marker='window_marker'
 
 CONFIG = 'buff_utils.json'
 

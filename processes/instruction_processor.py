@@ -4,6 +4,7 @@ from processes.click import Click
 from processes.recognizer import Recognizer
 from processes.wait import Wait
 from processes.process import Process
+from processes.key import Key
 
 class InstructionProcessor(Process):
 
