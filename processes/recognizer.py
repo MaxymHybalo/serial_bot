@@ -7,7 +7,7 @@ import cv2
 
 class Recognizer:
 
-    def __init__(self, image, region, wait=1, process="recognize", **kwargs):
+    def __init__(self, image, region, wait=0, process="recognize", **kwargs):
         self.log = logging.getLogger('recognizer')
         self.image = image
         self.region = region

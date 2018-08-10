@@ -4,3 +4,6 @@ markers:
   menu: 'menu_marker.png'
   moon: 'moon_marker.png'
   window: 'window_marker.png'
+  select_menu: 'select_menu.png'
+  selector_ok: 'selector_ok.png'
+  ok: 'ok.png'
