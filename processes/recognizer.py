@@ -16,7 +16,7 @@ class Recognizer:
         self.properties = kwargs
 
     def recognize(self, once=False):
-        self.log.debug('Try to recognize')
+        self.log.debug('Try to recognize {0}'.format(self.image))
         value = ui.locateOnScreen(str(self.image), region=self.region)
         if once:
             self.log.debug('Recognized once: {0}'.format(value))

@@ -10,9 +10,9 @@ from processes.wait import Wait
 # 0. Add in Arduiono sketch keyboard support                                +
 # 1. Autodetect window
 # 2. Split window to usefull zones
-# 3. Start from 'in game mode'
-# 4. Try to use 'splinter' icon to detect that character loaded
-# 5. Use keywords for buffing
+# 3. Start from 'in game mode'                                              +
+# 4. Try to use 'splinter' icon to detect that character loaded             +
+# 5. Use keywords for buffing                                               
 # In game enhacement
 # 1. Add cast and run speed
 # 

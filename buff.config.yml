@@ -7,3 +7,4 @@ markers:
   select_menu: 'select_menu.png'
   selector_ok: 'selector_ok.png'
   ok: 'ok.png'
+  selected_char_marker: 'selected_char_marker.png'
