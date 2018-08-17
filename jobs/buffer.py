@@ -42,24 +42,24 @@ class Buffer:
 
     def process_flow(self):
         for buffer in self.FLOW:
-            Rect(Recognizer(self.selector_ok, None).recognize()).click().make_click(self.serial)
+            Wait(1).delay()
+            Key('E').press(self.serial)
             Recognizer(self.moon, None).recognize()
             for buff in buffer:
                 Key(buff).press(self.serial)
-                Wait(1).delay()
+                Wait(1.3).delay()
             self._go_to_selector()
             Key('D').press(self.serial)
 
     def _detect_chars(self):
         recognizer = Recognizer(self.selected_char, None)
-        marker = recognizer.recognize(once=True)
+        marker = None
         key = Key('D')
-        print(marker)
-        if marker:
-            key.press(self.serial)
         while not marker:
             marker = recognizer.recognize(once=True)
-            key.press(self.serial)
+            if marker is None:
+                key.press(self.serial)
+            print('Marger', marker)
 
     def _go_to_selector(self):
         mode = self._setup_buff_mode()
