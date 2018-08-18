@@ -41,8 +41,14 @@ def set_buff(params, config):
             config['refresh'] = False
     else:
         config['refresh'] = True
+    config['spawn'] = False
     configurator.dump_yaml(config)
     
+def set_spawn(config):
+    configurator = Configurator(config['buffer'])
+    config = configurator.from_yaml()
+    config['spawn'] = True
+    configurator.dump_yaml(config)
 
 def make(params, config):
     params = params[1]

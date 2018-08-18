@@ -84,11 +84,11 @@ def make_handler(message):
     bot.send_message(message.chat.id, mode)
 
 
-@bot.message_handler(commands=['return'])
-def return_handler(message):
-    handlers.set_mode('return', CONFIG_FILE)
+@bot.message_handler(commands=['spawn'])
+def spawn_handler(message):
+    handlers.set_spawn(config)
     handlers.run_bot()
-    bot.send_message(message.chat.id, 'Okay! Return')
+    bot.send_message(message.chat.id, 'Okay! Returned')
 
 
 @bot.message_handler(func=lambda message: True)

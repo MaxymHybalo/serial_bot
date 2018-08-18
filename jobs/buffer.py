@@ -19,6 +19,7 @@ class Buffer:
         ['1'],
         ['2', '3','1']
     ]
+
     def __init__(self, configpath):
         self.log = logging.getLogger('buffer')
         self.config = Configurator(configpath).from_yaml()
@@ -33,21 +34,27 @@ class Buffer:
 
     def process(self, serial):
         self.serial = serial
-        print(self.config)
-        # wait just for testing
-        Wait(2).delay()
-        selector_ok = self._go_to_selector()
-        self._detect_chars()
         self.process_flow()
 
     def process_flow(self):
+        if self.config['spawn']:
+            Key('0').press(self.serial)
+            Wait(10).delay()
+            Recognizer(self.moon, None).recognize()
+            self._go_to_selector()
+            Key('U').press(self.serial)
+            Wait(0.5).delay()
+            Key('E').press(self.serial)
+            Recognizer(self.moon, None).recognize()
+            return
+        selector_ok = self._go_to_selector()
+        self._detect_chars()
         if self.config['buff']:
             self._go_over_chars(self._buff_flow)
         if self.config['refresh']:
             self._go_over_chars(self._refresh_flow)
             Key('E').press(self.serial)
 
-            
     def _buff_flow(self, *arg):
         for buff in arg:
             Key(buff).press(self.serial)
