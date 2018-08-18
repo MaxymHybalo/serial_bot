@@ -45,8 +45,10 @@ def mode_handler(message):
 
 @bot.message_handler(commands=['buff'])
 def buff_handler(message):
-    handlers.set_mode('buff', CONFIG_FILE)
     bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
+    params = message.text.split(' ')
+    handlers.set_buff(params, config)
+    handlers.set_mode('buff', CONFIG_FILE)
     final = handlers.run_bot()
     bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
 

@@ -33,6 +33,16 @@ def set_cycles(params, config):
     config['enhancement']['cycles'] = params[1]
     configurator.dump_yaml(config)
 
+def set_buff(params, config):
+    configurator = Configurator(config['buffer'])
+    config = configurator.from_yaml()
+    if len(params) > 1:
+        if params[1] == 'refresh':
+            config['refresh'] = False
+    else:
+        config['refresh'] = True
+    configurator.dump_yaml(config)
+    
 
 def make(params, config):
     params = params[1]
