@@ -5,7 +5,7 @@ from processes.recognizer import Recognizer
 from processes.wait import Wait
 from processes.nested_process import NestedProcessor
 
-PORT = 'COM7'
+PORT = 'COM6'
 BAUDRATE = 9600
 
 

@@ -3,7 +3,7 @@ enhance:
   cube:
     x: 1
     y: 1
-  cycles: 99
+  cycles: 60
 #  scope property mean left minimal point for enhance and right maximum point
   scope:
     start:
