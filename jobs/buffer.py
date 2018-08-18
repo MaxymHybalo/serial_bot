@@ -11,7 +11,7 @@ class Buffer:
 
     FLOW = [
         ['1','2','3','4','5'],
-        ['1','2','3','4'],
+        ['1','2','3','4', '5'],
         ['1'],
         ['1'],
         ['1'],
@@ -41,14 +41,27 @@ class Buffer:
         self.process_flow()
 
     def process_flow(self):
-        for buffer in self.FLOW:
-            Key('D').press(self.serial)
-            Wait(1).delay()
+        if self.config['buff']:
+            self._go_over_chars(self._buff_flow)
+        if self.config['refresh']:
+            self._go_over_chars(self._refresh_flow)
             Key('E').press(self.serial)
-            Recognizer(self.moon, None).recognize()
-            for buff in buffer:
-                Key(buff).press(self.serial)
-                Wait(1.5).delay()
+
+            
+    def _buff_flow(self, *arg):
+        for buff in arg:
+            Key(buff).press(self.serial)
+            Wait(1.5).delay()
+        self._go_to_selector()
+        
+    def _refresh_flow(self, *arg):
+        Wait(5).delay()
+        self._go_to_selector()
+
+    def _go_over_chars(self, handle):
+        for flow in self.FLOW:
+            self._next_char()
+            handle(*flow)
             self._go_to_selector()
 
     def _detect_chars(self):
@@ -57,6 +70,12 @@ class Buffer:
         marker = Rect(marker).click()
         marker.process = 'click'
         marker.make_click(self.serial)
+    
+    def _next_char(self):
+        Key('D').press(self.serial)
+        Wait(1).delay()
+        Key('E').press(self.serial)
+        Recognizer(self.moon, None).recognize()
 
     def _go_to_selector(self):
         mode = self._setup_buff_mode()

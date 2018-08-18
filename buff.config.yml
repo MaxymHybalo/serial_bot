@@ -1,3 +1,5 @@
+buff: true
+refresh: true
 asset_preffix: 'assets/window'
 markers:
   selector: 'char_selector_marker.png'
