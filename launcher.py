@@ -6,27 +6,26 @@ from utils.configurator import Configurator
 
 CONFIG_FILE = 'config.yml'
 
-
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG,
                         format=log_format,
                         datefmt='%d-%m %H:%M:%S')
 
-
 def load_config():
     return Configurator(CONFIG_FILE).from_yaml()
-
 
 configure_logger()
 config = load_config()
 bot = telebot.TeleBot(config['token'])
 
-
 @bot.message_handler(commands=['start'])
 def start(message):
-    bot.send_message(message.chat.id, 'Oh, it\'s work!')
-
+    markup = types.ReplyKeyboardMarkup()
+    item_buff = types.KeyboardButton('buff')
+    item_spawn = types.KeyboardButton('spawn')
+    markup.row(item_buff, item_spawn)
+    bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
 @bot.message_handler(commands=['config'])
 def config_handler(message):
@@ -93,7 +92,14 @@ def spawn_handler(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    bot.send_message(message.chat.id, 'Try use another command')
+    print(message.text)
+    command = message.text
+    if command == 'spawn':
+        spawn_handler(message)
+    if command == 'buff':
+        buff_handler(message)
+    else:
+        bot.send_message(message.chat.id, 'Try use another command')
 
 
 def validate(params, id):
@@ -101,6 +107,5 @@ def validate(params, id):
     if len(mode) <= 1:
         bot.send_message(id, 'You forget give me mode name')
     return mode
-
 
 bot.polling()
