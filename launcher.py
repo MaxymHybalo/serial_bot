@@ -31,7 +31,6 @@ def start(message):
 def config_handler(message):
     bot.send_message(message.chat.id, handlers.get_config(config))
 
-
 @bot.message_handler(commands=['mode'])
 def mode_handler(message):
     mode = validate(message, message.chat.id)
@@ -40,7 +39,6 @@ def mode_handler(message):
     else:
         return None
     bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
-
 
 @bot.message_handler(commands=['buff'])
 def buff_handler(message):
@@ -51,13 +49,11 @@ def buff_handler(message):
     final = handlers.run_bot()
     bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
 
-
 @bot.message_handler(commands=['run'])
 def run_handler(message):
     bot.send_message(message.chat.id, 'Okay, just run for you this')
     final = handlers.run_bot()
     bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(final/60))
-
 
 @bot.message_handler(commands=['cube'])
 def cube_handler(message):
@@ -66,14 +62,12 @@ def cube_handler(message):
         handlers.set_cube(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cube position')
 
-
 @bot.message_handler(commands=['cycles'])
 def cycles_handler(message):
     mode = validate(message, message.chat.id)
     if len(mode) > 1:
         handlers.set_cycles(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cycles count')
-
 
 @bot.message_handler(commands=['make'])
 def make_handler(message):
@@ -82,13 +76,11 @@ def make_handler(message):
         mode = handlers.make(mode, config)
     bot.send_message(message.chat.id, mode)
 
-
 @bot.message_handler(commands=['spawn'])
 def spawn_handler(message):
     handlers.set_spawn(config)
     handlers.run_bot()
     bot.send_message(message.chat.id, 'Okay! Returned')
-
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
@@ -100,7 +92,6 @@ def echo_all(message):
         buff_handler(message)
     else:
         bot.send_message(message.chat.id, 'Try use another command')
-
 
 def validate(params, id):
     mode = params.text.split(' ')

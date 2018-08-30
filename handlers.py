@@ -1,7 +1,6 @@
 from utils.configurator import Configurator
 import bot
 from processes.instruction_processor import InstructionProcessor
-from buff_instruction import to_reload
 
 AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return']
 
@@ -49,14 +48,6 @@ def set_spawn(config):
     config = configurator.from_yaml()
     config['spawn'] = True
     configurator.dump_yaml(config)
-
-def make(params, config):
-    params = params[1]
-    if params == 'reload':
-        procesor = InstructionProcessor(config['serial'], to_reload(is_return=True))
-        bot.run(procesor)
-    return 'Ok!'
-
 
 def run_bot():
     return bot.run()

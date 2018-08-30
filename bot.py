@@ -6,12 +6,9 @@ from jobs.buffer import Buffer
 from processes.object_processor import ProcessInitializer
 from enhance import Enhancer as Combinator
 from processes.instruction_processor import InstructionProcessor
-import buff_instruction as buff
-
 
 def load_config():
     return Configurator('config.yml').from_yaml()
-
 
 def run(external_processor=None):
     start_time = time.time()
@@ -36,7 +33,6 @@ def run(external_processor=None):
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
     log.info(final_message)
     return exec_time
-
 
 if __name__ == '__main__':
     run()
