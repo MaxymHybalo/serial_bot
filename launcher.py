@@ -24,7 +24,8 @@ def start(message):
     markup = types.ReplyKeyboardMarkup()
     item_buff = types.KeyboardButton('buff')
     item_spawn = types.KeyboardButton('spawn')
-    markup.row(item_buff, item_spawn)
+    item_enhance = types.KeyboardButton('enhance')
+    markup.row(item_buff, item_spawn, item_enhance)
     bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
 @bot.message_handler(commands=['config'])
@@ -49,6 +50,12 @@ def buff_handler(message):
     final = handlers.run_bot()
     bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
 
+@bot.message_handler(commands=['enhance'])
+def enhance(message):
+    handlers.set_mode('enhance', CONFIG_FILE)
+    time = handlers.run_bot()
+    bot.send_message(message.chat_id, 'Good, that\'s all, just in ' + str(time/60))
+
 @bot.message_handler(commands=['run'])
 def run_handler(message):
     bot.send_message(message.chat.id, 'Okay, just run for you this')
@@ -68,13 +75,6 @@ def cycles_handler(message):
     if len(mode) > 1:
         handlers.set_cycles(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cycles count')
-
-@bot.message_handler(commands=['make'])
-def make_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        mode = handlers.make(mode, config)
-    bot.send_message(message.chat.id, mode)
 
 @bot.message_handler(commands=['spawn'])
 def spawn_handler(message):
