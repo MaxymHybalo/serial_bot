@@ -90,6 +90,8 @@ def echo_all(message):
         spawn_handler(message)
     if command == 'buff':
         buff_handler(message)
+    if command == 'enhance':
+        enhance(message)
     else:
         bot.send_message(message.chat.id, 'Try use another command')
 
