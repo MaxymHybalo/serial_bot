@@ -24,8 +24,9 @@ def start(message):
     markup = types.ReplyKeyboardMarkup()
     item_buff = types.KeyboardButton('buff')
     item_spawn = types.KeyboardButton('spawn')
+    item_logout = types.KeyboardButton('logout')
     item_enhance = types.KeyboardButton('enhance')
-    markup.row(item_buff, item_spawn, item_enhance)
+    markup.row(item_buff, item_spawn, item_logout, item_enhance)
     bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
 @bot.message_handler(commands=['config'])
@@ -66,6 +67,11 @@ def spawn(message):
     handlers.run_bot()
     bot.send_message(message.chat.id, 'Okay! Returned')
 
+def logout(message):
+    handlers.set_logout(config)
+    handlers.run_bot()
+    bot.send_message(message.chat.id, 'Okay! Spawn')
+
 def buff(message):
     bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
     params = message.text.split(' ')
@@ -81,7 +87,7 @@ def enhance(message):
 
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    modes = ['spawn', 'buff', 'enhance']
+    modes = ['spawn', 'buff', 'enhance', 'logout']
     command = message.text
     for m in modes:
         if command == m:

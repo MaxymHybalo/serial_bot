@@ -38,8 +38,9 @@ class Buffer:
 
     def process_flow(self):
         if self.config['spawn']:
-            Key('0').press(self.serial)
-            Wait(10).delay()
+            if not self.config['logout']:
+                Key('0').press(self.serial)
+                Wait(10).delay()
             Recognizer(self.moon, None).recognize()
             self._go_to_selector()
             Key('U').press(self.serial)
@@ -47,7 +48,7 @@ class Buffer:
             Key('E').press(self.serial)
             Recognizer(self.moon, None).recognize()
             return
-        selector_ok = self._go_to_selector()
+        self._go_to_selector()
         self._detect_chars()
         if self.config['buff']:
             self._go_over_chars(self._buff_flow)
