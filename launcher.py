@@ -54,7 +54,7 @@ def buff_handler(message):
 def enhance(message):
     handlers.set_mode('enhance', CONFIG_FILE)
     time = handlers.run_bot()
-    bot.send_message(message.chat_id, 'Good, that\'s all, just in ' + str(time/60))
+    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(time/60))
 
 @bot.message_handler(commands=['run'])
 def run_handler(message):
