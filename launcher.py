@@ -41,21 +41,6 @@ def mode_handler(message):
         return None
     bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
 
-@bot.message_handler(commands=['buff'])
-def buff_handler(message):
-    bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
-    params = message.text.split(' ')
-    handlers.set_buff(params, config)
-    handlers.set_mode('buff', CONFIG_FILE)
-    final = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
-
-@bot.message_handler(commands=['enhance'])
-def enhance(message):
-    handlers.set_mode('enhance', CONFIG_FILE)
-    time = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(time/60))
-
 @bot.message_handler(commands=['run'])
 def run_handler(message):
     bot.send_message(message.chat.id, 'Okay, just run for you this')
@@ -76,24 +61,31 @@ def cycles_handler(message):
         handlers.set_cycles(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cycles count')
 
-@bot.message_handler(commands=['spawn'])
-def spawn_handler(message):
+def spawn(message):
     handlers.set_spawn(config)
     handlers.run_bot()
     bot.send_message(message.chat.id, 'Okay! Returned')
 
+def buff(message):
+    bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
+    params = message.text.split(' ')
+    handlers.set_buff(params, config)
+    handlers.set_mode('buff', CONFIG_FILE)
+    final = handlers.run_bot()
+    bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
+
+def enhance(message):
+    handlers.set_mode('enhance', CONFIG_FILE)
+    time = handlers.run_bot()
+    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(time/60))
+
 @bot.message_handler(func=lambda message: True)
 def echo_all(message):
-    print(message.text)
+    modes = ['spawn', 'buff', 'enhance']
     command = message.text
-    if command == 'spawn':
-        spawn_handler(message)
-    if command == 'buff':
-        buff_handler(message)
-    if command == 'enhance':
-        enhance(message)
-    else:
-        bot.send_message(message.chat.id, 'Try use another command')
+    for m in modes:
+        if command == m:
+            globals()[m](message)
 
 def validate(params, id):
     mode = params.text.split(' ')
