@@ -18,7 +18,7 @@ def index(name=None):
 
 @app.route('/buff', methods=['POST'])
 def buff(name=None):
-    params=None
+    params=[]
     handlers.set_buff(params, config)
     handlers.set_mode('buff', CONFIG_FILE)
     handlers.run_bot()
