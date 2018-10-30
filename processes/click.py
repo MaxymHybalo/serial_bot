@@ -1,5 +1,6 @@
 import pyautogui as ui
 from processes.wait import Wait
+from utils.serial_controller import SerialController
 
 
 CLICK = b'C'
@@ -18,7 +19,8 @@ class Click:
         self.delay = delay
 
     # param click mean Click instance
-    def make_click(self, serial):
+    def make_click(self, serial=SerialController()):
+        serial = serial.serial
         self.search(serial, self.x, self.y)
         serial.write(CLICK)
         if self.process == 'dclick':
