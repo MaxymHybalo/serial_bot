@@ -6,7 +6,7 @@ class Process:
         self.config = config
     
     def run_serial(self):
-        return SerialController(self.config).serial
+        return SerialController().serial
         # try:
         #     port = 'COM' + str(self.config['port'])
         #     baudrate = self.config['baudrate']

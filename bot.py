@@ -16,12 +16,12 @@ def run(external_processor=None):
     start_time = time.time()
     log = logging.getLogger('bot')
     config = load_config()
-    SerialController().run_serial(config['serial']) 
+    if not SerialController().serial:
+        SerialController().run_serial(config['serial']) 
 
     if config['mode'] == 'enhance':
         enhancer = Enhancer(config['enhancer'])
-        processor = ProcessInitializer(enhancer, config['serial'])
-        processor.handle()
+        enhancer.process()
     if config['mode'] == 'buff':
         processor = ProcessInitializer(Buffer(config['buffer']), config['serial'])
         processor.handle()

@@ -15,27 +15,12 @@ class Enhancer:
     def __init__(self, configpath):
         self.log = logging.getLogger('enhancer')
         self.config = Configurator(configpath).from_yaml()
-        self.serial = None
         self.cube = None
         self.grid = None
-
         self.now = datetime.datetime.now()
         self.round = 0
 
-    def write_state(state):
-        def wrapper(self):
-            name = self.logged_image_name('before')
-            self.log.debug('Cycle pre-enhance state name {0}'.format(name))
-            scope, eoi = state(self)
-            cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
-            eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
-            draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, file=name)
-            self.log.debug('Draw state')
-            return scope, eoi
-        return wrapper
-
-    def process(self, serial):
-        self.serial = serial
+    def process(self):
         cycles = int(self.config['enhancement']['cycles'])
         for i in range(cycles):
             self.round = i
@@ -43,7 +28,6 @@ class Enhancer:
         self.log.debug('End Enhancer process')
 
 
-    @write_state
     def state(self):
         self.log.debug('Getting inventory state')
         grid_image = self.image_path(self.config['recognize']['grid']['image'])
@@ -57,35 +41,26 @@ class Enhancer:
 
     def enhance(self):
         scope, eoi = self.state()
-
         self.click_at_target(self.config['recognize']['enhance']['menu'])
         before = self.fetch_scope_mask(scope)
         self.do_flow(scope)
-        # after = self.fetch_scope_mask(scope)
-        # broken = find_subtraction(before, after)
-        # broken = list(map(lambda e: scope[e[0]][e[1]], broken))
-        # self.write_after(scope, eoi, broken)
-        #
-        # if broken:
-        #     self.click_at_target(self.config['recognize']['enhance']['close'])
-        #     self.remove_broken(broken)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
         self.log.info('Start enhancing from {0}'.format(len(scope)))
-        cube.make_click(self.serial)
+        cube.make_click()
         cube.process = 'dclick'
         for row_id, row in enumerate(scope):
             for col_id, col in enumerate(row):
                 self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
                 item = Rect(col).click()
-                item.make_click(self.serial)
-                cube.make_click(self.serial)
-                make.make_click(self.serial)
-                main.make_click(self.serial)
+                item.make_click()
+                cube.make_click()
+                make.make_click()
+                main.make_click()
         cube.process = 'click'
-        cube.make_click(self.serial)
-        main.make_click(self.serial)
+        cube.make_click()
+        main.make_click()
 
     def _init_flow(self):
         make = self.click_at_target(self.config['recognize']['enhance']['make'], make=False)
@@ -108,14 +83,14 @@ class Enhancer:
 
     def select_broken(self, broken):
         for b in broken:
-            Rect(b).click().make_click(self.serial)
+            Rect(b).click().make_click()
 
     def click_at_target(self, target, make=True):
         click = Recognizer(self.image_path(target), region=None)\
             .recognize(once=True)
         click = Rect(click).click()
         if make:
-            click.make_click(self.serial)
+            click.make_click()
             self.log.debug('Click at {0}'.format(target))
         return click
 
@@ -143,14 +118,3 @@ class Enhancer:
         eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
         name = self.logged_image_name('after')
         draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, broken=broken, file=name)
-
-
-def find_subtraction(before, after):
-    changed = []
-    for row_id, row in enumerate(before):
-        for col_id, col in enumerate(row):
-            if not np.array_equal(after[row_id][col_id], col):
-                changed.append([row_id, col_id])
-                # utils.show(col, 'before')
-                # utils.show(after[row_id][col_id], 'after')
-    return changed
