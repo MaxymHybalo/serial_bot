@@ -111,10 +111,3 @@ class Enhancer:
     def logged_image_name(self, moment):
         return 'log/' + moment + '_cycle_' + str(self.round) + '_' + str(self.now.year) + '_' + str(self.now.month) \
                + '_' + str(self.now.day) + '_' + str(self.now.hour) + '_' + str(self.now.minute) + '.png '
-
-    def write_after(self, scope, eoi, broken):
-        # TODO move to some decorator
-        cube_roi = self.grid.get_region_of(self.cube[0], self.cube[1])
-        eoi_roi = self.grid.get_region_of(eoi[0] + 1, eoi[1] + 1) if eoi else None
-        name = self.logged_image_name('after')
-        draw_state(cube_roi, eoi_roi, scope, self.grid.inventory_region, broken=broken, file=name)
