@@ -6,7 +6,7 @@ from processes.recognizer import Recognizer
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
-from utils.drawer import draw_state
+from utils.drawer import draw_state 
 from shapes.rect import Rect
 
 
@@ -31,7 +31,7 @@ class Enhancer:
     def state(self):
         self.log.debug('Getting inventory state')
         grid_image = self.image_path(self.config['recognize']['grid']['image'])
-        self.grid = Grid(grid_image, self.config['recognize']['grid']['size'])
+        self.grid = Grid(grid_image)
         eoi = self.grid.find_position(self.image_path(self.config['recognize']['grid']['eoi']))
         self.cube = self.config['enhancement']['cube']
         self.cube = list(map(lambda x: int(x), self.cube))

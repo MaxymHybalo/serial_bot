@@ -5,18 +5,19 @@ import utils.cv2_utils as utils
 ITEM_WIDTH = 33
 ITEM_HEIGHT = 33
 MARGIN = 1
-
+SIZE = [9, 11]
+GRID_ENTRY = 'assets/enhancer/grid_identifier.png'
 
 # todo change debug to image log, decorate it
 # include size into class
 # add option use image instead path
 class Grid:
 
-    def __init__(self, identifier, size, debug=False):
+    def __init__(self, debug=False):
         self.debug = debug
         self.log = logging.getLogger('grid')
-        self.identifier = identifier
-        self.col, self.row = size
+        self.identifier = GRID_ENTRY
+        self.col, self.row = SIZE
         self.start, _ = self.__find_grid_entry()
         self.inventory_region = self.__inventory_region()
         self.matix_rects = self.generate_rectangles(self.start)

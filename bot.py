@@ -8,7 +8,9 @@ from enhance import Enhancer as Combinator
 from processes.instruction_processor import InstructionProcessor
 
 from utils.serial_controller import SerialController
-from processes.click import Click
+
+from jobs.grid_layout import Grid
+
 def load_config():
     return Configurator('config.yml').from_yaml()
 
@@ -32,8 +34,8 @@ def run(external_processor=None):
         processor = InstructionProcessor(config['serial'], combinate.enhance(combinate.combination))
         processor.process()
     if config['mode'] == 'test':
-        Click(329, 213).make_click()
-        
+        grid = Grid(debug=True)
+
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
     log.info(final_message)
