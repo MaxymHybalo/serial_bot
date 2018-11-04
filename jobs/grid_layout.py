@@ -1,6 +1,7 @@
 import logging
 from processes.recognizer import Recognizer
 import utils.cv2_utils as utils
+import pyautogui as ui
 
 ITEM_WIDTH = 33
 ITEM_HEIGHT = 33
@@ -18,7 +19,7 @@ class Grid:
         self.log = logging.getLogger('grid')
         self.identifier = GRID_ENTRY
         self.col, self.row = SIZE
-        self.start, _ = self.__find_grid_entry()
+        self.start = self.__find_grid_entry()
         self.inventory_region = self.__inventory_region()
         self.matix_rects = self.generate_rectangles(self.start)
 
@@ -93,9 +94,8 @@ class Grid:
     def __find_grid_entry(self):
         rect = Recognizer(self.identifier, None, wait=0).recognize()
         start = (rect[0], rect[1] + rect[3], 3)
-        end = (rect[0] + rect[2], rect[1] + rect[3], 3)
         self.log.debug('Found grid entry at: {0}'.format(start))
-        return start, end
+        return start
 
     def __inventory_region(self):
         self.log.debug('Find inventory region')

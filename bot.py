@@ -35,6 +35,7 @@ def run(external_processor=None):
         processor.process()
     if config['mode'] == 'test':
         grid = Grid(debug=True)
+        grid.slice_inventory([2,2], [5,5])
 
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
