@@ -53,41 +53,59 @@ def cube_handler(message):
         handlers.set_cube(mode, config)
     bot.send_message(message.chat.id, 'Maybe I update cube position')
 
-@bot.message_handler(commands=['cycles'])
-def cycles_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        handlers.set_cycles(mode, config)
+def cycles(cycle):
+    handlers.set_cycles(cycle, config)
+    handlers.run_bot()
 
-def spawn(message):
+def spawn():
     handlers.set_spawn(config)
     handlers.run_bot()
 
-def logout(message):
+def logout():
     handlers.set_logout(config)
     handlers.run_bot()
 
-def buff(message):
-    params = message.text.split(' ')
-    handlers.set_buff(params, config)
+def buff():
     handlers.set_mode('buff', CONFIG_FILE)
 
-def enhance(message):
-    handlers.set_mode('enhance', CONFIG_FILE)
-
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    command = message.text
-    for m in MODES:
-        if command == m:
-            globals()[m](message)
+def enhance(id):
+    markup = InlineKeyboardMarkup()
+    keyboard = [
+        {
+            'title': 'cycles 1',
+            'data': 'child_cycle_1',
+        },
+        {
+            'title': 'cycles 3',
+            'data': 'child_cycle_3',
+        },
+        {
+            'title': 'cycles 4',
+            'data': 'child_cycle_4',
+        }
+    ]
+    markup.add(InlineKeyboardButton('cube', callback_data='cube'))
+    row = []
+    for c_key in keyboard:
+        row.append(InlineKeyboardButton(c_key['title'], callback_data=c_key['data']))
+    markup.add(*row)
+    bot.send_message(id, 'Enhance menu', reply_markup=markup)
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
     bot.answer_callback_query(call.id, 'Start ' + call.data)
-    globals()[call.data]()
+    data = call.data.split('_')
+    print(data, data[0] is 'child')
+    if data[0] == 'child':
+        handle_child_nodes(data[1:])
+        bot.answer_callback_query(call.id, 'End ' + call.data)
+        return
+    globals()[data[0]](call.message.chat.id)
     bot.answer_callback_query(call.id, 'End ' + call.data)
             
+def handle_child_nodes(data):
+    if data[0] == 'cycle':
+        cycles(data[1])
 
 def validate(params, id):
     mode = params.text.split(' ')

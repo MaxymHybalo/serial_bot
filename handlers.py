@@ -26,7 +26,7 @@ def set_cube(params, config):
 def set_cycles(params, config):
     configurator = Configurator(config['enhancer'])
     config = configurator.from_yaml()
-    config['enhancement']['cycles'] = params[1]
+    config['enhancement']['cycles'] = params
     configurator.dump_yaml(config)
 
 def set_buff(params, config):
