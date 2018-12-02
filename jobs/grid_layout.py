@@ -1,21 +1,25 @@
 import logging
 from processes.recognizer import Recognizer
 import utils.cv2_utils as utils
+import pyautogui as ui
 
 ITEM_WIDTH = 33
 ITEM_HEIGHT = 33
 MARGIN = 1
-
+SIZE = [9, 11]
+GRID_ENTRY = 'assets/enhancer/grid_identifier.png'
 
 # todo change debug to image log, decorate it
+# include size into class
+# add option use image instead path
 class Grid:
 
-    def __init__(self, identifier, size, debug=False):
+    def __init__(self, debug=False):
         self.debug = debug
         self.log = logging.getLogger('grid')
-        self.identifier = identifier
-        self.col, self.row = size
-        self.start, _ = self.__find_grid_entry()
+        self.identifier = GRID_ENTRY
+        self.col, self.row = SIZE
+        self.start = self.__find_grid_entry()
         self.inventory_region = self.__inventory_region()
         self.matix_rects = self.generate_rectangles(self.start)
 
@@ -90,9 +94,8 @@ class Grid:
     def __find_grid_entry(self):
         rect = Recognizer(self.identifier, None, wait=0).recognize()
         start = (rect[0], rect[1] + rect[3], 3)
-        end = (rect[0] + rect[2], rect[1] + rect[3], 3)
         self.log.debug('Found grid entry at: {0}'.format(start))
-        return start, end
+        return start
 
     def __inventory_region(self):
         self.log.debug('Find inventory region')

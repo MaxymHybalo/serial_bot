@@ -99,4 +99,8 @@ def validate(params, id):
         bot.send_message(id, 'You forget give me mode name')
     return mode
 
-bot.polling()
+if not config['debug']:
+    bot.polling()
+else:
+    handlers.run_bot()
+
