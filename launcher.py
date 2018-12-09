@@ -68,7 +68,7 @@ def logout():
 def buff():
     handlers.set_mode('buff', CONFIG_FILE)
 
-def enhance(id):
+def enhance():
     markup = InlineKeyboardMarkup()
     keyboard = [
         {
@@ -89,7 +89,11 @@ def enhance(id):
     for c_key in keyboard:
         row.append(InlineKeyboardButton(c_key['title'], callback_data=c_key['data']))
     markup.add(*row)
-    bot.send_message(id, 'Enhance menu', reply_markup=markup)
+    markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
+    return markup
+
+def back():
+    return create_base_keyboard()
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
@@ -100,8 +104,13 @@ def handle_base_callbacks(call):
         handle_child_nodes(data[1:])
         bot.answer_callback_query(call.id, 'End ' + call.data)
         return
-    globals()[data[0]](call.message.chat.id)
-    bot.answer_callback_query(call.id, 'End ' + call.data)
+    markup = globals()[data[0]]()
+    print(call)
+    bot.edit_message_reply_markup(
+        chat_id=call.message.chat.id,
+        message_id=call.message.message_id,
+        reply_markup=markup
+    )
             
 def handle_child_nodes(data):
     if data[0] == 'cycle':
