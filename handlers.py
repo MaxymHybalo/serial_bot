@@ -20,7 +20,7 @@ def set_mode(mode, config):
 def set_cube(params, config):
     configurator = Configurator(config['enhancer'])
     config = configurator.from_yaml()
-    config['enhancement']['cube'] = [params[1], params[2]]
+    config['enhancement']['cube'] = [params[0], params[1]]
     configurator.dump_yaml(config)
 
 def set_cycles(params, config):

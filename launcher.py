@@ -47,6 +47,8 @@ def buff():
 def handle_child_nodes(data):
     if data[0] == 'cycle':
         cycles(data[1])
+    if data[0] == 'coords':
+        handlers.set_cube(data[1:], config)
 
 def enhance():
     markup = InlineKeyboardMarkup()
@@ -78,7 +80,7 @@ def cube():
     for row in range(1, 12):
         line = []
         for col in range(1, 10):
-            line.append(InlineKeyboardButton(str(col) + ':' + str(row), callback_data='cube_' + str(col) + '_' + str(row)))
+            line.append(InlineKeyboardButton(str(col) + ':' + str(row), callback_data='child_coords_' + str(col) + '_' + str(row)))
         markup.row(*line)
     markup.add(InlineKeyboardButton('<< Enhance', callback_data='enhance'))
     return markup
