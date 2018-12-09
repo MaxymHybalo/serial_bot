@@ -52,24 +52,13 @@ def handle_child_nodes(data):
 
 def enhance():
     markup = InlineKeyboardMarkup()
-    keyboard = [
-        {
-            'title': 'cycles 1',
-            'data': 'child_cycle_1',
-        },
-        {
-            'title': 'cycles 3',
-            'data': 'child_cycle_3',
-        },
-        {
-            'title': 'cycles 4',
-            'data': 'child_cycle_4',
-        }
-    ]
     markup.add(InlineKeyboardButton('cube', callback_data='cube'))
     row = []
-    for c_key in keyboard:
-        row.append(InlineKeyboardButton(c_key['title'], callback_data=c_key['data']))
+    for i in range(1, 5):
+        title = 'cycles ' + str(i)
+        callback = 'child_cycle_' + str(i) 
+        row.append(InlineKeyboardButton(title, callback_data=callback))
+    markup.row_width = 4
     markup.add(*row)
     markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
     return markup
