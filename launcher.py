@@ -21,6 +21,8 @@ def load_config():
 configure_logger()
 config = load_config()
 bot = telebot.TeleBot(config['token'])
+chat_id = None
+message_id = None
 
 @bot.message_handler(commands=['start'])
 def start(message):
@@ -70,6 +72,17 @@ def enhance():
     markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
     return markup
 
+def cube():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 9
+    for row in range(1, 12):
+        line = []
+        for col in range(1, 10):
+            line.append(InlineKeyboardButton(str(col) + ':' + str(row), callback_data='cube_' + str(col) + '_' + str(row)))
+        markup.row(*line)
+    markup.add(InlineKeyboardButton('<< Enhance', callback_data='enhance'))
+    return markup
+
 def back():
     return create_base_keyboard()
 
@@ -84,13 +97,14 @@ def create_base_keyboard():
 def handle_base_callbacks(call):
     bot.answer_callback_query(call.id, 'Start ' + call.data)
     data = call.data.split('_')
+    # chat_id = call.message.chat.id
+    # message_id = call.message.message_id
     print(data, data[0] is 'child')
     if data[0] == 'child':
         handle_child_nodes(data[1:])
         bot.answer_callback_query(call.id, 'End ' + call.data)
         return
     markup = globals()[data[0]]()
-    print(call)
     bot.edit_message_reply_markup(
         chat_id=call.message.chat.id,
         message_id=call.message.message_id,
