@@ -31,7 +31,14 @@ def start(message):
 
 def cycles(cycle):
     handlers.set_cycles(cycle, config)
+    print(chat_id, message_id)
+    bot.edit_message_reply_markup(
+        chat_id=chat_id,
+        message_id=message_id,
+        inline_message_id='Cycles ' + str(cycle)
+    )
     handlers.run_bot()
+    return None
 
 def spawn():
     handlers.set_spawn(config)
@@ -49,6 +56,8 @@ def handle_child_nodes(data):
         cycles(data[1])
     if data[0] == 'coords':
         handlers.set_cube(data[1:], config)
+        return enhance()
+    return None
 
 def enhance():
     markup = InlineKeyboardMarkup()
@@ -88,11 +97,14 @@ def create_base_keyboard():
 def handle_base_callbacks(call):
     bot.answer_callback_query(call.id, 'Start ' + call.data)
     data = call.data.split('_')
-    # chat_id = call.message.chat.id
-    # message_id = call.message.message_id
-    print(data, data[0] is 'child')
     if data[0] == 'child':
-        handle_child_nodes(data[1:])
+        handle = handle_child_nodes(data[1:])
+        if handle:
+            bot.edit_message_reply_markup(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=handle
+            )        
         bot.answer_callback_query(call.id, 'End ' + call.data)
         return
     markup = globals()[data[0]]()
