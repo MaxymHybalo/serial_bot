@@ -27,32 +27,6 @@ def start(message):
     markup = create_base_keyboard()
     bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
-@bot.message_handler(commands=['config'])
-def config_handler(message):
-    bot.send_message(message.chat.id, handlers.get_config(config))
-
-@bot.message_handler(commands=['mode'])
-def mode_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        mode = mode[1]
-    else:
-        return None
-    bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
-
-@bot.message_handler(commands=['run'])
-def run_handler(message):
-    bot.send_message(message.chat.id, 'Okay, just run for you this')
-    final = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(final/60))
-
-@bot.message_handler(commands=['cube'])
-def cube_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        handlers.set_cube(mode, config)
-    bot.send_message(message.chat.id, 'Maybe I update cube position')
-
 def cycles(cycle):
     handlers.set_cycles(cycle, config)
     handlers.run_bot()
@@ -67,6 +41,10 @@ def logout():
 
 def buff():
     handlers.set_mode('buff', CONFIG_FILE)
+
+def handle_child_nodes(data):
+    if data[0] == 'cycle':
+        cycles(data[1])
 
 def enhance():
     markup = InlineKeyboardMarkup()
@@ -95,6 +73,13 @@ def enhance():
 def back():
     return create_base_keyboard()
 
+def create_base_keyboard():
+    markup = InlineKeyboardMarkup()
+    keyboard = MODES
+    for key in keyboard:
+        markup.add(InlineKeyboardButton(key, callback_data=key))
+    return markup
+
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
     bot.answer_callback_query(call.id, 'Start ' + call.data)
@@ -111,23 +96,6 @@ def handle_base_callbacks(call):
         message_id=call.message.message_id,
         reply_markup=markup
     )
-            
-def handle_child_nodes(data):
-    if data[0] == 'cycle':
-        cycles(data[1])
-
-def validate(params, id):
-    mode = params.text.split(' ')
-    if len(mode) <= 1:
-        bot.send_message(id, 'You forget give me mode name')
-    return mode
-
-def create_base_keyboard():
-    markup = InlineKeyboardMarkup()
-    keyboard = MODES
-    for key in keyboard:
-        markup.add(InlineKeyboardButton(key, callback_data=key))
-    return markup
 
 if not config['debug']:
     bot.polling()
