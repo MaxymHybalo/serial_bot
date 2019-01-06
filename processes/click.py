@@ -20,7 +20,6 @@ class Click:
 
     # param click mean Click instance
     def make_click(self, serial=SerialController()):
-        serial = serial.serial
         self.search(serial, self.x, self.y)
         serial.write(CLICK)
         if self.process == 'dclick':
