@@ -49,7 +49,8 @@ def logout():
     handlers.run_bot()
 
 def buff():
-    handlers.set_mode('buff', CONFIG_FILE)
+    handlers.set_buff(['buff'], config)
+    handlers.run_bot()
 
 def handle_child_nodes(data):
     if data[0] == 'cycle':
