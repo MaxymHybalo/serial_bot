@@ -77,7 +77,7 @@ class Buffer:
         marker = recognizer.recognize()
         marker = Rect(marker).click()
         marker.process = 'click'
-        marker.make_click(self.serial)
+        marker.make_click()
     
     def _next_char(self):
         Key('D').press(self.serial)
@@ -89,9 +89,9 @@ class Buffer:
         mode = self._setup_buff_mode()
         if mode:
             select_button = Recognizer(self.select_marker, None).recognize()
-            Rect(select_button).click().make_click(self.serial)
+            Rect(select_button).click().make_click()
             ok = Recognizer(self.ok, None).recognize()
-            Rect(ok).click().make_click(self.serial)
+            Rect(ok).click().make_click()
         return Recognizer(self.selector_ok, None).recognize()
 
 

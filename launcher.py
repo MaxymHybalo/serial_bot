@@ -30,13 +30,14 @@ def start(message):
     bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
 def cycles(cycle):
+    handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
     print(chat_id, message_id)
-    bot.edit_message_reply_markup(
-        chat_id=chat_id,
-        message_id=message_id,
-        inline_message_id='Cycles ' + str(cycle)
-    )
+    # bot.edit_message_reply_markup(
+    #     chat_id=chat_id,
+    #     message_id=message_id,
+    #     inline_message_id='Cycles ' + str(cycle)
+    # )
     handlers.run_bot()
     return None
 
@@ -49,6 +50,7 @@ def logout():
     handlers.run_bot()
 
 def buff():
+    handlers.set_mode('buff', CONFIG_FILE)
     handlers.set_buff(['buff'], config)
     handlers.run_bot()
 
@@ -96,6 +98,7 @@ def create_base_keyboard():
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
+    print("##########", call.id, call.data)
     bot.answer_callback_query(call.id, 'Start ' + call.data)
     data = call.data.split('_')
     if data[0] == 'child':

@@ -32,11 +32,7 @@ def set_cycles(params, config):
 def set_buff(params, config):
     configurator = Configurator(config['buffer'])
     config = configurator.from_yaml()
-    if len(params) > 1:
-        if params[1] == 'refresh':
-            config['refresh'] = False
-    else:
-        config['refresh'] = True
+    config['refresh'] = True
     config['spawn'] = False
     configurator.dump_yaml(config)
     
