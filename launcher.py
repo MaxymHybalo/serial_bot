@@ -29,6 +29,12 @@ def start(message):
     markup = create_base_keyboard()
     bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
 
+@bot.message_handler(commands=['combination'])
+def combination(message):
+    handlers.set_mode('combination', CONFIG_FILE)
+    handlers.run_bot()
+    return None
+
 def cycles(cycle):
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
