@@ -26,8 +26,7 @@ message_id = None
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    markup = create_base_keyboard()
-    bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
+    _start(message.chat.id)
 
 @bot.message_handler(commands=['combination'])
 def combination(message):
@@ -44,18 +43,18 @@ def cycles(cycle):
 def spawn():
     handlers.set_spawn(config)
     handlers.run_bot()
-    return create_base_keyboard()
+    return None
 
 def logout():
     handlers.set_logout(config)
     handlers.run_bot()
-    return create_base_keyboard()
+    return None
 
 def buff():
     handlers.set_mode('buff', CONFIG_FILE)
     handlers.set_buff(['buff'], config)
     handlers.run_bot()
-    return create_base_keyboard()
+    return None
 
 def handle_child_nodes(data):
     if data[0] == 'cycle':
@@ -114,11 +113,18 @@ def handle_base_callbacks(call):
         bot.answer_callback_query(call.id, 'End ' + call.data)
         return
     markup = globals()[data[0]]()
-    bot.edit_message_reply_markup(
-        chat_id=call.message.chat.id,
-        message_id=call.message.message_id,
-        reply_markup=markup
-    )
+    if not markup:
+        _start(call.message.chat.id)
+    else:
+        bot.edit_message_reply_markup(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            reply_markup=markup
+        )
+
+def _start(id):
+    markup = create_base_keyboard()
+    bot.send_message(id, "Let's start work", reply_markup=markup)
 
 if not config['debug']:
     bot.polling()
