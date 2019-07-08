@@ -130,4 +130,3 @@ if not config['debug']:
     bot.polling()
 else:
     handlers.run_bot()
-
