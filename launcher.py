@@ -58,7 +58,7 @@ def buff():
 
 def handle_child_nodes(data):
     if data[0] == 'cycle':
-        cycles(data[1])
+        return cycles(data[1])
     if data[0] == 'coords':
         handlers.set_cube(data[1:], config)
         return enhance()
