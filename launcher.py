@@ -1,11 +1,14 @@
 import telebot
 from telebot import types
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+
 import handlers
 import logging
 from utils.configurator import Configurator
 
 CONFIG_FILE = 'config.yml'
 
+MODES = ['buff', 'spawn', 'logout', 'enhance']
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG,
@@ -18,86 +21,110 @@ def load_config():
 configure_logger()
 config = load_config()
 bot = telebot.TeleBot(config['token'])
+chat_id = None
+message_id = None
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    markup = types.ReplyKeyboardMarkup()
-    item_buff = types.KeyboardButton('buff')
-    item_spawn = types.KeyboardButton('spawn')
-    item_logout = types.KeyboardButton('logout')
-    item_enhance = types.KeyboardButton('enhance')
-    markup.row(item_buff, item_spawn, item_logout, item_enhance)
-    bot.send_message(message.chat.id, "Let's start work", reply_markup=markup)
+    _start(message.chat.id)
 
-@bot.message_handler(commands=['config'])
-def config_handler(message):
-    bot.send_message(message.chat.id, handlers.get_config(config))
+@bot.message_handler(commands=['combination'])
+def combination(message):
+    handlers.set_mode('combination', CONFIG_FILE)
+    handlers.run_bot()
+    return None
 
-@bot.message_handler(commands=['mode'])
-def mode_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        mode = mode[1]
-    else:
-        return None
-    bot.send_message(message.chat.id, handlers.set_mode(mode, CONFIG_FILE))
+def cycles(cycle):
+    handlers.set_mode('enhance', CONFIG_FILE)
+    handlers.set_cycles(cycle, config)
+    handlers.run_bot()
+    return None
 
-@bot.message_handler(commands=['run'])
-def run_handler(message):
-    bot.send_message(message.chat.id, 'Okay, just run for you this')
-    final = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(final/60))
-
-@bot.message_handler(commands=['cube'])
-def cube_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        handlers.set_cube(mode, config)
-    bot.send_message(message.chat.id, 'Maybe I update cube position')
-
-@bot.message_handler(commands=['cycles'])
-def cycles_handler(message):
-    mode = validate(message, message.chat.id)
-    if len(mode) > 1:
-        handlers.set_cycles(mode, config)
-    bot.send_message(message.chat.id, 'Maybe I update cycles count')
-
-def spawn(message):
+def spawn():
     handlers.set_spawn(config)
     handlers.run_bot()
-    bot.send_message(message.chat.id, 'Okay! Returned')
+    return None
 
-def logout(message):
+def logout():
     handlers.set_logout(config)
     handlers.run_bot()
-    bot.send_message(message.chat.id, 'Okay! Spawn')
+    return None
 
-def buff(message):
-    bot.send_message(message.chat.id, 'Okay! I start buffing, please be patient')
-    params = message.text.split(' ')
-    handlers.set_buff(params, config)
+def buff():
     handlers.set_mode('buff', CONFIG_FILE)
-    final = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Great! You can go. Buff ended at ' + str(final/60))
+    handlers.set_buff(['buff'], config)
+    handlers.run_bot()
+    return None
 
-def enhance(message):
-    handlers.set_mode('enhance', CONFIG_FILE)
-    time = handlers.run_bot()
-    bot.send_message(message.chat.id, 'Good, that\'s all, just in ' + str(time/60))
+def handle_child_nodes(data):
+    if data[0] == 'cycle':
+        cycles(data[1])
+    if data[0] == 'coords':
+        handlers.set_cube(data[1:], config)
+        return enhance()
+    return None
 
-@bot.message_handler(func=lambda message: True)
-def echo_all(message):
-    modes = ['spawn', 'buff', 'enhance', 'logout']
-    command = message.text
-    for m in modes:
-        if command == m:
-            globals()[m](message)
+def enhance():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton('cube', callback_data='cube'))
+    row = []
+    for i in range(1, 5):
+        title = 'cycles ' + str(i)
+        callback = 'child_cycle_' + str(i) 
+        row.append(InlineKeyboardButton(title, callback_data=callback))
+    markup.row_width = 4
+    markup.add(*row)
+    markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
+    return markup
 
-def validate(params, id):
-    mode = params.text.split(' ')
-    if len(mode) <= 1:
-        bot.send_message(id, 'You forget give me mode name')
-    return mode
+def cube():
+    markup = InlineKeyboardMarkup()
+    markup.row_width = 9
+    for row in range(1, 12):
+        line = []
+        for col in range(1, 10):
+            line.append(InlineKeyboardButton(str(col) + ':' + str(row), callback_data='child_coords_' + str(col) + '_' + str(row)))
+        markup.row(*line)
+    markup.add(InlineKeyboardButton('<< Enhance', callback_data='enhance'))
+    return markup
+
+def back():
+    return create_base_keyboard()
+
+def create_base_keyboard():
+    markup = InlineKeyboardMarkup()
+    keyboard = MODES
+    for key in keyboard:
+        markup.add(InlineKeyboardButton(key, callback_data=key))
+    return markup
+
+@bot.callback_query_handler(func=lambda call: True)
+def handle_base_callbacks(call):
+    bot.answer_callback_query(call.id, 'Start ' + call.data)
+    data = call.data.split('_')
+    if data[0] == 'child':
+        handle = handle_child_nodes(data[1:])
+        if handle:
+            bot.edit_message_reply_markup(
+                chat_id=call.message.chat.id,
+                message_id=call.message.message_id,
+                reply_markup=handle
+            )        
+        bot.answer_callback_query(call.id, 'End ' + call.data)
+        return
+    markup = globals()[data[0]]()
+    if not markup:
+        _start(call.message.chat.id)
+    else:
+        bot.edit_message_reply_markup(
+            chat_id=call.message.chat.id,
+            message_id=call.message.message_id,
+            reply_markup=markup
+        )
+
+def _start(id):
+    markup = create_base_keyboard()
+    bot.send_message(id, "Let's start work", reply_markup=markup)
 
 if not config['debug']:
     bot.polling()
