@@ -38,7 +38,7 @@ def cycles(cycle):
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
     handlers.run_bot()
-    return None
+    return enhance()
 
 def spawn():
     handlers.set_spawn(config)
