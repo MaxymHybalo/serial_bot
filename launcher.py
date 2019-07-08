@@ -38,7 +38,7 @@ def cycles(cycle):
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
     handlers.run_bot()
-    return enhance()
+    return None
 
 def spawn():
     handlers.set_spawn(config)
@@ -111,7 +111,6 @@ def handle_base_callbacks(call):
                 reply_markup=handle
             )        
         bot.answer_callback_query(call.id, 'End ' + call.data)
-        return
     markup = globals()[data[0]]()
     if not markup:
         _start(call.message.chat.id)
