@@ -37,7 +37,7 @@ def combination(message):
 def cycles(cycle):
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
-    handlers.run_bot()
+    # handlers.run_bot()
     return None
 
 def spawn():
@@ -104,14 +104,17 @@ def handle_base_callbacks(call):
     data = call.data.split('_')
     if data[0] == 'child':
         handle = handle_child_nodes(data[1:])
+        print(handle)
         if handle:
             bot.edit_message_reply_markup(
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=handle
-            )        
-        bot.answer_callback_query(call.id, 'End ' + call.data)
-    markup = globals()[data[0]]()
+            )
+            return
+    markup = None
+    if len(data) == 1:
+        markup = globals()[data[0]]()
     if not markup:
         _start(call.message.chat.id)
     else:
