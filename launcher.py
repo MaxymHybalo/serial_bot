@@ -37,7 +37,7 @@ def combination(message):
 def cycles(cycle):
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
-    # handlers.run_bot()
+    handlers.run_bot()
     return None
 
 def spawn():

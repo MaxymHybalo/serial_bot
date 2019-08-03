@@ -13,9 +13,10 @@ class CombinationFlow:
     def get_flow(self):
         return [
             Click(self.cells[0][0], self.cells[0][1], process='dclick'),
-            self.__select_count(5),
-            Click(676, 403),
-            # self.__select_count(8),
+            # self.__select_count(5),
+            # Click(676, 403),
+            self.__select_count(2),
+            self.__select_count(8),
 
             self.__select_count(0),
             Click(self.config['dial_ok'][0], self.config['dial_ok'][1]),
