@@ -6,6 +6,8 @@ import handlers
 import logging
 from utils.configurator import Configurator
 
+from utils.config import Config
+
 CONFIG_FILE = 'config.yml'
 
 MODES = ['buff', 'spawn', 'logout', 'enhance']
@@ -51,7 +53,9 @@ def logout():
     return None
 
 def buff():
+    print('test test test',Config().mode)
     handlers.set_mode('buff', CONFIG_FILE)
+    Config().mode = 'changed mode'
     handlers.set_buff(['buff'], config)
     handlers.run_bot()
     return None

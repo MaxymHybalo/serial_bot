@@ -11,12 +11,15 @@ from utils.serial_controller import SerialController
 
 from jobs.grid_layout import Grid
 
+from utils.config import Config
+
 def load_config():
     return Configurator('config.yml').from_yaml()
 
 def run(external_processor=None):
     start_time = time.time()
     log = logging.getLogger('bot')
+    log.warn(Config().mode)
     config = load_config()
     if not SerialController().serial:
         SerialController().run_serial(config['serial']) 
