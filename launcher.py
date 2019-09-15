@@ -10,7 +10,11 @@ from utils.config import Config
 
 CONFIG_FILE = 'config.yml'
 
-MODES = ['buff', 'spawn', 'logout', 'enhance', 'taming', 'stop']
+MODES = [
+        ('buff', 'enhance'),
+        ('spawn','taming'), 
+        ('logout','stop')
+    ]
 
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
@@ -31,8 +35,7 @@ message_id = None
 def start(message):
     _start(message.chat.id)
 
-@bot.message_handler(commands=['combination'])
-def combination(message):
+def combination():
     handlers.set_mode('combination', CONFIG_FILE)
     handlers.run_bot()
     return None
@@ -106,8 +109,10 @@ def back():
 def create_base_keyboard():
     markup = InlineKeyboardMarkup()
     keyboard = MODES
-    for key in keyboard:
-        markup.add(InlineKeyboardButton(key, callback_data=key))
+    for row in keyboard:
+        line = [InlineKeyboardButton(key, callback_data=key) for key in row]
+        markup.row(*line)
+    markup.add(InlineKeyboardButton('combination', callback_data='combination'))
     return markup
 
 @bot.callback_query_handler(func=lambda call: True)
