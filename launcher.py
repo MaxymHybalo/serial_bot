@@ -52,6 +52,7 @@ def spawn():
     return None
 
 def logout():
+    handlers.set_mode('buff', CONFIG_FILE)
     handlers.set_logout(config)
     handlers.run_bot()
     return None
@@ -121,14 +122,17 @@ def handle_base_callbacks(call):
     data = call.data.split('_')
     if data[0] == 'child':
         handle = handle_child_nodes(data[1:])
+        print(handle)
         if handle:
             bot.edit_message_reply_markup(
                 chat_id=call.message.chat.id,
                 message_id=call.message.message_id,
                 reply_markup=handle
-            )        
-        bot.answer_callback_query(call.id, 'End ' + call.data)
-    markup = globals()[data[0]]()
+            )
+            return
+    markup = None
+    if len(data) == 1:
+        markup = globals()[data[0]]()
     if not markup:
         _start(call.message.chat.id)
     else:

@@ -5,5 +5,7 @@ log/
 serial_env/
 .vscode/
 *.png
+*.yml
+*.yaml
 config.yml
 enhancer.config.yml
