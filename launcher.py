@@ -10,7 +10,8 @@ from utils.config import Config
 
 CONFIG_FILE = 'config.yml'
 
-MODES = ['buff', 'spawn', 'logout', 'enhance']
+MODES = ['buff', 'spawn', 'logout', 'enhance', 'taming', 'stop']
+
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
     logging.basicConfig(level=logging.DEBUG,
@@ -59,6 +60,13 @@ def buff():
     handlers.set_buff(['buff'], config)
     handlers.run_bot()
     return None
+
+def taming():
+    handlers.set_mode('taming', CONFIG_FILE)
+    handlers.run_bot()
+
+def stop():
+    Config().disable()
 
 def handle_child_nodes(data):
     if data[0] == 'cycle':
