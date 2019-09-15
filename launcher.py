@@ -46,6 +46,7 @@ def spawn():
     return None
 
 def logout():
+    handlers.set_mode('buff', CONFIG_FILE)
     handlers.set_logout(config)
     handlers.run_bot()
     return None
