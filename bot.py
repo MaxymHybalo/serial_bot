@@ -1,15 +1,19 @@
 import time
 import logging
 from utils.configurator import Configurator
+
 from jobs.enhancer import Enhancer
 from jobs.buffer import Buffer
+from jobs.taming import Taming
+from jobs.grid_layout import Grid
+
 from processes.object_processor import ProcessInitializer
 from enhance import Enhancer as Combinator
 from processes.instruction_processor import InstructionProcessor
 
 from utils.serial_controller import SerialController
 
-from jobs.grid_layout import Grid
+from utils.config import Config
 
 def load_config():
     return Configurator('config.yml').from_yaml()
@@ -20,20 +24,22 @@ def run(external_processor=None):
     config = load_config()
     if not SerialController().serial:
         SerialController().run_serial(config['serial']) 
-
-    if config['mode'] == 'enhance':
+    mode = config['mode']
+    if mode == 'enhance':
         enhancer = Enhancer(config['enhancer'])
         enhancer.process()
-    if config['mode'] == 'buff':
+    if mode == 'buff':
         processor = ProcessInitializer(Buffer(config['buffer']), config['serial'])
         processor.handle()
-    if config['mode'] == 'make':
+    if mode == 'make':
         external_processor.process()
-    if config['mode'] == 'combination':
+    if mode == 'combination':
         combinate = Combinator('configuration.yaml')
         processor = InstructionProcessor(config['serial'], combinate.enhance(combinate.combination))
         processor.process()
-    if config['mode'] == 'test':
+    if mode == 'taming':
+        Taming().run()
+    if mode == 'test':
         grid = Grid(debug=True)
         grid.slice_inventory([2,2], [5,5])
 
