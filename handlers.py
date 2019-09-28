@@ -50,5 +50,11 @@ def set_logout(config):
     config['logout'] = True
     configurator.dump_yaml(config)
 
+def set_combination_mode(mode, config):
+    configurator = Configurator(config['enhancer'])
+    config = configurator.from_yaml()
+    config['combination']['mode'] = mode
+    configurator.dump_yaml(config)
+
 def run_bot():
     return bot.run()
