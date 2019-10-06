@@ -3,22 +3,23 @@ import time
 import datetime
 import numpy as np
 from processes.recognizer import Recognizer
+from processes.wait import Wait
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
 from utils.drawer import draw_state 
 from shapes.rect import Rect
 
-
 class Enhancer:
 
-    def __init__(self, configpath):
+    def __init__(self, configpath, mode='single'):
         self.log = logging.getLogger('enhancer')
         self.config = Configurator(configpath).from_yaml()
         self.cube = None
         self.grid = None
         self.now = datetime.datetime.now()
         self.round = 0
+        self.mode = mode
 
     def process(self):
         cycles = int(self.config['enhancement']['cycles'])
@@ -40,10 +41,10 @@ class Enhancer:
         return scope, eoi
 
     def enhance(self):
-        scope, eoi = self.state()
+        scope, _ = self.state()
         self.click_at_target(self.config['recognize']['enhance']['menu'])
-        before = self.fetch_scope_mask(scope)
-        self.do_flow(scope)
+        self.mode = 'binary'
+        self.do_flow(scope) if self.mode == 'enhance' else self.do_binary_flow(scope)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
@@ -58,6 +59,27 @@ class Enhancer:
                 cube.make_click()
                 make.make_click()
                 main.make_click()
+        cube.process = 'click'
+        cube.make_click()
+        main.make_click()
+
+    def do_binary_flow(self, scope):
+        make, main, cube = self._init_flow()
+        self.log.info('Start enhancing from {0}'.format(len(scope)))
+        cube.make_click()
+        cube.process = 'dclick'
+        slots = []
+        for s in scope:
+            slots.extend(s)
+        size = len(slots)
+        for i, s in enumerate(slots):
+            item = Rect(s).click().make_click()
+            if i < size:
+                item2 = Rect(slots[i+1]).click().make_click()
+            self.log.info('Item 1 {0}, item 2 {1}'.format(s, slots[i+1]))
+            cube.make_click()
+            make.make_click()
+            main.make_click()
         cube.process = 'click'
         cube.make_click()
         main.make_click()
