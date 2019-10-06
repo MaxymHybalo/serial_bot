@@ -3,12 +3,12 @@ import logging
 from utils.configurator import Configurator
 
 from jobs.enhancer import Enhancer
+from jobs.combinator import Combinator
 from jobs.buffer import Buffer
 from jobs.taming import Taming
 from jobs.grid_layout import Grid
 
 from processes.object_processor import ProcessInitializer
-from enhance import Enhancer as Combinator
 from processes.instruction_processor import InstructionProcessor
 
 from utils.serial_controller import SerialController
@@ -34,9 +34,8 @@ def run(external_processor=None):
     if mode == 'make':
         external_processor.process()
     if mode == 'combination':
-        combinate = Combinator('configuration.yaml')
-        processor = InstructionProcessor(config['serial'], combinate.enhance(combinate.combination))
-        processor.process()
+        combinate = Combinator(config['enhancer'])
+        combinate.process()
     if mode == 'taming':
         Taming().run()
     if mode == 'test':

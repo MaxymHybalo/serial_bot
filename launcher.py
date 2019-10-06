@@ -36,7 +36,21 @@ def start(message):
     _start(message.chat.id)
 
 def combination():
+    markup = InlineKeyboardMarkup()
+    markup.add(InlineKeyboardButton('atack', callback_data='atack'))
+    markup.add(InlineKeyboardButton('armor', callback_data='armor'))
+    markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
+    return markup
+
+def atack():
     handlers.set_mode('combination', CONFIG_FILE)
+    handlers.set_combination_mode('atack', config)
+    handlers.run_bot()
+    return None
+
+def armor():
+    handlers.set_mode('combination', CONFIG_FILE)
+    handlers.set_combination_mode('armor', config)
     handlers.run_bot()
     return None
 
@@ -58,7 +72,6 @@ def logout():
     return None
 
 def buff():
-    print('test test test',Config().mode)
     handlers.set_mode('buff', CONFIG_FILE)
     Config().mode = 'changed mode'
     handlers.set_buff(['buff'], config)
