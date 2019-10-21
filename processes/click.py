@@ -23,7 +23,8 @@ class Click:
         print(type(serial))
         if hasattr(serial, 'serial'):
             serial = serial.serial
-        self.search(serial, self.x, self.y)
+        # self.search(serial, self.x, self.y)
+        ui.moveTo(self.x, self.y)
         serial.write(CLICK)
         if self.process == 'dclick':
             serial.write(CLICK)
