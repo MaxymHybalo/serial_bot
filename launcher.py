@@ -55,8 +55,16 @@ def armor():
     return None
 
 def cycles(cycle):
+    handlers.set_enhance_mode('single', config)
     handlers.set_mode('enhance', CONFIG_FILE)
     handlers.set_cycles(cycle, config)
+    handlers.run_bot()
+    return None
+
+def binary():
+    handlers.set_mode('enhance', CONFIG_FILE)
+    handlers.set_enhance_mode('binary', config)
+    handlers.set_cycles(1, config)
     handlers.run_bot()
     return None
 
@@ -103,6 +111,7 @@ def enhance():
         row.append(InlineKeyboardButton(title, callback_data=callback))
     markup.row_width = 4
     markup.add(*row)
+    markup.add(InlineKeyboardButton('binary', callback_data='binary'))
     markup.add(InlineKeyboardButton('<< Back', callback_data='back'))
     return markup
 

@@ -3,12 +3,12 @@ import time
 import datetime
 import numpy as np
 from processes.recognizer import Recognizer
+from processes.wait import Wait
 from utils.configurator import Configurator
 from jobs.grid_layout import Grid
 import utils.cv2_utils as utils
 from utils.drawer import draw_state 
 from shapes.rect import Rect
-
 
 class Enhancer:
 
@@ -19,6 +19,7 @@ class Enhancer:
         self.grid = None
         self.now = datetime.datetime.now()
         self.round = 0
+        self.mode = self.config['mode']
 
     def process(self):
         cycles = int(self.config['enhancement']['cycles'])
@@ -40,24 +41,47 @@ class Enhancer:
         return scope, eoi
 
     def enhance(self):
-        scope, eoi = self.state()
+        scope, _ = self.state()
         self.click_at_target(self.config['recognize']['enhance']['menu'])
-        before = self.fetch_scope_mask(scope)
-        self.do_flow(scope)
+        self.do_flow(scope) if self.mode == 'single' else self.do_binary_flow(scope)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
         self.log.info('Start enhancing from {0}'.format(len(scope)))
         cube.make_click()
         cube.process = 'dclick'
-        for row_id, row in enumerate(scope):
-            for col_id, col in enumerate(row):
-                self.log.info('Row: {0}/{1}, Col: {2}/{3}'.format(row_id, len(scope), col_id, len(row)))
-                item = Rect(col).click()
-                item.make_click()
-                cube.make_click()
-                make.make_click()
-                main.make_click()
+
+        items = flatten(scope)
+        for item in items:
+            self.log.info('Item: {0}'.format(item))
+            Rect(item).click().make_click()
+            cube.make_click()
+            make.make_click()
+            main.make_click()
+        cube.process = 'click'
+        cube.make_click()
+        main.make_click()
+
+    def do_binary_flow(self, scope):
+        make, main, cube = self._init_flow()
+        self.log.info('Start enhancing from {0}'.format(len(scope)))
+        cube.make_click()
+        cube.process = 'dclick'
+
+        slots = flatten(scope)
+        size = len(slots)
+
+        for i, s in enumerate(slots):
+            item = Rect(s).click().make_click()
+            print('i < size', i, size)
+            if i < size - 1:
+                item2 = Rect(slots[i+1]).click().make_click()
+                self.log.info('Item 1 {0}, item 2 {1}'.format(s, slots[i+1]))
+
+            cube.make_click()
+            make.make_click()
+            main.make_click()
+        
         cube.process = 'click'
         cube.make_click()
         main.make_click()
@@ -111,3 +135,9 @@ class Enhancer:
     def logged_image_name(self, moment):
         return 'log/' + moment + '_cycle_' + str(self.round) + '_' + str(self.now.year) + '_' + str(self.now.month) \
                + '_' + str(self.now.day) + '_' + str(self.now.hour) + '_' + str(self.now.minute) + '.png '
+
+def flatten(source):
+    result = []
+    for s in source:
+        result.extend(s)
+    return result
