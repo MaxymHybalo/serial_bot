@@ -29,6 +29,13 @@ def set_cycles(params, config):
     config['enhancement']['cycles'] = params
     configurator.dump_yaml(config)
 
+
+def set_enhance_mode(mode, config):
+    configurator = Configurator(config['enhancer'])
+    config = configurator.from_yaml()
+    config['mode'] = mode
+    configurator.dump_yaml(config)
+
 def set_buff(params, config):
     configurator = Configurator(config['buffer'])
     config = configurator.from_yaml()
