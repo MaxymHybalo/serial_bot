@@ -1,5 +1,10 @@
 import time
 
+from test.configs import buff_config
+from processes.recognizer import Recognizer
+from processes.key import Key
+from utils.serial_controller import SerialController
+
 # timer decorator
 def timerfunc(func):
     def function_timer(*args, **kwargs):
@@ -12,10 +17,28 @@ def timerfunc(func):
         return value
     return function_timer
 
-@timerfunc
-def benchmark_test():
-    for i in range(10009):
-        y = i**2
+def __asset_path(config, asset):
+    return config['asset_preffix'] + '/' + config['markers'][asset]
 
-if __name__ == '__main__':
-    benchmark_test()
+@timerfunc
+def moon_recognize():
+    Recognizer(__asset_path(buff_config, 'moon'), None).recognize()
+
+@timerfunc
+def menu_recognize():
+    Recognizer(__asset_path(buff_config, 'menu'), (960, 540, 960, 540)).recognize()
+
+@timerfunc
+def serial_run():
+    SerialController().run_serial({'baudrate': 9600, 'port': 12})
+
+@timerfunc
+def key():
+    Key('0').press()
+
+
+# running benchmarks
+menu_recognize()
+moon_recognize()
+serial_run()
+key()
