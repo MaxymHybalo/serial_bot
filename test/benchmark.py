@@ -26,7 +26,7 @@ def moon_recognize():
 
 @timerfunc
 def menu_recognize():
-    Recognizer(__asset_path(buff_config, 'menu'), (960, 540, 960, 540)).recognize()
+    Recognizer(__asset_path(buff_config, 'menu'), (640, 400, 640, 400)).recognize()
 
 @timerfunc
 def serial_run():
