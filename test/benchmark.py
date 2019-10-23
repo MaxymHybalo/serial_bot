@@ -22,10 +22,11 @@ def __asset_path(config, asset):
     return config['asset_preffix'] + '/' + config['markers'][asset]
 
 @timerfunc
-def moon_recognize():
-    Recognizer(__asset_path(buff_config, 'moon'), None).recognize()
-
 def menu_recognize():
+    Recognizer(__asset_path(buff_config, 'menu'), None).recognize()
+
+@timerfunc
+def menu_region_recognize():
     window = Window()
     center = window.center()
     @timerfunc
@@ -49,7 +50,7 @@ def init_window():
 
 # running benchmarks
 init_window()
+menu_region_recognize()
 menu_recognize()
-moon_recognize()
 serial_run()
 key()
