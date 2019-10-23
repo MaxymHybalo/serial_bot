@@ -1,19 +1,17 @@
 import time
 import logging
-from utils.configurator import Configurator
 
+from utils.configurator import Configurator
 from jobs.enhancer import Enhancer
 from jobs.combinator import Combinator
 from jobs.buffer import Buffer
 from jobs.taming import Taming
 from jobs.grid_layout import Grid
-
 from processes.object_processor import ProcessInitializer
 from processes.instruction_processor import InstructionProcessor
-
 from utils.serial_controller import SerialController
-
 from utils.config import Config
+
 
 def load_config():
     return Configurator('config.yml').from_yaml()
@@ -40,8 +38,7 @@ def run(external_processor=None):
     if mode == 'taming':
         Taming().run()
     if mode == 'test':
-        grid = Grid(debug=True)
-        grid.slice_inventory([2,2], [5,5])
+        print('nothings')
 
     exec_time = (time.time() - start_time)
     final_message = "Finished work, time: {0} (sec), {1} (min)".format(exec_time, exec_time / 60)
