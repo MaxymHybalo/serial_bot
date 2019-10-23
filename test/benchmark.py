@@ -4,6 +4,7 @@ from test.configs import buff_config
 from processes.recognizer import Recognizer
 from processes.key import Key
 from utils.serial_controller import SerialController
+from shapes.window import Window
 
 # timer decorator
 def timerfunc(func):
@@ -24,9 +25,14 @@ def __asset_path(config, asset):
 def moon_recognize():
     Recognizer(__asset_path(buff_config, 'moon'), None).recognize()
 
-@timerfunc
 def menu_recognize():
-    Recognizer(__asset_path(buff_config, 'menu'), (640, 400, 640, 400)).recognize()
+    window = Window()
+    center = window.center()
+    @timerfunc
+    def recognize():
+        region = (int(center[0]), int(center[1]), int(window.width / 2), int(window.height / 2))
+        Recognizer(__asset_path(buff_config, 'menu'), region).recognize()
+    recognize()
 
 @timerfunc
 def serial_run():
@@ -36,8 +42,13 @@ def serial_run():
 def key():
     Key('0').press()
 
+@timerfunc
+def init_window():
+    window = Window()
+
 
 # running benchmarks
+init_window()
 menu_recognize()
 moon_recognize()
 serial_run()
