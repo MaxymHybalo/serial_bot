@@ -5,6 +5,7 @@ from processes.recognizer import Recognizer
 from processes.key import Key
 from utils.serial_controller import SerialController
 from shapes.window import Window
+from utils.configurator import Configurator
 
 # timer decorator
 def timerfunc(func):
@@ -37,7 +38,8 @@ def menu_region_recognize():
 
 @timerfunc
 def serial_run():
-    SerialController().run_serial({'baudrate': 9600, 'port': 12})
+    config = Configurator('config.yml').from_yaml()
+    SerialController().run_serial(config['serial'])
 
 @timerfunc
 def key():
