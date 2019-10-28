@@ -2,11 +2,11 @@ import pyautogui as ui
 import matplotlib.pyplot as plt
 import numpy as np
 from utils.configurator import Configurator
+
 class Window:
 
     def __init__(self):
         self.config = Configurator('config.yml').from_yaml()['window']
-        print(self.config)
         self.width, self.height = self.config['width'], self.config['height']
         self.windowHead = ui.locateOnScreen(self.config['marker'])
         self.x = self.windowHead[0]

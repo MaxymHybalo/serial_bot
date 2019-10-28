@@ -27,7 +27,8 @@ def run(external_processor=None):
         enhancer = Enhancer(config['enhancer'])
         enhancer.process()
     if mode == 'buff':
-        processor = ProcessInitializer(Buffer(config['buffer']), config['serial'])
+        buff_config = Configurator(config['buffer']).from_yaml()
+        processor = ProcessInitializer(Buffer(buff_config), config['serial'])
         processor.handle()
     if mode == 'make':
         external_processor.process()

@@ -14,7 +14,7 @@ class SerialController(metaclass=Singleton):
         try:
             port = 'COM' + str(self.config['port'])
             baudrate = self.config['baudrate']
-            logging.critical('Trying connect to Arduino via {0}'.format(port))
+            logging.info('Trying connect to Arduino via {0}'.format(port))
             self.serial = serial.Serial(port, baudrate)
             self.serial.timeout = 0.01
             if self.serial.is_open:
@@ -24,5 +24,5 @@ class SerialController(metaclass=Singleton):
                 self.serial.open()
                 logging.info('Serial opened at: {0}'.format(port))
         except serial.SerialException:
-            logging.critical('Serial connection error')
+            logging.error('Serial connection error')
             self.serial = None

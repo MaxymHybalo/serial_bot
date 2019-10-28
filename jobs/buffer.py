@@ -1,5 +1,4 @@
 import logging
-from utils.configurator import Configurator
 
 from processes.recognizer import Recognizer
 from processes.wait import Wait
@@ -20,9 +19,9 @@ class Buffer:
         ['2', '3','1']
     ]
 
-    def __init__(self, configpath):
+    def __init__(self, config):
         self.log = logging.getLogger('buffer')
-        self.config = Configurator(configpath).from_yaml()
+        self.config = config
         self.serial = None
         self.menu = self.__asset_path('menu')
         self.selector = self.__asset_path('selector')
