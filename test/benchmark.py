@@ -51,8 +51,13 @@ def init_window():
 
 
 # running benchmarks
-init_window()
-menu_region_recognize()
-menu_recognize()
-serial_run()
-key()
+# init_window()
+# menu_region_recognize()
+# menu_recognize()
+# serial_run()
+# key()
+
+from jobs.helpers.extruder import Extruder
+from cv2 import imread
+
+Extruder(imread('assets/test_npc_env.png'))
