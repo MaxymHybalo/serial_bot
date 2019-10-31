@@ -47,7 +47,7 @@ def key():
 
 @timerfunc
 def init_window():
-    window = Window()
+    return  Window()
 
 
 # running benchmarks
@@ -57,7 +57,39 @@ def init_window():
 # serial_run()
 # key()
 
-from jobs.helpers.extruder import Extruder
-from cv2 import imread
+from jobs.helpers.extruder import Extruder, CharTitleConfig
+import cv2
+import pyautogui as u
+import numpy as np
 
-Extruder(imread('assets/test_npc_env.png'))
+# writes filtred images
+# for i in range(11):
+#     image = cv2.imread('assets/data/npc_extruding_tests/ ' + str(i) + '.png')
+#     print(image)
+#     extruded = Extruder(image)
+#     extruded = extruded.filtredImgByColor(CharTitleConfig)
+#     cv2.imwrite('assets/data/npc_extruded_by_char_color/' + str(i) + '.png', extruded)
+
+template = cv2.imread('assets/circus_flow/guide_siege_title.png');
+for i in range(11):
+    image = cv2.imread('assets/data/npc_extruding_tests/ ' + str(i) + '.png')
+    extruded = Extruder(image)
+    @timerfunc
+    def test_extrude():
+        return extruded.match_by_template(template)
+    template_roi = test_extrude()
+    result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
+    cv2.imwrite('assets/data/npc_template_matched/' + str(i) + '.png', result)
+
+
+
+def fetch_window(times):
+    window = init_window()
+    id = 0
+    while id < times:
+        time.sleep(2)
+        img = u.screenshot(region=window.rect)
+        img = np.array(img)
+        cv2.imwrite('assets/data/npc_extruding_tests/ ' + str(id) + '.png', cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        # img.save
+        id = id + 1

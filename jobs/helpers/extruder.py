@@ -14,8 +14,8 @@ class Extruder:
         # plt.imshow(self.filtredImgByColor())
         # plt.show()
 
-    def filtredImgByColor(self):
-        return self.filterByColor(self.image, CharTitleConfig)
+    def filtredImgByColor(self, config):
+        return self.filterByColor(self.image, config)
 
     def filterByColor(self, image, colorSpace):
         # color space object with light and dark tupels
@@ -24,6 +24,15 @@ class Extruder:
         mask = cv2.inRange(hsv, colorSpace.light, colorSpace.dark)
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
+    
+    def match_by_template(self, template):
+        template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        grayImage = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        top_left = max_loc
+        h, w = template.shape
+        return (top_left[0], top_left[1], w, h)
     
 def as_rgb(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)

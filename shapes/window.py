@@ -12,6 +12,6 @@ class Window:
         self.x = self.windowHead[0]
         self.y = self.windowHead[1] + self.windowHead[3]
         self.screen = ui.screenshot(region=(self.x,self.y, self.width, self.height))
-
+        self.rect = (self.x, self.y, self.width, self.height)
     def center(self):
         return self.x + self.width / 2, self.y + self.height / 2
