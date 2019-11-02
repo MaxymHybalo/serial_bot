@@ -93,3 +93,11 @@ def log_image(**kwargs):
         cv2.imwrite(kwargs['file'], image)
     else:
         show(image)
+
+def draw_rect(image, roi):
+    return cv2.rectangle(image, roi[:2], (roi[0] + roi[2], roi[1] + roi[3]), 255,2)
+
+def show_image(image):
+    import matplotlib.pyplot as plt
+    plt.imshow(image)
+    plt.show()
