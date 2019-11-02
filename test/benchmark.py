@@ -1,3 +1,6 @@
+import cv2
+import pyautogui as u
+import numpy as np
 import time
 
 from test.configs import buff_config
@@ -6,6 +9,11 @@ from processes.key import Key
 from utils.serial_controller import SerialController
 from shapes.window import Window
 from utils.configurator import Configurator
+from jobs.helpers.extruder import Extruder, CharTitleConfig
+
+from test.tasks import make_extruder_env
+
+TEMPLATE = 'assets/circus_flow/guide_siege_title.png'
 
 # timer decorator
 def timerfunc(func):
@@ -57,39 +65,46 @@ def init_window():
 # serial_run()
 # key()
 
-from jobs.helpers.extruder import Extruder, CharTitleConfig
-import cv2
-import pyautogui as u
-import numpy as np
 
 # writes filtred images
-# for i in range(11):
-#     image = cv2.imread('assets/data/npc_extruding_tests/ ' + str(i) + '.png')
-#     print(image)
-#     extruded = Extruder(image)
-#     extruded = extruded.filtredImgByColor(CharTitleConfig)
-#     cv2.imwrite('assets/data/npc_extruded_by_char_color/' + str(i) + '.png', extruded)
 
-template = cv2.imread('assets/circus_flow/guide_siege_title.png');
-for i in range(11):
-    image = cv2.imread('assets/data/npc_extruding_tests/ ' + str(i) + '.png')
-    extruded = Extruder(image)
-    @timerfunc
-    def test_extrude():
-        return extruded.match_by_template(template)
-    template_roi = test_extrude()
-    result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
-    cv2.imwrite('assets/data/npc_template_matched/' + str(i) + '.png', result)
+@timerfunc
+def filter_img_by_color(times=10):
+    for i in range(times):
+        image = cv2.imread('assets/data/screens/' + str(i) + '.png')
+        extruded = Extruder(image)
+        extruded = extruded.filtredImgByColor(CharTitleConfig)
+        cv2.imwrite('assets/data/npc_extruded_by_char_color/' + str(i) + '.png', extruded)
+
+@timerfunc
+def match_by_template(times=11, imagepath='assets/data/screens/'):
+    template = cv2.imread(TEMPLATE)
+    for i in range(times):
+        image = cv2.imread(imagepath + str(i) + '.png')
+        extruded = Extruder(image)
+        @timerfunc
+        def test_extrude():
+            return extruded.match_by_template(template)
+        template_roi = test_extrude()
+        result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
+        cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
 
 
-
-def fetch_window(times):
+def fetch_window(times, delay=2, dir='assets/data/screens/'):
     window = init_window()
     id = 0
     while id < times:
-        time.sleep(2)
+        time.sleep(delay)
         img = u.screenshot(region=window.rect)
         img = np.array(img)
-        cv2.imwrite('assets/data/npc_extruding_tests/ ' + str(id) + '.png', cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
-        # img.save
+        cv2.imwrite(dir + str(id) + '.png', cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
         id = id + 1
+
+@timerfunc
+def generate_guide_siege_area(times):
+    make_extruder_env()
+    fetch_window(times, delay=0.5)
+    filter_img_by_color(times)
+    match_by_template(times)
+
+generate_guide_siege_area(40)
