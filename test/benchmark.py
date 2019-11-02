@@ -10,6 +10,7 @@ from utils.serial_controller import SerialController
 from shapes.window import Window
 from utils.configurator import Configurator
 from jobs.helpers.extruder import Extruder, CharTitleConfig
+from jobs.helpers.navigator import Navigator
 
 from test.tasks import make_extruder_env
 
@@ -62,11 +63,19 @@ def init_window():
 # init_window()
 # menu_region_recognize()
 # menu_recognize()
-# serial_run()
+serial_run()
 # key()
 
 
 # writes filtred images
+
+def draw_rect(image, roi):
+    return cv2.rectangle(image, roi[:2], (roi[0] + roi[2], roi[1] + roi[3]), 255,2)
+
+def show_image(image):
+    import matplotlib.pyplot as plt
+    plt.imshow(image)
+    plt.show()
 
 @timerfunc
 def filter_img_by_color(times=10):
@@ -89,6 +98,18 @@ def match_by_template(times=11, imagepath='assets/data/screens/'):
         result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
         cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
 
+@timerfunc
+def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
+    template = cv2.imread(TEMPLATE)
+    window = init_window()
+
+    for i in range(times):
+        image = u.screenshot(region=window.rect)
+        extruded = Extruder(image)
+        title_roi = extruded.match_by_template(template, image=extruded.filtredImgByColor(CharTitleConfig))
+        print(title_roi)
+        Navigator.move_to_npc(title_roi)
+        
 
 def fetch_window(times, delay=2, dir='assets/data/screens/'):
     window = init_window()
@@ -102,9 +123,9 @@ def fetch_window(times, delay=2, dir='assets/data/screens/'):
 
 @timerfunc
 def generate_guide_siege_area(times):
-    make_extruder_env()
-    fetch_window(times, delay=0.5)
-    filter_img_by_color(times)
-    match_by_template(times)
-
+    # make_extruder_env()
+    # fetch_window(times, delay=0.5)
+    # filter_img_by_color(times)
+    # match_by_template(times)
+    move_to_npc(2)
 generate_guide_siege_area(40)

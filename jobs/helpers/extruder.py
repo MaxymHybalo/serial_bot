@@ -10,6 +10,11 @@ class CharTitleConfig:
 class Extruder:
 
     def __init__(self, image):
+
+        if not isinstance(image, np.ndarray):
+            image = np.array(image)
+            image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
         self.image = image
         # plt.imshow(self.filtredImgByColor())
         # plt.show()
@@ -25,9 +30,11 @@ class Extruder:
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
     
-    def match_by_template(self, template):
+    def match_by_template(self, template, image=None):
+        if image is None:
+            image = self.image
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
-        grayImage = cv2.cvtColor(self.image, cv2.COLOR_BGR2GRAY)
+        grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         top_left = max_loc
