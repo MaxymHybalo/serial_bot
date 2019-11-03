@@ -90,6 +90,10 @@ def taming():
     handlers.set_mode('taming', CONFIG_FILE)
     handlers.run_bot()
 
+def farming():
+    handlers.set_mode('farming', CONFIG_FILE)
+    handlers.run_bot()
+
 def stop():
     Config().disable()
 
@@ -136,6 +140,8 @@ def create_base_keyboard():
         line = [InlineKeyboardButton(key, callback_data=key) for key in row]
         markup.row(*line)
     markup.add(InlineKeyboardButton('combination', callback_data='combination'))
+    markup.add(InlineKeyboardButton('farming', callback_data='farming'))
+
     return markup
 
 @bot.callback_query_handler(func=lambda call: True)

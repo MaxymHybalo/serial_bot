@@ -2,7 +2,7 @@ from utils.configurator import Configurator
 import bot
 from processes.instruction_processor import InstructionProcessor
 
-AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return', 'taming']
+AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return', 'taming', 'farming']
 
 
 def get_config(config):

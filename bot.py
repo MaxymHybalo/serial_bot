@@ -6,6 +6,8 @@ from jobs.enhancer import Enhancer
 from jobs.combinator import Combinator
 from jobs.buffer import Buffer
 from jobs.taming import Taming
+from jobs.farming import Farming
+
 from jobs.grid_layout import Grid
 from processes.object_processor import ProcessInitializer
 from processes.instruction_processor import InstructionProcessor
@@ -37,6 +39,8 @@ def run(external_processor=None):
         combinate.process()
     if mode == 'taming':
         Taming().run()
+    if mode == 'farming':
+        Farming().run()
     if mode == 'test':
         print('nothings')
 
