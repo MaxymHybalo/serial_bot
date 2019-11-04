@@ -5,24 +5,27 @@ import pyautogui as u
 
 from shapes.window import Window
 
-from jobs.helpers.extruder import Extruder, CharTitleConfig
+from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig
 from jobs.helpers.navigator import Navigator
 
 from test.timerfunc import timerfunc
 from test.tasks import make_extruder_env
 
 TEMPLATE = 'assets/circus_flow/guide_siege_title.png'
+GUILD_TEMPLATE = 'assets/circus_flow/guild_icon.png'
 
 @timerfunc
 def filter_img_by_color(times=10):
+    from utils.cv2_utils import show_image
     for i in range(times):
         image = cv2.imread('assets/data/screens/' + str(i) + '.png')
         extruded = Extruder(image)
         extruded = extruded.filtredImgByColor(CharTitleConfig)
+        # show_image(extruded)
         cv2.imwrite('assets/data/npc_extruded_by_char_color/' + str(i) + '.png', extruded)
 
 @timerfunc
-def match_by_template(times=11, imagepath='assets/data/screens/'):
+def match_title_by_template(times=11, imagepath='assets/data/screens/'):
     template = cv2.imread(TEMPLATE)
     for i in range(times):
         image = cv2.imread(imagepath + str(i) + '.png')
@@ -31,8 +34,22 @@ def match_by_template(times=11, imagepath='assets/data/screens/'):
         def test_extrude():
             return extruded.match_by_template(template)
         template_roi = test_extrude()
-        result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
-        cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
+        print(template_roi)
+        # result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
+        # cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
+
+@timerfunc
+def match_guild_by_template(times=10, imagepath="assets/data/screens/"):
+    from utils.cv2_utils import draw_rect
+    guild_template = cv2.imread(GUILD_TEMPLATE)
+    for i in range(times):
+        image = cv2.imread(imagepath + str(i) + '.png')
+        extruder = Extruder(image)
+        guild_roi = extruder.match_by_template(guild_template)
+        print('guild_roi', guild_roi)
+        # result = draw_rect(extruder.image, guild_roi)
+        # cv2.imwrite('assets/data/guild_icons_match/' + str(i) + '.png', result)
+
 
 @timerfunc
 def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
@@ -45,7 +62,6 @@ def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
         title_roi = extruded.match_by_template(template, image=extruded.filtredImgByColor(CharTitleConfig))
         print(title_roi)
         Navigator.move_to_npc(title_roi)
-        
 
 def fetch_window(times, delay=2, dir='assets/data/screens/'):
     window = Window()
@@ -58,9 +74,10 @@ def fetch_window(times, delay=2, dir='assets/data/screens/'):
         id = id + 1
 
 @timerfunc
-def run(times=30):
-    make_extruder_env()
-    fetch_window(times, delay=0.5)
-    filter_img_by_color(times)
-    match_by_template(times)
-    move_to_npc(2)
+def run(times=40):
+    # make_extruder_env()
+    # fetch_window(times, delay=0.5)
+    # filter_img_by_color(times=times)
+    # match_title_by_template(times=times)
+    move_to_npc(1)
+    # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')

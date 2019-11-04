@@ -7,6 +7,13 @@ class CharTitleConfig:
     light = (11, 140, 0)
     dark = (18, 255, 255)
 
+class GuildIconConfig:
+
+    # 51 140 190
+    # 62 141 132
+    light = (50, 0, 0)
+    dark = (60, 200, 255)
+
 class Extruder:
 
     def __init__(self, image):
