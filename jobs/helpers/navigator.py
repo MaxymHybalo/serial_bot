@@ -9,7 +9,13 @@ class Navigator:
     def move_to_npc(npc_roi):
         npc_x, npc_y = calc_nav_point(npc_roi)
         wx, wy = Window().position()
-        Click(wx + npc_x, wy + npc_y, process='dclick').make_click()
+        Click(wx + npc_x - 40, wy + npc_y, process='dclick').make_click()
+
+    @staticmethod
+    def click_at_npc(npc_roi):
+        npc_x, npc_y = calc_nav_point(npc_roi)
+        wx, wy = Window().position()
+        Click(wx + npc_x, wy + npc_y - int(Y_OFFSET_FROM_START_POSITION / 2), process='dclick').make_click()
 
 def calc_nav_point(roi):
     x,y,w,h = roi

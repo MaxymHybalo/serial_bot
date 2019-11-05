@@ -13,6 +13,7 @@ from test.tasks import make_extruder_env
 
 TEMPLATE = 'assets/circus_flow/guide_siege_title.png'
 GUILD_TEMPLATE = 'assets/circus_flow/guild_icon.png'
+SCREENS = 'assets/data/screens/'
 
 @timerfunc
 def filter_img_by_color(times=10):
@@ -34,9 +35,8 @@ def match_title_by_template(times=11, imagepath='assets/data/screens/'):
         def test_extrude():
             return extruded.match_by_template(template)
         template_roi = test_extrude()
-        print(template_roi)
-        # result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
-        # cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
+        result = cv2.rectangle(extruded.image, template_roi[:2], (template_roi[0] + template_roi[2], template_roi[1] + template_roi[3]), 255,2)
+        cv2.imwrite('assets/data/npc_template_matched_1/' + str(i) + '.png', result)
 
 @timerfunc
 def match_guild_by_template(times=10, imagepath="assets/data/screens/"):
@@ -50,11 +50,10 @@ def match_guild_by_template(times=10, imagepath="assets/data/screens/"):
         # result = draw_rect(extruder.image, guild_roi)
         # cv2.imwrite('assets/data/guild_icons_match/' + str(i) + '.png', result)
 
-
 @timerfunc
 def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
     template = cv2.imread(TEMPLATE)
-    window = Window()
+    window = Window() 
 
     for i in range(times):
         image = u.screenshot(region=window.rect)
@@ -65,19 +64,78 @@ def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
 
 def fetch_window(times, delay=2, dir='assets/data/screens/'):
     window = Window()
+    from utils.cv2_utils import screenshot
     id = 0
     while id < times:
         time.sleep(delay)
-        img = u.screenshot(region=window.rect)
-        img = np.array(img)
-        cv2.imwrite(dir + str(id) + '.png', cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        @timerfunc
+        def screen():
+            return screenshot(window.rect)
+        
+        # screen()
+
+        @timerfunc
+        def save():
+            img = np.array(screen())
+            cv2.imwrite(dir + str(id) + '.png', cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        save()
         id = id + 1
+
+@timerfunc
+def get_guild_npc_rect(times=10):
+    for i in range(times):
+        image = cv2.imread(SCREENS + str(i) + '.png')
+        extruder = Extruder(image)
+        titleRoi, guildRoi = extruder.get_template_rect(CharTitleConfig), extruder.get_template_rect(GuildIconConfig)
+        print(i, titleRoi, guildRoi)
+
+from utils.cv2_utils import screenshot
+from processes.wait import Wait
+from shapes.rect import Rect
+def get_npc():
+    window = Window()
+    image = screenshot(window.rect)
+    extruder = Extruder(image)
+    title = extruder.get_template_rect(CharTitleConfig)
+    Navigator.move_to_npc(title)
+    Wait(3).delay()
+    title, guild = get_guild_and_npc(window.rect)
+    while not is_near_npc(title, guild):
+        title, guild = get_guild_and_npc(window.rect)
+        print(title, guild)
+        Wait(1).delay()
+    title, guild = get_guild_and_npc(window.rect)
+    Navigator.click_at_npc(title)
+    
+
+def get_guild_and_npc(rect):
+    image = screenshot(rect)
+    extruder = Extruder(image)
+    titleCenter = extruder.get_template_rect(CharTitleConfig)
+    guildCenter = extruder.get_template_rect(GuildIconConfig)
+    return titleCenter, guildCenter
+
+def distance(point1, point2):
+    import math
+    x1,y1 = point1
+    x2, y2 = point2
+    return math.sqrt((x1-x2)**2+(y1-y2)**2)
+
+def is_near_npc(npc, guild, near=100):
+    # accept 2 rects
+    npc = Rect(npc).center()
+    guild = Rect(guild).center()
+    d = distance(npc, guild)
+    print('distance', d)
+    return d <= near
 
 @timerfunc
 def run(times=40):
     # make_extruder_env()
-    # fetch_window(times, delay=0.5)
+    # fetch_window(times, delay=0)
     # filter_img_by_color(times=times)
     # match_title_by_template(times=times)
-    move_to_npc(1)
+    # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
+    # get_guild_npc_rect(times=times)
+    get_npc()

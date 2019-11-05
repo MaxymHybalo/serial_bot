@@ -101,3 +101,8 @@ def show_image(image):
     import matplotlib.pyplot as plt
     plt.imshow(image)
     plt.show()
+
+
+def screenshot(rect):
+    import pyautogui as ui
+    return ui.screenshot(region=rect)

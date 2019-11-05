@@ -6,6 +6,7 @@ import matplotlib.pyplot as plt
 class CharTitleConfig:
     light = (11, 140, 0)
     dark = (18, 255, 255)
+    template = 'assets/circus_flow/guide_siege_title.png'
 
 class GuildIconConfig:
 
@@ -13,18 +14,27 @@ class GuildIconConfig:
     # 62 141 132
     light = (50, 0, 0)
     dark = (60, 200, 255)
+    template = 'assets/circus_flow/guild_icon.png'
 
 class Extruder:
 
     def __init__(self, image):
 
+        # if not isinstance(image, np.ndarray):
+        #     image = np.array(image)
+        #     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+
+        # self.image = image
+        self.set_image(image)
+        # plt.imshow(self.filtredImgByColor())
+        # plt.show()
+
+    def set_image(self, image):
         if not isinstance(image, np.ndarray):
             image = np.array(image)
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
 
         self.image = image
-        # plt.imshow(self.filtredImgByColor())
-        # plt.show()
 
     def filtredImgByColor(self, config):
         return self.filterByColor(self.image, config)
@@ -37,6 +47,11 @@ class Extruder:
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
     
+    def get_template_rect(self, config):
+        filtered = self.filtredImgByColor(config)
+        template = cv2.imread(config.template)
+        return self.match_by_template(template)
+    
     def match_by_template(self, template, image=None):
         if image is None:
             image = self.image
@@ -46,6 +61,8 @@ class Extruder:
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         top_left = max_loc
         h, w = template.shape
+        # from utils.cv2_utils import draw_rect, show_image
+        # show_image(draw_rect(image, (top_left[0], top_left[1], w, h)))
         return (top_left[0], top_left[1], w, h)
     
 def as_rgb(image):
