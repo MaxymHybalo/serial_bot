@@ -89,45 +89,6 @@ def get_guild_npc_rect(times=10):
         titleRoi, guildRoi = extruder.get_template_rect(CharTitleConfig), extruder.get_template_rect(GuildIconConfig)
         print(i, titleRoi, guildRoi)
 
-from utils.cv2_utils import screenshot
-from processes.wait import Wait
-from shapes.rect import Rect
-def get_npc():
-    window = Window()
-    image = screenshot(window.rect)
-    extruder = Extruder(image)
-    title = extruder.get_template_rect(CharTitleConfig)
-    Navigator.move_to_npc(title)
-    Wait(3).delay()
-    title, guild = get_guild_and_npc(window.rect)
-    while not is_near_npc(title, guild):
-        title, guild = get_guild_and_npc(window.rect)
-        print(title, guild)
-        Wait(1).delay()
-    title, guild = get_guild_and_npc(window.rect)
-    Navigator.click_at_npc(title)
-    
-
-def get_guild_and_npc(rect):
-    image = screenshot(rect)
-    extruder = Extruder(image)
-    titleCenter = extruder.get_template_rect(CharTitleConfig)
-    guildCenter = extruder.get_template_rect(GuildIconConfig)
-    return titleCenter, guildCenter
-
-def distance(point1, point2):
-    import math
-    x1,y1 = point1
-    x2, y2 = point2
-    return math.sqrt((x1-x2)**2+(y1-y2)**2)
-
-def is_near_npc(npc, guild, near=100):
-    # accept 2 rects
-    npc = Rect(npc).center()
-    guild = Rect(guild).center()
-    d = distance(npc, guild)
-    print('distance', d)
-    return d <= near
 
 @timerfunc
 def run(times=40):
@@ -138,4 +99,4 @@ def run(times=40):
     # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
     # get_guild_npc_rect(times=times)
-    get_npc()
+    Navigator.touch_npc()
