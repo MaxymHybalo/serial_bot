@@ -89,6 +89,7 @@ def get_guild_npc_rect(times=10):
         titleRoi, guildRoi = extruder.get_template_rect(CharTitleConfig), extruder.get_template_rect(GuildIconConfig)
         print(i, titleRoi, guildRoi)
 
+from processes.move import Move 
 
 @timerfunc
 def run(times=40):
@@ -99,4 +100,6 @@ def run(times=40):
     # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
     # get_guild_npc_rect(times=times)
-    Navigator.touch_npc()
+    title = Navigator.touch_circus_npc()
+    x, y, _, _ = title
+    Navigator.turn_around(title)    
