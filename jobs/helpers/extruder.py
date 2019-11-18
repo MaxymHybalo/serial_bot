@@ -1,6 +1,7 @@
 import cv2
 import numpy as np
 import matplotlib.pyplot as plt
+from utils.cv2_utils import show_image
 
 # Support classes
 class CharTitleConfig:
@@ -15,6 +16,11 @@ class GuildIconConfig:
     light = (50, 0, 0)
     dark = (60, 200, 255)
     template = 'assets/circus_flow/guild_icon.png'
+
+class StartPointConfig:
+    light = (0,0,0)
+    dark = (80, 100, 40)
+    template = 'assets/circus_flow/altar_ground.png'
 
 class Extruder:
 
@@ -50,13 +56,15 @@ class Extruder:
     def get_template_rect(self, config):
         filtered = self.filtredImgByColor(config)
         template = cv2.imread(config.template)
-        return self.match_by_template(template)
+        return self.match_by_template(template, image=filtered)
     
     def match_by_template(self, template, image=None):
         if image is None:
             image = self.image
+
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         top_left = max_loc
