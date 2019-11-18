@@ -41,6 +41,7 @@ def match_title_by_template(times=11, imagepath='assets/data/screens/'):
 @timerfunc
 def draw_matched(times, imagepath='assets/data/screens/', config=StartPointConfig):
     for i in range(times):
+        print('[${i}]'.format(i=i))
         image = cv2.imread(imagepath + str(i) + '.png')
         e = Extruder(image)
         rect = e.get_template_rect(config)

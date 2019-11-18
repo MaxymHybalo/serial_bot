@@ -8,19 +8,19 @@ class CharTitleConfig:
     light = (11, 140, 0)
     dark = (18, 255, 255)
     template = 'assets/circus_flow/guide_siege_title.png'
+    roi=None
 
 class GuildIconConfig:
-
-    # 51 140 190
-    # 62 141 132
     light = (50, 0, 0)
     dark = (60, 200, 255)
     template = 'assets/circus_flow/guild_icon.png'
+    roi=None
 
 class StartPointConfig:
     light = (0,0,0)
     dark = (80, 100, 40)
     template = 'assets/circus_flow/altar_ground.png'
+    roi = (605, 60, 290, 340)
 
 class Extruder:
 
@@ -56,22 +56,29 @@ class Extruder:
     def get_template_rect(self, config):
         filtered = self.filtredImgByColor(config)
         template = cv2.imread(config.template)
-        return self.match_by_template(template, image=filtered)
+        return self.match_by_template(template, image=filtered, roi=config.roi)
     
-    def match_by_template(self, template, image=None):
+    def match_by_template(self, template, image=None, roi=None):
         if image is None:
             image = self.image
 
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
+        if roi:
+            x,y,w,h = roi
+            image = image[y:y+h,x:x+w]
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         top_left = max_loc
         h, w = template.shape
         # from utils.cv2_utils import draw_rect, show_image
         # show_image(draw_rect(image, (top_left[0], top_left[1], w, h)))
-        return (top_left[0], top_left[1], w, h)
+        if roi:
+            print(top_left)
+            top = (x + top_left[0], y + top_left[1])
+        else: 
+            top = top_left
+        return (top[0], top[1], w, h)
     
 def as_rgb(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
