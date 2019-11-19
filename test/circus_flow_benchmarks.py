@@ -115,5 +115,12 @@ def run(times=50):
     # x, y, _, _ = title
     # Navigator.turn_around(title)    
     # fetch_window(times=times, delay=0)
-    draw_matched(times=times,config=StartPointConfig)
+    # draw_matched(times=times,config=StartPointConfig)
     # filter_img_by_color(4, color_shcheme=StartPointConfig)
+
+
+    # from processes.wait import Wait
+    # npc_title = Navigator.touch_circus_npc()
+    # Navigator.turn_around(npc_title)
+    # Wait(1).delay()
+    # Navigator.go_to_start()

@@ -26,3 +26,7 @@ class Window(metaclass=Singleton):
     
     def center(self):
         return self.x + self.width / 2, self.y + self.height / 2
+
+    def relative(self, point):
+        x, y = point
+        return self.x + x, self.y + y
