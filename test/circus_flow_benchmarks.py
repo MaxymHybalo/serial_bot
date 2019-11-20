@@ -6,7 +6,7 @@ import pyautogui as u
 from shapes.window import Window
 
 from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
-from jobs.helpers.navigator import Navigator
+# from jobs.helpers.navigator import Navigator
 
 from test.timerfunc import timerfunc
 from test.tasks import make_extruder_env
@@ -95,9 +95,28 @@ def fetch_window(times, delay=2, dir='assets/data/screens/'):
 def get_guild_npc_rect(times=10):
     for i in range(times):
         image = cv2.imread(SCREENS + str(i) + '.png')
-        extruder = Extruder(image)
-        titleRoi, guildRoi = extruder.get_template_rect(CharTitleConfig), extruder.get_template_rect(StartPointConfig)
-        print(i, titleRoi, guildRoi)
+        e = Extruder(image)
+        e.threshold(StartPointConfig)
+        # titleRoi, guildRoi = extruder.get_template_rect(CharTitleConfig), extruder.get_template_rect(StartPointConfig)
+        # print(i, titleRoi, guildRoi)
+
+@timerfunc
+def draw_corners(times=10):
+    rx,ry,w,h = StartPointConfig.roi
+    for i in range(times):
+        image = cv2.imread(SCREENS + str(i) + '.png')
+        e = Extruder(image)
+        roi = e.threshold(StartPointConfig)
+        roi = e.clear(roi)
+
+        corners = e.corners(roi)
+        if corners is not None:
+            for c in corners:
+                x,y = c.ravel()
+                cv2.circle(image, (rx + x, ry + y), 3, 255, -1)
+        cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
+        cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
+
 
 from processes.move import Move 
 
@@ -110,12 +129,12 @@ def run(times=50):
     # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
     # get_guild_npc_rect(times=times)
-
+    draw_corners(times=times)
     # title = Navigator.touch_circus_npc()
     # x, y, _, _ = title
     # Navigator.turn_around(title)    
     # fetch_window(times=times, delay=0)
-    # draw_matched(times=times,config=StartPointConfig)
+    # draw_matched(times=times)
     # filter_img_by_color(4, color_shcheme=StartPointConfig)
 
 

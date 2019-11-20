@@ -20,7 +20,7 @@ class StartPointConfig:
     light = (0,0,0)
     dark = (80, 100, 40)
     template = 'assets/circus_flow/altar_ground.png'
-    roi = (605, 60, 290, 340)
+    roi = (605, 170, 290, 150)
 
 class Extruder:
 
@@ -79,6 +79,33 @@ class Extruder:
         else: 
             top = top_left
         return (top[0], top[1], w, h)
+    
+    def threshold(self, config):
+        x,y,w,h = config.roi
+        gray = self.image[y:y+h,x:x+w]
+        gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
+        result = gray
+        _, result = cv2.threshold(gray, 30, 255, cv2.THRESH_BINARY)
+        # show_image(cv2.cvtColor(result,cv2.COLOR_GRAY2RGB))
+        return result
+    
+    def clear(self, image, kernel=(2,2)):
+        kernel = np.ones(kernel, np.uint8)
+        image = cv2.dilate(image, kernel, iterations=1)
+        return cv2.erode(image, kernel, iterations=1)
+
+    def corners(self, image):
+        result = np.float32(image)
+        corners = cv2.goodFeaturesToTrack(result, 100, 0.01, 20)
+        if corners is None:
+            return None
+        corners = np.int0(corners)
+        result = cv2.cvtColor(result, cv2.COLOR_GRAY2RGB)
+        return corners
+        # for c in corners:
+            # x,y = c.ravel()
+            # cv2.circle(result, (x,y), 3, 255, -1)
+        # show_image(result)
     
 def as_rgb(image):
     return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
