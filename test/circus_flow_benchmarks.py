@@ -110,12 +110,42 @@ def draw_corners(times=10):
         roi = e.clear(roi)
 
         corners = e.corners(roi)
+        print('corners', corners)
+
         if corners is not None:
-            for c in corners:
-                x,y = c.ravel()
-                cv2.circle(image, (rx + x, ry + y), 3, 255, -1)
+            #  search start point
+            plain_corners = [c.ravel() for c in corners]
+            plain_corners.sort(key = lambda x: x[0], reverse=True)
+            right = plain_corners[0]
+            plain_corners.sort(key = lambda x: x[1], reverse=True)
+            bottom = plain_corners[0]
+            
+            print(right, bottom)
+            # for c in corners:
+            #     x,y = c.ravel()
+            cv2.circle(image, (rx + right[0], ry + right[1]), 3, 150, -1)
+            cv2.circle(image, (rx + bottom[0], ry + bottom[1]), 3, 255, -1)
         cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
         cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
+
+def draw_positon_features(times=50):
+    for i in range(times):
+        from shapes.rect import Rect
+
+        image = cv2.imread('assets/data/start_point_src/' + str(i) + '.png')
+        e = Extruder(image)
+        e.threshold(StartPointConfig)
+        titleRoi, guildRoi = e.get_template_rect(CharTitleConfig), e.get_template_rect(GuildIconConfig)
+        npcC = Rect(titleRoi).center()
+        gC = Rect(guildRoi).center()
+        cv2.circle(image, npcC, 5, [0, 200,0], 2);
+        cv2.circle(image, gC, 5, [200, 10, 0], 2);
+        cv2.line(image, npcC, gC, [0, 0, 200], 2) # connect gc n npc
+        cv2.line(image, gC, (gC[0], npcC[1]), [100, 10,10], 2) # gc projection
+        cv2.line(image, npcC, (gC[0], npcC[1]), [100, 100,10], 2) # npcc projection
+        npcGuildDist = gC[1] - npcC[1]
+        cv2.putText(image, str(npcGuildDist), (0,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, [0, 0, 200], 2)
+        cv2.imwrite('assets/data/start_position_features/' + str(i) + '.png', image)
 
 
 from processes.move import Move 
@@ -129,17 +159,18 @@ def run(times=50):
     # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
     # get_guild_npc_rect(times=times)
-    draw_corners(times=times)
+    # draw_corners(times=times)
     # title = Navigator.touch_circus_npc()
     # x, y, _, _ = title
     # Navigator.turn_around(title)    
-    # fetch_window(times=times, delay=0)
+    # fetch_window(times=times, delay=0, dir='assets/data/start_point_src/' )
     # draw_matched(times=times)
     # filter_img_by_color(4, color_shcheme=StartPointConfig)
-
 
     # from processes.wait import Wait
     # npc_title = Navigator.touch_circus_npc()
     # Navigator.turn_around(npc_title)
     # Wait(1).delay()
     # Navigator.go_to_start()
+
+    draw_positon_features(times=times)
