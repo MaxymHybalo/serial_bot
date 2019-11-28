@@ -44,4 +44,4 @@ def run():
     menu_region_recognize()
     menu_recognize()
     serial_run()
-    key()
+    # key()
