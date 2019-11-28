@@ -6,11 +6,12 @@ import pyautogui as u
 from shapes.window import Window
 
 from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
-# from jobs.helpers.navigator import Navigator
+from jobs.helpers.navigator import Navigator, get_guild_and_npc
 
 from test.timerfunc import timerfunc
 from test.tasks import make_extruder_env
 from utils.cv2_utils import show_image
+from utils.cv2_utils import screenshot
 
 TEMPLATE = 'assets/circus_flow/guide_siege_title.png'
 GUILD_TEMPLATE = 'assets/circus_flow/guild_icon.png'
@@ -74,7 +75,6 @@ def move_to_npc(times=10, imagepath='assets/data/npc_extruded_by_char_color/'):
 
 def fetch_window(times, delay=2, dir='assets/data/screens/'):
     window = Window()
-    from utils.cv2_utils import screenshot
     id = 0
     while id < times:
         time.sleep(delay)
@@ -128,13 +128,20 @@ def draw_corners(times=10):
         cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
         cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
 
+from shapes.rect import Rect
+
+EXPECTED_HEIGHT = 305
+
+def camera_height(npc, guild):
+    npcC = Rect(npc).center()
+    gC = Rect(guild).center()
+    return gC[1] - npcC[1]
+
 def draw_positon_features(times=50):
     for i in range(times):
-        from shapes.rect import Rect
 
         image = cv2.imread('assets/data/start_point_src/' + str(i) + '.png')
         e = Extruder(image)
-        e.threshold(StartPointConfig)
         titleRoi, guildRoi = e.get_template_rect(CharTitleConfig), e.get_template_rect(GuildIconConfig)
         npcC = Rect(titleRoi).center()
         gC = Rect(guildRoi).center()
@@ -173,4 +180,27 @@ def run(times=50):
     # Wait(1).delay()
     # Navigator.go_to_start()
 
-    draw_positon_features(times=times)
+    # draw_positon_features(times=times)
+    
+    # observer draft
+    from jobs.helpers.observer import Observer
+    
+    @timerfunc
+    def check():
+        titleRoi, guildRoi = get_guild_and_npc()
+        height = camera_height(titleRoi, guildRoi)
+        print(height)
+        return height < EXPECTED_HEIGHT
+
+    obs = Observer(check)
+    obs.observe()
+    # titleRoi, guildRoi = get_guild_and_npc()
+    # height = camera_height(titleRoi, guildRoi)
+    # sx,sy,_,_ = guildRoi
+    # ex, ey = sx, sy
+    # print(height)
+    # while :
+    #     ey += 3
+    #     Navigator.drag_camera((sx, sy), (ex, ey))
+        
+    #     print(height)

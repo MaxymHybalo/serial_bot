@@ -51,12 +51,20 @@ class Navigator:
         x, y = window.relative(start_point(start))
         Click(x,y).make_click()
         return start
+    
+    @staticmethod
+    def drag_camera(start, end):
+        x,y = window.position()
+        sx, sy = start
+        ex, ey = end
+        Move().fromTo((x + sx, y + sy), (x + ex, y + ey))
+
 
 def get_guild_and_npc():
     rect = window.rect
     image = screenshot(rect)
-    titleCenter = get_tempalate_roi(CharTitleConfig)
-    guildCenter = get_tempalate_roi(GuildIconConfig)
+    titleCenter = get_tempalate_roi(CharTitleConfig, image)
+    guildCenter = get_tempalate_roi(GuildIconConfig, image)
     return titleCenter, guildCenter
 
 def get_tempalate_roi(config, image=None):
