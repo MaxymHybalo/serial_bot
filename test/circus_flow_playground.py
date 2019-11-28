@@ -131,6 +131,7 @@ def draw_corners(times=10):
 from shapes.rect import Rect
 
 EXPECTED_HEIGHT = 305
+EXPECTED_HORIZONTAL = 20
 
 def camera_height(npc, guild):
     npcC = Rect(npc).center()
@@ -139,7 +140,6 @@ def camera_height(npc, guild):
 
 def draw_positon_features(times=50):
     for i in range(times):
-
         image = cv2.imread('assets/data/start_point_src/' + str(i) + '.png')
         e = Extruder(image)
         titleRoi, guildRoi = e.get_template_rect(CharTitleConfig), e.get_template_rect(GuildIconConfig)
@@ -151,7 +151,10 @@ def draw_positon_features(times=50):
         cv2.line(image, gC, (gC[0], npcC[1]), [100, 10,10], 2) # gc projection
         cv2.line(image, npcC, (gC[0], npcC[1]), [100, 100,10], 2) # npcc projection
         npcGuildDist = gC[1] - npcC[1]
+        GN = abs(npcC[0] - gC[0])
         cv2.putText(image, str(npcGuildDist), (0,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, [0, 0, 200], 2)
+        cv2.putText(image, str(GN), (0,25), cv2.FONT_HERSHEY_SIMPLEX, 0.5, [100, 50,100], 2)
+
         cv2.imwrite('assets/data/start_position_features/' + str(i) + '.png', image)
 
 
@@ -182,7 +185,7 @@ def run(times=50):
 
     # draw_positon_features(times=times)
     
-    # observer draft
+    # OBSERVER  DRAFT
     from jobs.helpers.observer import Observer
     
     @timerfunc
@@ -194,6 +197,9 @@ def run(times=50):
 
     obs = Observer(check)
     obs.observe()
+
+    # OBSERVER  DRAFT
+
     # titleRoi, guildRoi = get_guild_and_npc()
     # height = camera_height(titleRoi, guildRoi)
     # sx,sy,_,_ = guildRoi

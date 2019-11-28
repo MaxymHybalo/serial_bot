@@ -18,13 +18,15 @@ class Observer:
         self.window = Window().center()
 
 
-    def observe(self):
+    def observe(self, navigate=None):
         x, y = self.window
         dx, dy = x, y
         self.move.moveTo(x,y)
         self.move.pressRight()
         while self.checker():
             # TODO move to custom method as parametr
+            # navigate()
+            # one move equals around 10 real pixels
             for i in range(SPEED):
                 self.move.move(self._apply_direction())
         self.move.releaseRight()
