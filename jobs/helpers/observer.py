@@ -1,3 +1,4 @@
+import math
 from processes.move import Move
 from processes.wait import Wait
 from shapes.window import Window
@@ -7,7 +8,7 @@ OBSERVE_Y_INV = 1
 OBSERVE_X = 2
 OBSERVE_Y_INV = 3
 DELTA = 3
-SPEED = 3
+OBSERVE_DELAY = 0.05
 
 class Observer:
 
@@ -23,12 +24,16 @@ class Observer:
         dx, dy = x, y
         self.move.moveTo(x,y)
         self.move.pressRight()
-        while self.checker():
-            # TODO move to custom method as parametr
-            # navigate()
-            # one move equals around 10 real pixels
-            for i in range(SPEED):
+        check = self.checker()
+        while check is not None:
+            speed = math.floor(int(check / 10))
+            if speed == 0:
+                speed = 1
+
+            for i in range(speed):
                 self.move.move(self._apply_direction())
+                Wait(OBSERVE_DELAY).delay()
+            check = self.checker()
         self.move.releaseRight()
 
 

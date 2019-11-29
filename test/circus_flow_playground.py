@@ -192,10 +192,11 @@ def run(times=50):
     def check():
         titleRoi, guildRoi = get_guild_and_npc()
         height = camera_height(titleRoi, guildRoi)
-        print(height)
-        return height < EXPECTED_HEIGHT
+        if height > EXPECTED_HEIGHT:
+            return None
+        return EXPECTED_HEIGHT - height
 
-    obs = Observer(check)
+    obs = Observer(check,1)
     obs.observe()
 
     # OBSERVER  DRAFT
