@@ -128,15 +128,7 @@ def draw_corners(times=10):
         cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
         cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
 
-from shapes.rect import Rect
 
-EXPECTED_HEIGHT = 305
-EXPECTED_HORIZONTAL = 20
-
-def camera_height(npc, guild):
-    npcC = Rect(npc).center()
-    gC = Rect(guild).center()
-    return gC[1] - npcC[1]
 
 def draw_positon_features(times=50):
     for i in range(times):
@@ -176,38 +168,15 @@ def run(times=50):
     # fetch_window(times=times, delay=0, dir='assets/data/start_point_src/' )
     # draw_matched(times=times)
     # filter_img_by_color(4, color_shcheme=StartPointConfig)
+    # draw_positon_features(times=times)
+    
+    # OBSERVER  DRAFT
+    # from jobs.helpers.observer import Observer, observe_height, observe_angle
 
+    # obs = Observer(observe_angle, observe_height)
+    # obs.observe()
     # from processes.wait import Wait
     # npc_title = Navigator.touch_circus_npc()
     # Navigator.turn_around(npc_title)
     # Wait(1).delay()
     # Navigator.go_to_start()
-
-    # draw_positon_features(times=times)
-    
-    # OBSERVER  DRAFT
-    from jobs.helpers.observer import Observer
-    
-    @timerfunc
-    def check():
-        titleRoi, guildRoi = get_guild_and_npc()
-        height = camera_height(titleRoi, guildRoi)
-        if height > EXPECTED_HEIGHT:
-            return None
-        return EXPECTED_HEIGHT - height
-
-    obs = Observer(check,1)
-    obs.observe()
-
-    # OBSERVER  DRAFT
-
-    # titleRoi, guildRoi = get_guild_and_npc()
-    # height = camera_height(titleRoi, guildRoi)
-    # sx,sy,_,_ = guildRoi
-    # ex, ey = sx, sy
-    # print(height)
-    # while :
-    #     ey += 3
-    #     Navigator.drag_camera((sx, sy), (ex, ey))
-        
-    #     print(height)

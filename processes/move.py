@@ -64,4 +64,6 @@ class Move:
         return current <= target + ACCURACY
 
     def move(self, t):
+        if t is None:
+            return
         self.serial.write(t.encode())
