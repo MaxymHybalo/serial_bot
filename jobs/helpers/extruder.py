@@ -20,7 +20,7 @@ class StartPointConfig:
     light = (0,0,0)
     dark = (80, 100, 40)
     template = 'assets/circus_flow/altar_ground.png'
-    roi = (605, 170, 290, 150)
+    roi = (760, 220, 60, 80)
 
 class Extruder:
 
@@ -85,8 +85,11 @@ class Extruder:
         gray = self.image[y:y+h,x:x+w]
         gray = cv2.cvtColor(gray, cv2.COLOR_BGR2GRAY)
         result = gray
-        _, result = cv2.threshold(gray, 30, 255, cv2.THRESH_BINARY)
+
+        # TODO move 30 to config
+        _, result = cv2.threshold(gray, 49, 255, cv2.THRESH_BINARY)
         # show_image(cv2.cvtColor(result,cv2.COLOR_GRAY2RGB))
+
         return result
     
     def clear(self, image, kernel=(2,2)):

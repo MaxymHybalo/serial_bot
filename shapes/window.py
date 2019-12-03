@@ -1,9 +1,11 @@
+import logging
 import pyautogui as ui
 import matplotlib.pyplot as plt
 import numpy as np
 from utils.configurator import Configurator
 from utils.singleton import Singleton
 
+log = logging.getLogger('Window')
 class Window(metaclass=Singleton):
 
     def __init__(self):
@@ -21,6 +23,7 @@ class Window(metaclass=Singleton):
     def locate_window(self):
         if not hasattr(self, 'windowHead'):
             self.windowHead = ui.locateOnScreen(self.config['marker'])
+            log.info('Located game window on screen')
         else:
             print('window already inited: ', self.windowHead)
     

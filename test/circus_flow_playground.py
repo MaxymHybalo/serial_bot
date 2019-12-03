@@ -7,6 +7,7 @@ from shapes.window import Window
 
 from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
 from jobs.helpers.navigator import Navigator, get_guild_and_npc
+from processes.combination_flow import Click
 
 from test.timerfunc import timerfunc
 from test.tasks import make_extruder_env
@@ -102,31 +103,38 @@ def get_guild_npc_rect(times=10):
 
 @timerfunc
 def draw_corners(times=10):
+    window = Window()
     rx,ry,w,h = StartPointConfig.roi
     for i in range(times):
-        image = cv2.imread(SCREENS + str(i) + '.png')
+        # image = cv2.imread('assets/data/after_turn_around/' + str(i) + '.png')
+        image = np.array(screenshot(window.rect))
         e = Extruder(image)
         roi = e.threshold(StartPointConfig)
+        show_image(roi)
         roi = e.clear(roi)
-
         corners = e.corners(roi)
-        print('corners', corners)
 
-        if corners is not None:
-            #  search start point
-            plain_corners = [c.ravel() for c in corners]
-            plain_corners.sort(key = lambda x: x[0], reverse=True)
-            right = plain_corners[0]
-            plain_corners.sort(key = lambda x: x[1], reverse=True)
-            bottom = plain_corners[0]
+        # if corners is not None:
+        #     #  search start point
+        #     plain_corners = [c.ravel() for c in corners]
+        #     plain_corners.sort(key = lambda x: x[0], reverse=True)
+        #     right = plain_corners[0]
+        #     plain_corners.sort(key = lambda x: x[1], reverse=True)
+        #     bottom = plain_corners[0]
             
-            print(right, bottom)
-            # for c in corners:
-            #     x,y = c.ravel()
-            cv2.circle(image, (rx + right[0], ry + right[1]), 3, 150, -1)
-            cv2.circle(image, (rx + bottom[0], ry + bottom[1]), 3, 255, -1)
-        cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
-        cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
+        #     print(right, bottom)
+        #     # for c in corners:
+        #     #     x,y = c.ravel()
+        #     #     print(x,y)
+        #     #     image = cv2.circle(image, (rx+x,ry+y), 3, 255, -1)
+        #     cv2.circle(image, (window.x + rx + right[0], window.y + ry + right[1]), 3, 150, -1)
+        from shapes.rect import Rect
+        cx, cy = Rect(StartPointConfig.roi).center()
+        Click(window.x + cx, window.y + cy).make_click()
+            # cv2.circle(image, (rx + bottom[0], ry + bottom[1]), 3, 255, -1)
+
+        # cv2.rectangle(image, (rx,ry), (rx+w, ry+h),(0,200,0), 2)
+        # cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', image)
 
 
 
@@ -153,7 +161,7 @@ def draw_positon_features(times=50):
 from processes.move import Move 
 
 @timerfunc
-def run(times=50):
+def run(times=10):
     # make_extruder_env()
     # fetch_window(times, delay=0)
     # filter_img_by_color(times=times)
@@ -161,7 +169,6 @@ def run(times=50):
     # move_to_npc(1)
     # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
     # get_guild_npc_rect(times=times)
-    # draw_corners(times=times)
     # title = Navigator.touch_circus_npc()
     # x, y, _, _ = title
     # Navigator.turn_around(title)    
@@ -171,12 +178,16 @@ def run(times=50):
     # draw_positon_features(times=times)
     
     # OBSERVER  DRAFT
-    # from jobs.helpers.observer import Observer, observe_height, observe_angle
+    from jobs.helpers.observer import Observer, observe_height, observe_angle
 
-    # obs = Observer(observe_angle, observe_height)
-    # obs.observe()
-    # from processes.wait import Wait
-    # npc_title = Navigator.touch_circus_npc()
-    # Navigator.turn_around(npc_title)
+    obs = Observer(observe_angle, observe_height)
+    obs.observe()
+    from processes.wait import Wait
+    npc_title = Navigator.touch_circus_npc()
+    Navigator.turn_around(npc_title)
+    Wait(1).delay()
+    draw_corners(times=1)
+    # fetch_window(1, dir='assets/data/after_turn_around/')
+
     # Wait(1).delay()
     # Navigator.go_to_start()
