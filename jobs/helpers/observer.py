@@ -16,20 +16,23 @@ DELTA = 3
 OBSERVE_DELAY = 0.05
 
 # start point camera position reqiuirement
-CAMERA_HEIGHT = 300
-ANGLE_WIDTH = 20
+CAMERA_HEIGHT_LOWER = 300
+CAMERA_HEIGHT_UPPER = 310
+ANGLE_WIDTH = 10
 
 def observe_height():
     titleRoi, guildRoi = get_guild_and_npc()
     height = camera_height(titleRoi, guildRoi)
-    if height > CAMERA_HEIGHT:
+
+    if height > CAMERA_HEIGHT_LOWER and height <= CAMERA_HEIGHT_UPPER:
         return None
-    return CAMERA_HEIGHT - height
+    return CAMERA_HEIGHT_LOWER - height
 
 def observe_angle():
     titleRoi, guildRoi = get_guild_and_npc()
     width = camera_angle_width(titleRoi, guildRoi)
-    if abs(width) <= ANGLE_WIDTH:
+
+    if width >= 0 and width < ANGLE_WIDTH:
         return None
     return width
 
@@ -63,24 +66,37 @@ class Observer:
             self.round(yCheck, self.yChecker)
         if xCheck:
             self.direction = OBSERVE_X if xCheck > 0 else OBSERVE_X_INV
-            self.round(xCheck, self.xChecker)
+            self.round(xCheck, self.xChecker, axis='X')
 
-    def round(self, initial, checker):
+    def round(self, initial, checker, axis='Y'):
         x, y = self.window
         dx, dy = x, y
         self.move.moveTo(x,y)
         self.move.pressRight()
+        self._cast_direction(initial, axis)
         check = abs(initial)
+
         while check is not None:
             speed = math.floor(int(check / 10))
             if speed == 0:
                 speed = 1
+
             for i in range(speed):
                 self.move.move(self._apply_direction())
                 Wait(OBSERVE_DELAY).delay()
+            
             check = checker()
+            self._cast_direction(check, axis)
             check = abs(check) if check is not None else None
         self.move.releaseRight()
+
+    def _cast_direction(self, value, axis):
+        if value is None:
+            return
+        if axis is 'Y':
+            self.direction = OBSERVE_Y_INV if value < 0 else OBSERVE_Y
+        if axis is 'X':
+            self.direction = OBSERVE_X_INV if value < 0 else OBSERVE_X
 
     def _apply_direction(self):
         if self.direction is OBSERVE_Y:
