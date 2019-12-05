@@ -66,6 +66,7 @@ class Extruder:
         if roi:
             x,y,w,h = roi
             image = image[y:y+h,x:x+w]
+
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
