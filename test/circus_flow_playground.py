@@ -163,31 +163,6 @@ from processes.move import Move
 @timerfunc
 def run(times=10):
     # make_extruder_env()
-    # fetch_window(times, delay=0)
-    # filter_img_by_color(times=times)
-    # match_title_by_template(times=times)
-    # move_to_npc(1)
-    # match_guild_by_template(times=times, imagepath='assets/data/npc_extruded_by_char_color/')
-    # get_guild_npc_rect(times=times)
-    # title = Navigator.touch_circus_npc()
-    # x, y, _, _ = title
-    # Navigator.turn_around(title)    
-    # fetch_window(times=times, delay=0, dir='assets/data/start_point_src/' )
-    # draw_matched(times=times)
-    # filter_img_by_color(4, color_shcheme=StartPointConfig)
-    # draw_positon_features(times=times)
-    
-    # OBSERVER  DRAFT
-    from jobs.helpers.observer import Observer, observe_height, observe_angle
+    from jobs.helpers.circus_handler import CircusHandler
 
-    obs = Observer(observe_angle, observe_height)
-    obs.observe()
-    from processes.wait import Wait
-    npc_title = Navigator.touch_circus_npc()
-    Navigator.turn_around(npc_title)
-    Wait(1).delay()
-    draw_corners(times=1)
-    # fetch_window(1, dir='assets/data/after_turn_around/')
-
-    # Wait(1).delay()
-    # Navigator.go_to_start()
+    CircusHandler().get_quest()

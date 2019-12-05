@@ -36,7 +36,7 @@ class Navigator:
             print(title, guild)
             Wait(1).delay()
         title, guild = get_guild_and_npc()
-        # Navigator.click_at_npc(title)
+        Navigator.click_at_npc(title)
         return title
 
     @staticmethod
