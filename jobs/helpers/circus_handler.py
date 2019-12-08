@@ -13,9 +13,9 @@ class CircusHandler:
     def __init__(self):
         self.window = Window()
 
-    def get_quest(self):
-        HandleNpc().select_menu(QuestMenu)
-        HandleNpc().select_menu(AcceptQuest)
+    # def get_quest(self):
+    #     HandleNpc().select_menu(QuestMenu)
+    #     HandleNpc().select_menu(AcceptQuest)
 
 
     def get_quest(self):

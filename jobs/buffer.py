@@ -38,13 +38,13 @@ class Buffer:
     def process_flow(self):
         if self.config['spawn']:
             if not self.config['logout']:
-                Key('0').press(self.serial)
+                Key('0').press()
                 Wait(10).delay()
             Recognizer(self.moon, None).recognize()
             self._go_to_selector()
-            Key('U').press(self.serial)
+            Key('U').press()
             Wait(0.5).delay()
-            Key('E').press(self.serial)
+            Key('E').press()
             Recognizer(self.moon, None).recognize()
             return
         self._go_to_selector()
@@ -53,11 +53,11 @@ class Buffer:
             self._go_over_chars(self._buff_flow)
         if self.config['refresh']:
             self._go_over_chars(self._refresh_flow)
-            Key('E').press(self.serial)
+            Key('E').press()
 
     def _buff_flow(self, *arg):
         for buff in arg:
-            Key(buff).press(self.serial)
+            Key(buff).press()
             Wait(1.5).delay()
         self._go_to_selector()
         
@@ -79,9 +79,9 @@ class Buffer:
         marker.make_click()
     
     def _next_char(self):
-        Key('D').press(self.serial)
+        Key('D').press()
         Wait(1).delay()
-        Key('E').press(self.serial)
+        Key('E').press()
         Recognizer(self.moon, None).recognize()
 
     def _go_to_selector(self):
@@ -98,7 +98,7 @@ class Buffer:
         state = self._game_state()
         if state is 'game':
             # go to selector
-            Key('z').press(self.serial)
+            Key('z').press()
             return True
         elif state is None:
             return 'Error!'

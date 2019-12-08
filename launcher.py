@@ -18,7 +18,7 @@ MODES = [
 
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
-    logging.basicConfig(level=logging.DEBUG,
+    logging.basicConfig(level=logging.INFO,
                         format=log_format,
                         datefmt='%d-%m %H:%M:%S')
 
@@ -86,6 +86,12 @@ def buff():
     handlers.run_bot()
     return None
 
+def quests():
+    handlers.set_mode('buff', CONFIG_FILE)
+    handlers.set_logout(config)
+    handlers.get_quests(config)
+    return None
+
 def taming():
     handlers.set_mode('taming', CONFIG_FILE)
     handlers.run_bot()
@@ -141,6 +147,7 @@ def create_base_keyboard():
         markup.row(*line)
     markup.add(InlineKeyboardButton('combination', callback_data='combination'))
     markup.add(InlineKeyboardButton('farming', callback_data='farming'))
+    markup.add(InlineKeyboardButton('Get cicus quest', callback_data='quests'))
 
     return markup
 
