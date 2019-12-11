@@ -1,7 +1,8 @@
 from processes.click import Click
 from shapes.window import Window
 from utils.cv2_utils import screenshot
-from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
+from jobs.helpers.extruder import Extruder
+from utils.config import Config
 from processes.wait import Wait
 from processes.move import Move
 from shapes.rect import Rect
@@ -10,7 +11,7 @@ Y_OFFSET_FROM_START_POSITION = 70
 TURN_AROUND_DISTANCE = 500
 
 window = Window()
-
+config = Config()
 class Navigator:
 
     @staticmethod
@@ -27,7 +28,7 @@ class Navigator:
     
     @staticmethod
     def touch_circus_npc():
-        title = get_tempalate_roi(CharTitleConfig)
+        title = get_tempalate_roi(config.CharTitleConfig)
         Navigator.move_to_npc(title)
         Wait(3).delay()
         title, guild = get_guild_and_npc()
@@ -47,7 +48,7 @@ class Navigator:
 
     @staticmethod
     def go_to_start():
-        start = get_tempalate_roi(StartPointConfig)
+        start = get_tempalate_roi(config.StartPointConfig)
         x, y = window.relative(start_point(start))
         Click(x,y).make_click()
         return start
@@ -63,8 +64,8 @@ class Navigator:
 def get_guild_and_npc():
     rect = window.rect
     image = screenshot(rect)
-    titleCenter = get_tempalate_roi(CharTitleConfig, image)
-    guildCenter = get_tempalate_roi(GuildIconConfig, image)
+    titleCenter = get_tempalate_roi(config.CharTitleConfig, image)
+    guildCenter = get_tempalate_roi(config.GuildIconConfig, image)
     return titleCenter, guildCenter
 
 def get_tempalate_roi(config, image=None):

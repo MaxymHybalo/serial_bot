@@ -13,3 +13,15 @@ class Config(metaclass=Singleton):
 
     def enable(self):
         self.mode = 'enabled'
+
+    def initialize_configs(self, config):
+        from utils.configurator import Configurator
+        import jobs.helpers.configs as markers
+        import sys
+        
+        config = Configurator(config).from_yaml()
+        for c in config['templates']:
+            setattr(self, c['name'], getattr(sys.modules['jobs.helpers.configs'], c['name']))
+            for field, value in c.items():
+                if field is not 'name':
+                    setattr(getattr(self, c['name']), field, value)

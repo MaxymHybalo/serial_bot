@@ -3,25 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.cv2_utils import show_image
 
-# Support classes
-class CharTitleConfig:
-    light = (11, 140, 0)
-    dark = (18, 255, 255)
-    template = 'assets/circus_flow/guide_siege_title.png'
-    roi=None
-
-class GuildIconConfig:
-    light = (50, 0, 0)
-    dark = (60, 200, 255)
-    template = 'assets/circus_flow/guild_icon.png'
-    roi=None
-
-class StartPointConfig:
-    light = (0,0,0)
-    dark = (80, 100, 40)
-    template = 'assets/circus_flow/altar_ground.png'
-    roi = (760, 220, 60, 80)
-
 class Extruder:
 
     def __init__(self, image):
@@ -49,7 +30,8 @@ class Extruder:
         # color space object with light and dark tupels
         # image as bgr color scheme
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv, colorSpace.light, colorSpace.dark)
+        
+        mask = cv2.inRange(hsv, tuple(colorSpace.light), tuple(colorSpace.dark))
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
     
