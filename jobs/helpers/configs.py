@@ -24,3 +24,9 @@ class QuestMenu:
 class AcceptQuest:
     path = 'assets/circus_flow/accept_quest.png'
     roi = (665, 720, 110, 25)
+
+class DungeonNpc:
+    light = 0
+    dark = 0
+    template = ''
+    roi=None

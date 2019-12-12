@@ -24,7 +24,7 @@ class CircusHandler:
         obs = Observer(observe_angle, observe_height)
         obs.observe()
 
-        npc_title = Navigator.touch_circus_npc()
+        npc_title = Navigator.touch_npc(config.CharTitleConfig)
 
         HandleNpc().select_menu(config.QuestMenu)
         HandleNpc().select_menu(config.AcceptQuest)

@@ -5,8 +5,8 @@ import pyautogui as u
 
 from shapes.window import Window
 
-from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
-from jobs.helpers.navigator import Navigator, get_guild_and_npc
+from jobs.helpers.extruder import Extruder
+from jobs.helpers.navigator import Navigator
 from processes.combination_flow import Click
 
 from test.timerfunc import timerfunc
@@ -19,7 +19,7 @@ GUILD_TEMPLATE = 'assets/circus_flow/guild_icon.png'
 SCREENS = 'assets/data/screens/'
 
 @timerfunc
-def filter_img_by_color(times=10, color_shcheme=CharTitleConfig):
+def filter_img_by_color(times=10, color_shcheme=None):
     for i in range(times):
         image = cv2.imread('assets/data/screens/' + str(i) + '.png')
         extruded = Extruder(image)
@@ -41,7 +41,7 @@ def match_title_by_template(times=11, imagepath='assets/data/screens/'):
         cv2.imwrite('assets/data/altar_matched/' + str(i) + '.png', result)
 
 @timerfunc
-def draw_matched(times, imagepath='assets/data/screens/', config=StartPointConfig):
+def draw_matched(times, imagepath='assets/data/screens/', config=None):
     for i in range(times):
         print('[${i}]'.format(i=i))
         image = cv2.imread(imagepath + str(i) + '.png')
@@ -163,6 +163,17 @@ from processes.move import Move
 @timerfunc
 def run(times=10):
     # make_extruder_env()
-    from jobs.helpers.circus_handler import CircusHandler
+    # from jobs.helpers.circus_handler import CircusHandler
+    from utils.config import Config
+    # CircusHandler().get_quest()
+    window = Window()
+    config = Config()
+    config.initialize_configs('navigator.config.yml')
 
-    CircusHandler().get_quest()
+    Navigator.touch_npc(config.DungeonNpc)
+    # image = screenshot(window.rect)
+    # e = Extruder(image)
+    # screenshot(window.rect)
+    # filtred = e.filtredImgByColor(config.DungeonNpc)
+    # cv2.imwrite('assets/data/dungeon_tp.png', filtred)
+    # show_image(cv2.cvtColor(filtred, cv2.COLOR_BGR2RGB))
