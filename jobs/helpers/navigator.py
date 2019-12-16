@@ -41,10 +41,9 @@ class Navigator:
         return title
 
     @staticmethod
-    def turn_around(start):
-        wx, wy = Window().position()
-        x, y, _, _ = start
-        Move().fromTo((wx + x, wy + y), (wx + x + TURN_AROUND_DISTANCE, wy + y))
+    def turn_around():
+        x, y = Window().center()
+        Move().fromTo((x, y), (x + TURN_AROUND_DISTANCE,y))
 
     @staticmethod
     def go_to_start():

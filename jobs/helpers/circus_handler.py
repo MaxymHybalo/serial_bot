@@ -24,12 +24,17 @@ class CircusHandler:
         obs = Observer(observe_angle, observe_height)
         obs.observe()
 
-        npc_title = Navigator.touch_npc(config.CharTitleConfig)
+        Navigator.touch_circus_npc()
+
+        Navigator.touch_npc(config.CharTitleConfig)
 
         HandleNpc().select_menu(config.QuestMenu)
-        HandleNpc().select_menu(config.AcceptQuest)
+        Wait(0.3).delay()
 
-        Navigator.turn_around(npc_title)
+        HandleNpc().select_menu(config.AcceptQuest)
+        Wait(0.3).delay()
+
+        Navigator.turn_around()
         Wait(0.3).delay()
 
         from shapes.rect import Rect
