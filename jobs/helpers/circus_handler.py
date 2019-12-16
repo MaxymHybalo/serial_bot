@@ -4,10 +4,12 @@ from processes.click import Click
 from shapes.window import Window
 
 from jobs.helpers.navigator import Navigator
+from utils.config import Config
 from jobs.helpers.observer import Observer, observe_angle, observe_height
 from jobs.helpers.handle_npc import HandleNpc
 from jobs.helpers.configs import QuestMenu, AcceptQuest
 
+config = Config()
 class CircusHandler:
 
     def __init__(self):
@@ -24,17 +26,20 @@ class CircusHandler:
 
         Navigator.touch_circus_npc()
 
-        HandleNpc().select_menu(QuestMenu)
+        Navigator.touch_npc(config.CharTitleConfig)
+
+        HandleNpc().select_menu(config.QuestMenu)
         Wait(0.3).delay()
-        HandleNpc().select_menu(AcceptQuest)
+
+        HandleNpc().select_menu(config.AcceptQuest)
         Wait(0.3).delay()
 
         Navigator.turn_around()
         Wait(0.3).delay()
 
         from shapes.rect import Rect
-        from jobs.helpers.extruder import StartPointConfig
-        center = Rect(StartPointConfig.roi).center()
+
+        center = Rect(config.StartPointConfig.roi).center()
         x, y = self.window.relative(center)
         Click(x, y).make_click()
         

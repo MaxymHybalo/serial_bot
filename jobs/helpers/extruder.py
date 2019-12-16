@@ -3,25 +3,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from utils.cv2_utils import show_image
 
-# Support classes
-class CharTitleConfig:
-    light = (11, 140, 0)
-    dark = (18, 255, 255)
-    template = 'assets/circus_flow/guide_siege_title.png'
-    roi=None
-
-class GuildIconConfig:
-    light = (50, 0, 0)
-    dark = (60, 200, 255)
-    template = 'assets/circus_flow/guild_icon.png'
-    roi=None
-
-class StartPointConfig:
-    light = (0,0,0)
-    dark = (80, 100, 40)
-    template = 'assets/circus_flow/altar_ground.png'
-    roi = (760, 220, 60, 80)
-
 class Extruder:
 
     def __init__(self, image):
@@ -49,7 +30,10 @@ class Extruder:
         # color space object with light and dark tupels
         # image as bgr color scheme
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-        mask = cv2.inRange(hsv, colorSpace.light, colorSpace.dark)
+        lower = tuple(colorSpace.light)
+        upper = tuple(colorSpace.dark)
+        print(lower,upper)
+        mask = cv2.inRange(hsv, lower, upper)
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
     
@@ -66,9 +50,8 @@ class Extruder:
         if roi:
             x,y,w,h = roi
             image = image[y:y+h,x:x+w]
-        # from utils.cv2_utils import show_image
+        from utils.cv2_utils import show_image
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-        # show_image(grayImage)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
         top_left = max_loc
@@ -76,11 +59,13 @@ class Extruder:
         # from utils.cv2_utils import draw_rect, show_image
         # show_image(draw_rect(image, (top_left[0], top_left[1], w, h)))
         if roi:
-            print(top_left)
             top = (x + top_left[0], y + top_left[1])
         else: 
             top = top_left
-        return (top[0], top[1], w, h)
+        rect = (top[0], top[1], w, h)
+        # cv2.rectangle(grayImage, (rect[0], rect[2]), (rect[0]+rect[2], rect[1] + rect[3]),255, 2)
+        # show_image(grayImage)
+        return rect
     
     def threshold(self, config):
         x,y,w,h = config.roi

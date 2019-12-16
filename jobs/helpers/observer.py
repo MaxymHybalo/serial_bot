@@ -8,6 +8,8 @@ from shapes.rect import Rect
 
 from jobs.helpers.navigator import get_guild_and_npc
 
+from utils.config import Config
+
 OBSERVE_Y = 0
 OBSERVE_Y_INV = 1
 OBSERVE_X = 2
@@ -20,8 +22,10 @@ CAMERA_HEIGHT_LOWER = 300
 CAMERA_HEIGHT_UPPER = 310
 ANGLE_WIDTH = 10
 
+config = Config()
+
 def observe_height():
-    titleRoi, guildRoi = get_guild_and_npc()
+    titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
     height = camera_height(titleRoi, guildRoi)
 
     if height > CAMERA_HEIGHT_LOWER and height <= CAMERA_HEIGHT_UPPER:
@@ -29,7 +33,7 @@ def observe_height():
     return CAMERA_HEIGHT_LOWER - height
 
 def observe_angle():
-    titleRoi, guildRoi = get_guild_and_npc()
+    titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
     width = camera_angle_width(titleRoi, guildRoi)
 
     if width >= 0 and width < ANGLE_WIDTH:

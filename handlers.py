@@ -1,5 +1,6 @@
-from utils.configurator import Configurator
 import bot
+
+from utils.configurator import Configurator
 from processes.instruction_processor import InstructionProcessor
 
 AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return', 'taming', 'farming']
@@ -72,6 +73,10 @@ def get_quests(config):
     from jobs.helpers.circus_handler import CircusHandler
     from processes.wait import Wait
     from jobs.buffer import Buffer
+    from utils.config import Config
+
+    Config().initialize_configs(config['navigator'])
+
     if not SerialController().serial:
         SerialController().run_serial(config['serial']) 
 

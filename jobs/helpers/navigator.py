@@ -1,7 +1,8 @@
 from processes.click import Click
 from shapes.window import Window
 from utils.cv2_utils import screenshot
-from jobs.helpers.extruder import Extruder, CharTitleConfig, GuildIconConfig, StartPointConfig
+from jobs.helpers.extruder import Extruder
+from utils.config import Config
 from processes.wait import Wait
 from processes.move import Move
 from shapes.rect import Rect
@@ -10,33 +11,33 @@ Y_OFFSET_FROM_START_POSITION = 70
 TURN_AROUND_DISTANCE = 500
 
 window = Window()
-
+config = Config()
 class Navigator:
 
     @staticmethod
-    def move_to_npc(npc_roi):
+    def move_to_npc(npc_roi, npc=None):
         npc_x, npc_y = circus_npc_point(npc_roi)
         wx, wy = Window().position()
-        Click(wx + npc_x - 40, wy + npc_y, process='dclick').make_click()
+        Click(wx + npc_x + npc.nav_x_shift, wy + npc_y + npc.nav_y_shift, process='dclick').make_click()
 
     @staticmethod
-    def click_at_npc(npc_roi):
+    def click_at_npc(npc_roi, npc):
         npc_x, npc_y = circus_npc_point(npc_roi)
         wx, wy = Window().position()
-        Click(wx + npc_x, wy + npc_y - int(Y_OFFSET_FROM_START_POSITION / 2), process='dclick').make_click()
+        Click(wx + npc_x + npc.click_x_shift, wy + npc_y + npc.click_y_shift, process='dclick').make_click()
     
     @staticmethod
-    def touch_circus_npc():
-        title = get_tempalate_roi(CharTitleConfig)
-        Navigator.move_to_npc(title)
+    def touch_npc(npc):
+        title = get_tempalate_roi(npc)
+        Navigator.move_to_npc(title, npc)
         Wait(3).delay()
-        title, guild = get_guild_and_npc()
+        title, guild = get_guild_and_npc(npc)
         while not is_near_npc(title, guild):
-            title, guild = get_guild_and_npc()
+            title, guild = get_guild_and_npc(npc)
             print(title, guild)
             Wait(1).delay()
-        title, guild = get_guild_and_npc()
-        Navigator.click_at_npc(title)
+        title, guild = get_guild_and_npc(npc)
+        Navigator.click_at_npc(title, npc)
         return title
 
     @staticmethod
@@ -46,7 +47,7 @@ class Navigator:
 
     @staticmethod
     def go_to_start():
-        start = get_tempalate_roi(StartPointConfig)
+        start = get_tempalate_roi(config.StartPointConfig)
         x, y = window.relative(start_point(start))
         Click(x,y).make_click()
         return start
@@ -59,11 +60,11 @@ class Navigator:
         Move().fromTo((x + sx, y + sy), (x + ex, y + ey))
 
 
-def get_guild_and_npc():
+def get_guild_and_npc(npc):
     rect = window.rect
     image = screenshot(rect)
-    titleCenter = get_tempalate_roi(CharTitleConfig, image)
-    guildCenter = get_tempalate_roi(GuildIconConfig, image)
+    titleCenter = get_tempalate_roi(npc, image)
+    guildCenter = get_tempalate_roi(config.GuildIconConfig, image)
     return titleCenter, guildCenter
 
 def get_tempalate_roi(config, image=None):
@@ -101,7 +102,7 @@ def is_near_npc(npc, guild, near=120):
 def circus_npc_point(roi):
     x,y,w,h = roi
     center = int(x + w/2)
-    return (center, y + h + Y_OFFSET_FROM_START_POSITION)
+    return (center, y + h)
 
 def start_point(roi):
     x, y, w, h = roi
