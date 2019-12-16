@@ -1,12 +1,11 @@
 import time
-
 from utils.config import Config
 from processes.key import Key
 from processes.move import Move
 from shapes.window import Window
 
 class Farming:
-    
+    # TODO invistigate asyncio
 
     actions = {
         'one': 2.4,
@@ -30,13 +29,12 @@ class Farming:
         self.roundFrequency = 10
         self.actionsState = self.init_actions_time(self.actionsState)
 
-        self.window = Window()
-        self.roundStart = self.window.center()
-        self.rountEnd =  self.roundStart[0] + 100, self.roundStart[1]
+        # self.window = Window()
+        # self.roundStart = self.window.center()
+        # self.rountEnd =  self.roundStart[0] + 100, self.roundStart[1]
 
     def run(self):
         startTime = time.time()
-
         while self.config.isWorks():
             print('[While iteration]')
             for a in self.actionsState:
@@ -74,5 +72,5 @@ class Farming:
 
     def turn(self):
         print('turn')
-        Move().fromTo(self.roundStart, self.rountEnd)
+        # Move().fromTo(self.roundStart, self.rountEnd)
         return None
