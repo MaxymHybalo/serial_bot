@@ -1,32 +1,36 @@
 # Support classes
 class CharTitleConfig:
     light = 0
-    dark = (18, 255, 255)
-    template = 'assets/circus_flow/guide_siege_title.png'
-    roi=None
+    dark = None
+    template = None
+    roi = None
 
 class GuildIconConfig:
-    light = (50, 0, 0)
-    dark = (60, 200, 255)
-    template = 'assets/circus_flow/guild_icon.png'
-    roi=None
+    light = None
+    dark = None
+    template = None
+    roi = None
 
 class StartPointConfig:
-    light = (0,0,0)
-    dark = (80, 100, 40)
-    template = 'assets/circus_flow/altar_ground.png'
-    roi = (760, 220, 60, 80)
+    light = None
+    dark = None
+    template = None
+    roi = None
 
 class QuestMenu:
-    path = 'assets/circus_flow/quest_menu.png'
-    roi = (630, 200, 200, 30)
+    path = None
+    roi = None
 
 class AcceptQuest:
-    path = 'assets/circus_flow/accept_quest.png'
-    roi = (665, 720, 110, 25)
+    path = None
+    roi = None
 
 class DungeonNpc:
-    light = 0
-    dark = 0
-    template = ''
-    roi=None
+    light = None
+    dark = None
+    template = None
+    roi = None
+
+class Observable:
+    camera_height_lower = None
+    camera_height_upper = None

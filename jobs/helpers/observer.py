@@ -27,10 +27,11 @@ config = Config()
 def observe_height():
     titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
     height = camera_height(titleRoi, guildRoi)
-
-    if height > CAMERA_HEIGHT_LOWER and height <= CAMERA_HEIGHT_UPPER:
+    observable = config.Observable
+    ch_lower, ch_upper = observable.camera_height_lower, observable.camera_height_upper
+    if height > ch_lower and height <= ch_upper:
         return None
-    return CAMERA_HEIGHT_LOWER - height
+    return ch_lower - height
 
 def observe_angle():
     titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
@@ -60,7 +61,6 @@ class Observer:
         self.xChecker = xChecker
         self.yChecker = yChecker
         self.window = Window().center()
-
 
     def observe(self):
         xCheck = self.xChecker()

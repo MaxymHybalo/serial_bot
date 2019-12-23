@@ -15,16 +15,10 @@ class CircusHandler:
     def __init__(self):
         self.window = Window()
 
-    # def get_quest(self):
-    #     HandleNpc().select_menu(QuestMenu)
-    #     HandleNpc().select_menu(AcceptQuest)
-
-
     def get_quest(self):
         obs = Observer(observe_angle, observe_height)
         obs.observe()
 
-        Navigator.touch_circus_npc()
 
         Navigator.touch_npc(config.CharTitleConfig)
 
