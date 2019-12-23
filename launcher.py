@@ -8,6 +8,9 @@ from utils.configurator import Configurator
 
 from utils.config import Config
 
+
+
+
 CONFIG_FILE = 'config.yml'
 
 MODES = [
@@ -31,9 +34,17 @@ bot = telebot.TeleBot(config['token'])
 chat_id = None
 message_id = None
 
+state = dict()
+
 @bot.message_handler(commands=['start'])
 def start(message):
-    _start(message.chat.id)
+    # testing oo markups
+    from ui.screen import Screen
+    from ui.start_screen import StartScreen
+    ss = StartScreen(message, bot)
+    state[ss.name] = ss
+    ss.render()
+    # _start(message.chat.id)
 
 def combination():
     markup = InlineKeyboardMarkup()
@@ -153,29 +164,37 @@ def create_base_keyboard():
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
-    bot.answer_callback_query(call.id, 'Start ' + call.data)
-    data = call.data.split('_')
-    if data[0] == 'child':
-        handle = handle_child_nodes(data[1:])
-        print(handle)
-        if handle:
-            bot.edit_message_reply_markup(
-                chat_id=call.message.chat.id,
-                message_id=call.message.message_id,
-                reply_markup=handle
-            )
-            return
-    markup = None
-    if len(data) == 1:
-        markup = globals()[data[0]]()
-    if not markup:
-        _start(call.message.chat.id)
-    else:
-        bot.edit_message_reply_markup(
-            chat_id=call.message.chat.id,
-            message_id=call.message.message_id,
-            reply_markup=markup
-        )
+    print(call.data)
+    screen, action = call.data.split('.')
+    screen = state[screen]
+    action_key, action_value = getattr(screen, action)()
+    state[action_key] = action_value
+    print(state)
+# @bot.callback_query_handler(func=lambda call: True)
+# def handle_base_callbacks(call):
+#     bot.answer_callback_query(call.id, 'Start ' + call.data)
+#     data = call.data.split('_')
+#     if data[0] == 'child':
+#         handle = handle_child_nodes(data[1:])
+#         print(handle)
+#         if handle:
+#             bot.edit_message_reply_markup(
+#                 chat_id=call.message.chat.id,
+#                 message_id=call.message.message_id,
+#                 reply_markup=handle
+#             )
+#             return
+#     markup = None
+#     if len(data) == 1:
+#         markup = globals()[data[0]]()
+#     if not markup:
+#         _start(call.message.chat.id)
+#     else:
+#         bot.edit_message_reply_markup(
+#             chat_id=call.message.chat.id,
+#             message_id=call.message.message_id,
+#             reply_markup=markup
+#         )
 
 def _start(id):
     markup = create_base_keyboard()
