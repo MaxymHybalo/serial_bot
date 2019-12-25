@@ -27,7 +27,9 @@ def configure_logger():
                         datefmt='%d-%m %H:%M:%S')
 
 def load_config():
-    return Configurator(CONFIG_FILE).from_yaml()
+    cfg = Config()
+    cfg.load_config(CONFIG_FILE)
+    return cfg.config
 
 configure_logger()
 config = load_config()
@@ -39,6 +41,7 @@ state = dict()
 
 @bot.message_handler(commands=['start'])
 def start(message):
+    print(config)
     ss = StartScreen(message, bot)
     state[ss.name] = ss
     ss.render()

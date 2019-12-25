@@ -1,4 +1,5 @@
 from ui.screen import Screen
+from jobs.buffer import Buffer
 
 class BuffScreen(Screen):
 
@@ -7,8 +8,12 @@ class BuffScreen(Screen):
 
     def __init__(self, message, bot):
         super().__init__(message, bot)
-        self.title = 'Buffer menu:'    
+        self.title = 'Buffer menu:'
+        self.load_config()
 
+    def load_config(self):
+        from utils.configurator import Configurator
+        self.config = Configurator(self.config['buffer']).from_yaml()
 
     def back(self, call, state):
         screen = 'StartScreen'
@@ -18,4 +23,7 @@ class BuffScreen(Screen):
 
     def buff(self, call, state):
         self.bot.answer_callback_query(call.id, 'Start ' + call.data)
+        
+        Buffer(self.config).process()
+
         return self.name, self

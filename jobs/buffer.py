@@ -22,7 +22,6 @@ class Buffer:
     def __init__(self, config):
         self.log = logging.getLogger('buffer')
         self.config = config
-        self.serial = None
         self.menu = self.__asset_path('menu')
         self.selector = self.__asset_path('selector')
         self.select_marker = self.__asset_path('select_menu')
@@ -31,8 +30,7 @@ class Buffer:
         self.moon = self.__asset_path('moon')
         self.selected_char = self.__asset_path('selected_char_marker')
 
-    def process(self, serial):
-        self.serial = serial
+    def process(self):
         self.process_flow()
 
     def process_flow(self):

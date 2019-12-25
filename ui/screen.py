@@ -1,4 +1,5 @@
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
+from utils.config import Config
 
 class Screen:
     def __init__(self, message, bot):
@@ -7,6 +8,7 @@ class Screen:
         self.markup = InlineKeyboardMarkup()
         self.InlineKeyboardButton = InlineKeyboardButton
         self.title = 'Undefined'
+        self.config = Config().config
         self.name = self.__class__.__name__
 
     def render(self, call=None):
