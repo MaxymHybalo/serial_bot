@@ -8,6 +8,7 @@ from utils.configurator import Configurator
 
 from utils.config import Config
 
+from ui.start_screen import StartScreen
 
 
 
@@ -38,13 +39,9 @@ state = dict()
 
 @bot.message_handler(commands=['start'])
 def start(message):
-    # testing oo markups
-    from ui.screen import Screen
-    from ui.start_screen import StartScreen
     ss = StartScreen(message, bot)
     state[ss.name] = ss
     ss.render()
-    # _start(message.chat.id)
 
 def combination():
     markup = InlineKeyboardMarkup()
@@ -164,12 +161,17 @@ def create_base_keyboard():
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
-    print(call.data)
     screen, action = call.data.split('.')
-    screen = state[screen]
-    action_key, action_value = getattr(screen, action)()
-    state[action_key] = action_value
-    print(state)
+    try:
+        screen = state[screen]
+        action_key, action_value = getattr(screen, action)(call, state)
+        state[action_key] = action_value
+    except KeyError:
+        if screen == 'StartScreen':
+            print('Start screen not defined')
+            bot.answer_callback_query(call.id, 'StartScreen intiated, try again')
+            start(call.message)
+
 # @bot.callback_query_handler(func=lambda call: True)
 # def handle_base_callbacks(call):
 #     bot.answer_callback_query(call.id, 'Start ' + call.data)
