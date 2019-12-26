@@ -22,8 +22,21 @@ class BuffScreen(Screen):
         return 'StartScreen', ss
 
     def buff(self, call, state):
-        self.bot.answer_callback_query(call.id, 'Start ' + call.data)
-        
-        Buffer(self.config).process()
+        self.config['refresh'] = True
+        self.config['logout'] = False
+        return self.run_action(call)
 
+    def logout(self, call, state):
+        self.config['spawn'] = True
+        self.config['logout'] = True
+        return self.run_action(call)
+
+    def spawn(self, call, state):
+        self.config['spawn'] = True
+        self.config['logout'] = False
+        return self.run_action(call)
+
+    def run_action(self, call):
+        self.bot.answer_callback_query(call.id, 'Start ' + call.data)
+        Buffer(self.config).process()
         return self.name, self
