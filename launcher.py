@@ -22,7 +22,7 @@ MODES = [
 
 def configure_logger():
     log_format = '%(levelname)s : %(name)s %(asctime)s - %(message)s'
-    logging.basicConfig(level=logging.INFO,
+    logging.basicConfig(level=logging.DEBUG,
                         format=log_format,
                         datefmt='%d-%m %H:%M:%S')
 
@@ -169,11 +169,20 @@ def handle_base_callbacks(call):
         screen = state[screen]
         action_key, action_value = getattr(screen, action)(call, state)
         state[action_key] = action_value
-    except KeyError:
+    except KeyError as e:
+        logging.error(e)
+
         if screen == 'StartScreen':
             print('Start screen not defined')
             bot.answer_callback_query(call.id, 'StartScreen intiated, try again')
             start(call.message)
+    except Exception as e:
+        print(e)
+    except:
+        e = 'Something went wrong'
+        print(e)
+        logging.error(e)
+
 
 # @bot.callback_query_handler(func=lambda call: True)
 # def handle_base_callbacks(call):

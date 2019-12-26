@@ -1,5 +1,7 @@
 from ui.screen import Screen
 from ui.buff_screen import BuffScreen
+from ui.enhance_screen import EnhanceScreen
+
 
 class StartScreen(Screen):
 
@@ -7,14 +9,15 @@ class StartScreen(Screen):
 
     def __init__(self, message, bot):
         super().__init__(message, bot)
-        self.title = 'Menu:'    
+        self.title = 'Menu:'
 
     def buff(self, call, state):
-        print('make_buff')
         bs = state['BuffScreen'] if 'BuffScreen' in state else BuffScreen(self.message, self.bot)
         bs.render(call=call)
+        return bs.name, bs
 
-        # self.bot
-        # before defintion check if markup exist at state
-        # define BuffScreen and return itself key and instance
+    def enhance(self, call, state):
+        print('make_enhnace')
+        bs = state['EnhanceScreen'] if 'EnhanceScreen' in state else EnhanceScreen(self.message, self.bot)
+        bs.render(call=call)
         return bs.name, bs

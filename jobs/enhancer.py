@@ -12,9 +12,9 @@ from shapes.rect import Rect
 
 class Enhancer:
 
-    def __init__(self, configpath):
+    def __init__(self, config):
         self.log = logging.getLogger('enhancer')
-        self.config = Configurator(configpath).from_yaml()
+        self.config = config
         self.cube = None
         self.grid = None
         self.now = datetime.datetime.now()
