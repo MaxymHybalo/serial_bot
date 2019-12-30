@@ -1,4 +1,5 @@
 from ui.screen import Screen
+from ui.cubes_screen import CubesScreen
 from jobs.enhancer import Enhancer
 
 class EnhanceScreen(Screen):
@@ -45,6 +46,17 @@ class EnhanceScreen(Screen):
             self.send()
         else:
             self.edit(call)
+    
+    def cube(self, call, state):
+        cs = CubesScreen(self.message, self.bot)
+        cs.render(call=call)
+        return cs.name, cs
+
+    def binary(self, call, state):
+        pass
+
+    def combination(self, call, state):
+        pass
 
     def back(self, call, state):
         screen = 'StartScreen'
