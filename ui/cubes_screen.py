@@ -12,37 +12,38 @@ class CubesScreen(Screen):
 
 
     def generate_cubes(self):
-        for i in range(4):
-            cycle_id = i+1
-            attr_name = 'cycle_{0}'.format(cycle_id)
-
-            def cycle(call, state):
-                data = call.data.split('_')[1]
-                self.config['enhancement']['cycles'] = data
-                self.bot.answer_callback_query(call.id, 'Start {0} cycles'.format(data))
-                es = state['EnhanceScreen']
-                es.render(call=call)
-                return 'EnhanceScreen', es
-            
-            setattr(self, attr_name, cycle)
+        for i in range(1, 13):
+            for j in range(1, 10):
+                attr_name = 'cube_{0}_{1}'.format(i, j)
+                def cube(call, state):
+                    self.set_cube_config(call)
+                    es = state['EnhanceScreen']
+                    es.render(call=call)
+                    return 'EnhanceScreen', es
+                
+                setattr(self, attr_name, cube)
         return None
 
+    def set_cube_config(self, call):
+        data = call.data.split('_')[1:]
+        self.config['enhancement']['cube'] = data
+        self.bot.answer_callback_query(call.id, 'Set cube  {0}'.format(data))
 
     def render(self, call=None):
-            self.markup.keyboard = []
-            cycles = []
-
-            for i in range(1, 5):
-                title = '1:' + str(i)
-                callback = '{name}.cycle_{i}'.format(name=self.name, i=str(i))
-                cycles.append(self.InlineKeyboardButton(title, callback_data=callback))
-            self.markup.row_width = 4
-            self.markup.add(*cycles)
-            
-            if call is None:
-                self.send()
-            else:
-                self.edit(call)
+        self.markup.keyboard = []
+        self.markup.row_width = 10
+        for i in range(1, 13):
+            line = []
+            for j in range(1, 10):
+                title = '{i}:{j}'.format(i=i, j=j)
+                callback = '{name}.cube_{i}_{j}'.format(name=self.name, i=str(i), j=str(j))
+                line.append(self.InlineKeyboardButton(title, callback_data=callback))
+            self.markup.row(*line)
+        
+        if call is None:
+            self.send()
+        else:
+            self.edit(call)
     
     def load_config(self):
         self.config = Configurator(self.config['enhancer']).from_yaml()

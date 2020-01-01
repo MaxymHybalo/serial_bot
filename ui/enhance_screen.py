@@ -53,7 +53,9 @@ class EnhanceScreen(Screen):
         return cs.name, cs
 
     def binary(self, call, state):
-        pass
+        self.config['mode'] = 'binary'
+        Enhancer(self.config).process()
+        return self.name, self
 
     def combination(self, call, state):
         pass
