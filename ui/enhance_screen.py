@@ -1,5 +1,6 @@
 from ui.screen import Screen
 from ui.cubes_screen import CubesScreen
+from ui.combination_screen import CombinationScreen
 from jobs.enhancer import Enhancer
 
 class EnhanceScreen(Screen):
@@ -58,7 +59,9 @@ class EnhanceScreen(Screen):
         return self.name, self
 
     def combination(self, call, state):
-        pass
+        cs = CombinationScreen(self.message, self.bot)
+        cs.render(call=call)
+        return cs.name, cs
 
     def back(self, call, state):
         screen = 'StartScreen'

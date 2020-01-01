@@ -7,12 +7,10 @@ from processes.wait import Wait
 
 class Combinator:
 
-    def __init__(self, configpath):
+    def __init__(self, config):
         self.log = logging.getLogger('combinator')
-        self.config = Configurator(configpath).from_yaml()
+        self.config = config
         self.config = self.config['combination']
-        print(self.config)
-
         
     def process(self):
         cycles = int(self.config['cycles'])
