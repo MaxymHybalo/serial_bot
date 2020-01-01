@@ -10,7 +10,7 @@ from utils.configurator import Configurator
 from utils.config import Config
 
 from ui.start_screen import StartScreen
-
+from utils.serial_controller import SerialController
 
 CONFIG_FILE = 'config.yml'
 
@@ -33,6 +33,7 @@ def load_config():
 
 configure_logger()
 config = load_config()
+SerialController().run_serial(config['serial'])
 bot = telebot.TeleBot(config['token'])
 chat_id = None
 message_id = None
