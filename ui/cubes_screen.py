@@ -26,6 +26,7 @@ class CubesScreen(Screen):
 
     def set_cube_config(self, call):
         data = call.data.split('_')[1:]
+        data = data[::-1]
         self.config['enhancement']['cube'] = data
         self.bot.answer_callback_query(call.id, 'Set cube  {0}'.format(data))
 
