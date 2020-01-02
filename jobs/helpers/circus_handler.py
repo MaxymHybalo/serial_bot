@@ -37,3 +37,4 @@ class CircusHandler:
         x, y = self.window.relative(center)
         Click(x, y).make_click()
         
+        Wait(3).delay()

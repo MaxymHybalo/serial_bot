@@ -12,6 +12,9 @@ class Window(metaclass=Singleton):
         self.config = Configurator('config.yml').from_yaml()['window']
         self.width, self.height = self.config['width'], self.config['height']
         self.locate_window()
+        if self.windowHead is None:
+            log.error('Window has not initiated!')
+            return
         self.x = self.windowHead[0]
         self.y = self.windowHead[1] + self.windowHead[3]
         self.screen = ui.screenshot(region=(self.x,self.y, self.width, self.height))

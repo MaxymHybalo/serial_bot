@@ -1,6 +1,7 @@
 from ui.screen import Screen
 from ui.buff_screen import BuffScreen
 from ui.enhance_screen import EnhanceScreen
+from ui.circus_screen import CircusScreen
 from jobs.farming import Farming
 from jobs.taming import Taming
 from utils.config import Config
@@ -24,7 +25,9 @@ class StartScreen(Screen):
         return bs.name, bs
     
     def circus(self, call, state):
-        pass
+        cs = CircusScreen(self.message, self.bot)
+        cs.render(call=call)
+        return cs.name, cs
 
     def farming(self, call, state):
         Farming().run()

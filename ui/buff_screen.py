@@ -1,5 +1,6 @@
 from ui.screen import Screen
 from jobs.buffer import Buffer
+from utils.configurator import Configurator
 
 class BuffScreen(Screen):
 
@@ -12,7 +13,6 @@ class BuffScreen(Screen):
         self.load_config()
 
     def load_config(self):
-        from utils.configurator import Configurator
         self.config = Configurator(self.config['buffer']).from_yaml()
 
     def back(self, call, state):
