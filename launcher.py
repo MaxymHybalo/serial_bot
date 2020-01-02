@@ -54,22 +54,13 @@ def quests():
     handlers.get_quests(config)
     return None
 
-def taming():
-    handlers.set_mode('taming', CONFIG_FILE)
-    handlers.run_bot()
-
-def farming():
-    handlers.set_mode('farming', CONFIG_FILE)
-    handlers.run_bot()
-
-def stop():
-    Config().disable()
 
 def proceed_screen(call):
     screen, action = call.data.split('.')
     screen = state[screen]
     action_key, action_value = getattr(screen, action)(call, state)
-    state[action_key] = action_value
+    if action_key:
+        state[action_key] = action_value
 
 @bot.callback_query_handler(func=lambda call: True)
 def handle_base_callbacks(call):
