@@ -21,7 +21,12 @@ class EnhanceScreen(Screen):
 
             def cycle(call, state):
                 data = call.data.split('_')[1]
+                self.config['enhancement']['mode'] = 'single'
                 self.config['enhancement']['cycles'] = data
+                self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
+
+                print('data!!!!',self.config)
+                
                 self.bot.answer_callback_query(call.id, 'Start {0} cycles'.format(data))
                 Enhancer(self.config).process()
                 return self.name, self
