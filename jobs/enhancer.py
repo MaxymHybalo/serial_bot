@@ -42,7 +42,7 @@ class Enhancer:
 
     def enhance(self):
         scope, _ = self.state()
-        self.click_at_target(self.config['recognize']['enhance']['menu'])
+        # self.click_at_target(self.config['recognize']['enhance']['menu'])
         self.do_flow(scope) if self.mode == 'single' else self.do_binary_flow(scope)
 
     def do_flow(self, scope):
