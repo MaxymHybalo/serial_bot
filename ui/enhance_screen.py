@@ -21,7 +21,7 @@ class EnhanceScreen(Screen):
 
             def cycle(call, state):
                 data = call.data.split('_')[1]
-                self.config['enhancement']['mode'] = 'single'
+                self.config['mode'] = 'single'
                 self.config['enhancement']['cycles'] = data
                 self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
 

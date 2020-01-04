@@ -4,6 +4,9 @@ from utils.configurator import Configurator
 
 class CubesScreen(Screen):
 
+    CELLS_ROW = 12
+    CELLS_COL = 10
+
     def __init__(self, message, bot):
         super().__init__(message, bot)
         self.title = 'Select cube position:'
@@ -12,8 +15,8 @@ class CubesScreen(Screen):
 
 
     def generate_cubes(self):
-        for i in range(1, 13):
-            for j in range(1, 10):
+        for i in range(1, self.CELLS_ROW):
+            for j in range(1, self.CELLS_COL):
                 attr_name = 'cube_{0}_{1}'.format(i, j)
                 def cube(call, state):
                     self.set_cube_config(call)
@@ -32,10 +35,10 @@ class CubesScreen(Screen):
 
     def render(self, call=None):
         self.markup.keyboard = []
-        self.markup.row_width = 10
-        for i in range(1, 13):
+        self.markup.row_width = self.CELLS_COL
+        for i in range(1, self.CELLS_ROW):
             line = []
-            for j in range(1, 10):
+            for j in range(1, self.CELLS_COL):
                 title = '{i}:{j}'.format(i=i, j=j)
                 callback = '{name}.cube_{i}_{j}'.format(name=self.name, i=str(i), j=str(j))
                 line.append(self.InlineKeyboardButton(title, callback_data=callback))
