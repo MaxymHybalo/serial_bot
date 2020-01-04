@@ -12,6 +12,7 @@ class CircusScreen(Screen):
     def __init__(self, message, bot):
         super().__init__(message, bot)
         self.title = 'Circus:'
+        self.load_config()
 
     def render(self, call=None):
         self.markup.keyboard = []
