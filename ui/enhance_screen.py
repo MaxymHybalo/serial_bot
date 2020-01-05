@@ -57,6 +57,7 @@ class EnhanceScreen(Screen):
         return cs.name, cs
 
     def binary(self, call, state):
+        self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
         self.config['mode'] = 'binary'
         Enhancer(self.config).process()
         return self.name, self
