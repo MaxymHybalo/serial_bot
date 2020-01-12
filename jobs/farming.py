@@ -7,27 +7,36 @@ from shapes.window import Window
 
 class Farming:
     # TODO invistigate asyncio
-    frequences = [
-        2,
-        0.3,
-        0.3,
-        15,
-        15,
-        40,
-        40,
-        40,
-        6
-    ]
+    # frequences = [
+    #     2,
+    #     0.3,
+    #     0.3,
+    #     15,
+    #     15,
+    #     40,
+    #     40,
+    #     40,
+    #     6
+    # ]
 
+    # action_params = [
+    #     '1',
+    #     '2',
+    #     '3',
+    #     '5',
+    #     '6',
+    #     ['a', '5'], # alt + 1
+    #     ['a', '4'],
+    #     ['a', '1'],
+    #     '_'
+    # ]
+
+    frequences = [
+        0.5,
+        2
+    ]
     action_params = [
         '1',
-        '2',
-        '3',
-        '5',
-        '6',
-        ['a', '5'], # alt + 1
-        ['a', '4'],
-        ['a', '1'],
         '_'
     ]
 
@@ -59,9 +68,9 @@ class Farming:
             self.skills_state[a] = itime
     
     def generate_actions(self):
-        self.actions = ['key'] * 8
+        self.actions = ['key'] * (len(self.action_params) - 1)
         self.actions.append('turn')
-        self.skills_state = [0] * 9
+        self.skills_state = [0] * len(self.frequences)
         self.init_actions_time()
 
     def key(self, params):
