@@ -13,7 +13,8 @@ class BuffScreen(Screen):
         self.load_config()
 
     def load_config(self):
-        self.config = Configurator(self.config['buffer']).from_yaml()
+        self.configfile = Configurator(self.config['buffer'])
+        self.config = self.configfile.from_yaml()
 
     def back(self, call, state):
         screen = 'StartScreen'
@@ -23,17 +24,20 @@ class BuffScreen(Screen):
 
     def buff(self, call, state):
         self.config['refresh'] = True
-        self.config['logout'] = False
+        self.config['logout'] = True
+        self.configfile.dump_yaml(self.config)
         return self.run_action(call)
 
     def logout(self, call, state):
         self.config['spawn'] = True
         self.config['logout'] = True
+        self.configfile.dump_yaml(self.config)
         return self.run_action(call)
 
     def spawn(self, call, state):
         self.config['spawn'] = True
         self.config['logout'] = False
+        self.configfile.dump_yaml(self.config)
         return self.run_action(call)
 
     def run_action(self, call):

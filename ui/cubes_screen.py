@@ -31,6 +31,7 @@ class CubesScreen(Screen):
         data = call.data.split('_')[1:]
         data = data[::-1]
         self.config['enhancement']['cube'] = data
+        self.configfile.dump_yaml(self.config)
         self.bot.answer_callback_query(call.id, 'Set cube  {0}'.format(data))
 
     def render(self, call=None):
@@ -50,4 +51,5 @@ class CubesScreen(Screen):
             self.edit(call)
     
     def load_config(self):
-        self.config = Configurator(self.config['enhancer']).from_yaml()
+        self.configfile = Configurator(self.config['enhancer'])
+        self.config = self.configfile.from_yaml()
