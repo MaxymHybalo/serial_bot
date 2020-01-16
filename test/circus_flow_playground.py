@@ -168,7 +168,7 @@ def run(times=10):
     window = Window()
     config = Config()
     config.initialize_configs('navigator.config.yml')
-    CircusHandler().get_quest()
+    CircusHandler().go_to_dungeon()
 
     # # Navigator.touch_npc(config.DungeonNpc)
 

@@ -38,3 +38,7 @@ class CircusHandler:
         Click(x, y).make_click()
         
         Wait(3).delay()
+    
+    def go_to_dungeon(self):
+        Navigator.touch_npc(config.DungeonNpc)
+        HandleNpc().select_menu(config.CircusDungeonMenu)

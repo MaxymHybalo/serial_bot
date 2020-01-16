@@ -34,3 +34,7 @@ class DungeonNpc:
 class Observable:
     camera_height_lower = None
     camera_height_upper = None
+
+class CircusDungeonMenu:
+    path = None
+    roi = None

@@ -45,7 +45,6 @@ class Extruder:
     def match_by_template(self, template, image=None, roi=None):
         if image is None:
             image = self.image
-
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
         if roi:
             x,y,w,h = roi
