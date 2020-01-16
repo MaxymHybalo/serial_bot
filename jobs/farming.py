@@ -7,38 +7,39 @@ from shapes.window import Window
 
 class Farming:
     # TODO invistigate asyncio
-    # frequences = [
-    #     2,
-    #     0.3,
-    #     0.3,
-    #     15,
-    #     15,
-    #     40,
-    #     40,
-    #     40,
-    #     6
-    # ]
-
-    # action_params = [
-    #     '1',
-    #     '2',
-    #     '3',
-    #     '5',
-    #     '6',
-    #     ['a', '5'], # alt + 1
-    #     ['a', '4'],
-    #     ['a', '1'],
-    #     '_'
-    # ]
-
     frequences = [
-        0.5,
-        2
+        2,
+        0.3,
+        0.3,
+        15,
+        15,
+        40,
+        40,
+        40,
+        5
     ]
+
     action_params = [
         '1',
+        ['c', '6'],
+        ['c', '7'],
+        ['s', '2'],
+        ['s', '3'],
+        ['a', '5'], # alt + 1
+        ['a', '4'],
+        ['a', '1'],
         '_'
     ]
+
+    # frequences = [
+    #     0.5,
+
+    #     2
+    # ]
+    # action_params = [
+    #     '1',
+    #     '_'
+    # ]
 
     def __init__(self):
         self.config = Config()

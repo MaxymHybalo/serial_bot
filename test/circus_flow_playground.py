@@ -163,14 +163,22 @@ from processes.move import Move
 @timerfunc
 def run(times=10):
     # make_extruder_env()
-    # from jobs.helpers.circus_handler import CircusHandler
+    from jobs.helpers.circus_handler import CircusHandler
     from utils.config import Config
-    # CircusHandler().get_quest()
     window = Window()
     config = Config()
     config.initialize_configs('navigator.config.yml')
+    CircusHandler().get_quest()
 
-    Navigator.touch_npc(config.DungeonNpc)
+    # # Navigator.touch_npc(config.DungeonNpc)
+
+    # image = screenshot(window.rect)
+    # image =  np.array(image)
+    # image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    
+    # show_image(image)
+    # e = Extruder(image)
+    # e.match_by_template(cv2.imread('assets/circus_flow/cicus_dungeon_menu.png'))
     # image = screenshot(window.rect)
     # e = Extruder(image)
     # screenshot(window.rect)

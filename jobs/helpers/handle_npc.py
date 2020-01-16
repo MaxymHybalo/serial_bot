@@ -21,7 +21,8 @@ class HandleNpc:
         e = Extruder(screenshot(Window().rect))
         template = cv2.imread(config.path)
         menu = e.match_by_template(template, roi=config.roi)
+        if not menu:
+            return
         point = Rect(menu).center()
         x,y = Window().relative(point)
-        print(x,y)
         Click(x,y).make_click()

@@ -50,22 +50,17 @@ class Extruder:
         if roi:
             x,y,w,h = roi
             image = image[y:y+h,x:x+w]
-        from utils.cv2_utils import show_image
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
-        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
-        top_left = max_loc
         h, w = template.shape
-        # from utils.cv2_utils import draw_rect, show_image
-        # show_image(draw_rect(image, (top_left[0], top_left[1], w, h)))
-        if roi:
-            top = (x + top_left[0], y + top_left[1])
-        else: 
-            top = top_left
-        rect = (top[0], top[1], w, h)
-        # cv2.rectangle(grayImage, (rect[0], rect[2]), (rect[0]+rect[2], rect[1] + rect[3]),255, 2)
-        # show_image(grayImage)
-        return rect
+
+        threshold = 0.8
+        loc = np.where( res >= threshold)
+        loc = list(zip(*loc[::-1]))
+        if not len(loc):
+            return None
+        x,y = loc[0]
+        return (x, y, w, h)
     
     def threshold(self, config):
         x,y,w,h = config.roi

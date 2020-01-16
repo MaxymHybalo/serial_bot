@@ -7,7 +7,7 @@ from jobs.buffer import Buffer
 
 class CircusScreen(Screen):
 
-    buttons = [['Get quests', 'quests'], ['Back', 'back']]
+    buttons = [['Get quests', 'quests'], ['Go to dungeon', 'dungeon'], ['Back', 'back']]
 
     def __init__(self, message, bot):
         super().__init__(message, bot)
@@ -38,6 +38,9 @@ class CircusScreen(Screen):
             buff.process_flow()
 
         return None, None
+
+    def dungeon(self, call, state):
+        pass
 
     def back(self, call, state):
         ss = state['StartScreen']
