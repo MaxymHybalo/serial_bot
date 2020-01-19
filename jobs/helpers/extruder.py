@@ -53,7 +53,7 @@ class Extruder:
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         h, w = template.shape
 
-        threshold = 0.8
+        threshold = 0.5
         loc = np.where( res >= threshold)
         loc = list(zip(*loc[::-1]))
         if not len(loc):

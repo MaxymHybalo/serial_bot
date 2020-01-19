@@ -25,6 +25,7 @@ class Combinator:
         Click(x, y, delay=0.5, process='dclick').make_click()
         self.write_code(self.config[self.config['mode']])
         Key('E').press()
+        Wait(1).delay()
         x,y = self.config['cell_1']
         Click(x, y, delay=0.5, process='dclick').make_click()
         self.write_code(self.config['partials'])
