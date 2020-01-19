@@ -42,7 +42,7 @@ class Extruder:
         template = cv2.imread(config.template)
         return self.match_by_template(template, image=filtered, roi=config.roi)
     
-    def match_by_template(self, template, image=None, roi=None):
+    def match_by_template(self, template, image=None, roi=None, method='minmax'):
         if image is None:
             image = self.image
         template = cv2.cvtColor(template, cv2.COLOR_BGR2GRAY)
@@ -52,14 +52,11 @@ class Extruder:
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         h, w = template.shape
-
-        threshold = 0.5
-        loc = np.where( res >= threshold)
-        loc = list(zip(*loc[::-1]))
-        if not len(loc):
-            return None
-        x,y = loc[0]
-        return (x, y, w, h)
+        dx, dy = self._min_max_match(res) if method is 'minmax' else self._threshold_match(res) 
+        if roi:
+            dx += x
+            dy += y
+        return (dx, dy, w, h)
     
     def threshold(self, config):
         x,y,w,h = config.roi
@@ -72,7 +69,19 @@ class Extruder:
         # show_image(cv2.cvtColor(result,cv2.COLOR_GRAY2RGB))
 
         return result
-    
+
+    def _min_max_match(self, res):
+        min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(res)
+        return max_loc
+
+    def _threshold_match(self, res):
+        threshold = 0.8
+        loc = np.where( res >= threshold)
+        loc = list(zip(*loc[::-1]))
+        if not len(loc):
+            return None
+        return loc[0]
+
     def clear(self, image, kernel=(2,2)):
         kernel = np.ones(kernel, np.uint8)
         image = cv2.dilate(image, kernel, iterations=1)
