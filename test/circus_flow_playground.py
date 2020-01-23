@@ -159,17 +159,20 @@ def draw_positon_features(times=50):
 
 
 from processes.move import Move 
+from jobs.helpers.detector import Detector
+from jobs.helpers.circus_handler import CircusHandler
+from utils.config import Config
 
 @timerfunc
 def run(times=10):
     # make_extruder_env()
-    from jobs.helpers.circus_handler import CircusHandler
-    from utils.config import Config
     window = Window()
     config = Config()
     config.initialize_configs('navigator.config.yml')
-    CircusHandler().go_to_dungeon()
-
+    # CircusHandler().go_to_dungeon()
+    template = cv2.imread('assets/window/menu_marker.png')
+    found = Detector(template, window).detect()
+    print(found)
     # # Navigator.touch_npc(config.DungeonNpc)
 
     # image = screenshot(window.rect)

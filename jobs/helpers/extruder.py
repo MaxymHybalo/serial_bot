@@ -52,7 +52,10 @@ class Extruder:
         grayImage = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
         res = cv2.matchTemplate(grayImage, template, cv2.TM_CCOEFF_NORMED)
         h, w = template.shape
-        dx, dy = self._min_max_match(res) if method is 'minmax' else self._threshold_match(res) 
+        loc = self._min_max_match(res) if method is 'minmax' else self._threshold_match(res)
+        if loc is None:
+            return None
+        dx, dy = loc
         if roi:
             dx += x
             dy += y
