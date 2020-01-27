@@ -8,7 +8,10 @@ class Detector:
 
     def __init__(self, observable, window):
         self.window = window
+        # import pdb; pdb.set_trace()
         self.observable = observable
+        if type(observable) is str:
+            self.observable = cv2.imread(observable)
 
     def detect(self):
         # move method head to once detection method if could be needed

@@ -2,12 +2,15 @@ from processes.wait import Wait
 from processes.click import Click
 
 from shapes.window import Window
+from shapes.rect import Rect
 
 from jobs.helpers.navigator import Navigator
 from utils.config import Config
 from jobs.helpers.observer import Observer, observe_angle, observe_height
 from jobs.helpers.handle_npc import HandleNpc
 from jobs.helpers.configs import QuestMenu, AcceptQuest
+from jobs.helpers.detector import Detector
+
 
 config = Config()
 class CircusHandler:
@@ -31,7 +34,6 @@ class CircusHandler:
         Navigator.turn_around()
         Wait(0.3).delay()
 
-        from shapes.rect import Rect
 
         center = Rect(config.StartPointConfig.roi).center()
         x, y = self.window.relative(center)
@@ -42,3 +44,9 @@ class CircusHandler:
     def go_to_dungeon(self):
         Navigator.touch_npc(config.DungeonNpc)
         HandleNpc().select_menu(config.CircusDungeonMenu)
+        x, y, w, h = config.StarIcon.roi
+        x,y = Window().relative((x,y))
+        Wait(1).delay()
+        Detector(config.StarIcon.menu, Window()).detect()
+        Rect((x,y,w,h)).click().make_click()
+

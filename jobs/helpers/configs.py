@@ -38,3 +38,7 @@ class Observable:
 class CircusDungeonMenu:
     path = None
     roi = None
+
+class StarIcon:
+    menu = None
+    roi = None

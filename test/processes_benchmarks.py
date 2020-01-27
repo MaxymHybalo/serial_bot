@@ -40,8 +40,8 @@ def init_window():
 
 @timerfunc
 def run():
-    init_window()
-    menu_region_recognize()
-    menu_recognize()
+    # init_window()
+    # menu_region_recognize()
+    # menu_recognize()
     serial_run()
     # key()
