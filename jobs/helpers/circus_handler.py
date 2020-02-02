@@ -4,7 +4,7 @@ from processes.click import Click
 from shapes.window import Window
 from shapes.rect import Rect
 
-from jobs.helpers.navigator import Navigator
+from jobs.helpers.navigator import Navigator, get_guild_and_npc
 from utils.config import Config
 from jobs.helpers.observer import Observer, observe_angle, observe_height
 from jobs.helpers.handle_npc import HandleNpc
@@ -49,4 +49,8 @@ class CircusHandler:
         Wait(1).delay()
         Detector(config.StarIcon.menu, Window()).detect()
         Rect((x,y,w,h)).click().make_click()
-
+        Navigator.touch_npc(config.CircusNpc)
+        Wait(1).delay()
+        HandleNpc().select_menu(config.CircusNpcMenu)
+        Wait(1).delay()
+        HandleNpc().select_menu(config.FirstCircus)

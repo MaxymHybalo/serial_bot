@@ -42,3 +42,12 @@ class CircusDungeonMenu:
 class StarIcon:
     menu = None
     roi = None
+
+class CircusNpc:
+    pass
+
+class CircusNpcMenu:
+    pass
+
+class FirstCircus:
+    pass
