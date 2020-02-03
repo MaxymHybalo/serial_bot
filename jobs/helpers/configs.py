@@ -51,3 +51,6 @@ class CircusNpcMenu:
 
 class FirstCircus:
     pass
+
+class OkButton:
+    pass

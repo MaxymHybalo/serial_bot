@@ -41,7 +41,14 @@ class CircusHandler:
         
         Wait(3).delay()
     
-    def go_to_dungeon(self):
+    def go_to_dungeon(self, party):
+        if party:
+            d = Detector(config.OkButton.path, Window()).detect()
+            x, y, w, h = d
+            x,y = Window().relative((x,y))
+            Rect((x,y,w,h)).click().make_click()
+            Click(x,y).make_click()
+
         Navigator.touch_npc(config.DungeonNpc)
         HandleNpc().select_menu(config.CircusDungeonMenu)
         x, y, w, h = config.StarIcon.roi
