@@ -14,7 +14,7 @@ from processes.instruction_processor import InstructionProcessor
 from utils.serial_controller import SerialController
 from utils.config import Config
 
-
+#test commit
 def load_config():
     return Configurator('config.yml').from_yaml()
 
