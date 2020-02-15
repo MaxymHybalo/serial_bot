@@ -20,9 +20,11 @@ class HandleNpc:
         Wait(DELAY).delay()
         e = Extruder(screenshot(Window().rect))
         template = cv2.imread(config.path)
-        menu = e.match_by_template(template, roi=config.roi)
+        menu = e.match_by_template(template, roi=config.roi, ,method='threshold')
         if not menu:
-            return
+            return None
+
         point = Rect(menu).center()
         x,y = Window().relative(point)
         Click(x,y).make_click()
+        return x, y

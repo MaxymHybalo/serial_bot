@@ -56,8 +56,16 @@ class CircusHandler:
         Wait(1).delay()
         Detector(config.StarIcon.menu, Window()).detect()
         Rect((x,y,w,h)).click().make_click()
-        Navigator.touch_npc(config.CircusNpc)
+        npc, guild = get_guild_and_npc(config.CircusNpc)
+        
+        Navigator.click_at_npc(npc, config.CircusNpc)
         Wait(1).delay()
-        HandleNpc().select_menu(config.CircusNpcMenu)
+        
+        npc_menu = HandleNpc().select_menu(config.CircusNpcMenu)
+        
+        if not npc_menu:
+            return None
+            
         Wait(1).delay()
-        HandleNpc().select_menu(config.FirstCircus)
+        npc_menu = HandleNpc().select_menu(config.FirstCircus)
+        return npc_menu

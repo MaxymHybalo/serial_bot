@@ -12,6 +12,7 @@ TURN_AROUND_DISTANCE = 500
 
 window = Window()
 config = Config()
+
 class Navigator:
 
     @staticmethod
