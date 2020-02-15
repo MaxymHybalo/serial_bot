@@ -62,7 +62,6 @@ class CircusHandler:
         Wait(1).delay()
         
         npc_menu = HandleNpc().select_menu(config.CircusNpcMenu)
-        
         if not npc_menu:
             return None
             
