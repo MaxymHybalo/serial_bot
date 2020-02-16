@@ -1,10 +1,16 @@
 from utils.singleton import Singleton
+from utils.configurator import Configurator
 
 class Config(metaclass=Singleton):
     
     def __init__(self, *args, **kwargs):
         self.mode = 'test'
     
+    def load_config(self, config):
+        if not hasattr(self, 'config'):
+            print('load config')
+            self.config = Configurator(config).from_yaml()
+
     def isWorks(self):
         return self.mode == 'enabled'
     
@@ -13,3 +19,15 @@ class Config(metaclass=Singleton):
 
     def enable(self):
         self.mode = 'enabled'
+
+    def initialize_configs(self, config):
+        import jobs.helpers.configs as markers
+        import sys
+        
+        config = Configurator(config).from_yaml()
+        
+        for c in config['templates']:
+            setattr(self, c['name'], getattr(sys.modules['jobs.helpers.configs'], c['name']))
+            for field, value in c.items():
+                if field is not 'name':
+                    setattr(getattr(self, c['name']), field, value)

@@ -12,9 +12,9 @@ from shapes.rect import Rect
 
 class Enhancer:
 
-    def __init__(self, configpath):
+    def __init__(self, config):
         self.log = logging.getLogger('enhancer')
-        self.config = Configurator(configpath).from_yaml()
+        self.config = config
         self.cube = None
         self.grid = None
         self.now = datetime.datetime.now()
@@ -42,7 +42,7 @@ class Enhancer:
 
     def enhance(self):
         scope, _ = self.state()
-        self.click_at_target(self.config['recognize']['enhance']['menu'])
+        # self.click_at_target(self.config['recognize']['enhance']['menu'])
         self.do_flow(scope) if self.mode == 'single' else self.do_binary_flow(scope)
 
     def do_flow(self, scope):

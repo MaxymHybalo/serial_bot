@@ -17,10 +17,10 @@ class Move:
         self.end = end
         startX, startY = self.start
         self.moveTo(startX, startY)
-        self.serial.write(b'P')
+        self.pressRight()
         endX, endY = self.end
         self.moveTo(endX, endY)
-        self.serial.write(b'R')
+        self.releaseRight()
 
     def moveTo(self, x, y):
         _x, _y = ui.position()
@@ -30,21 +30,27 @@ class Move:
         while not (is_x_pass and is_y_pass):
             if axis == 'X':
                 if self._is_coord_less(_x, x):
-                    self._move(self.serial, X_DIRECT[1])
+                    self.move(X_DIRECT[1])
                     axis = 'Y' if not is_y_pass else 'X'
                 else:
-                    self._move(self.serial, X_DIRECT[0])
+                    self.move(X_DIRECT[0])
                     axis = 'Y' if not is_y_pass else 'X'
             if axis == 'Y':
                 if self._is_coord_less(_y, y):
-                    self._move(self.serial, Y_DIRECT[1])
+                    self.move(Y_DIRECT[1])
                     axis = 'X' if not is_x_pass else 'Y'
                 else:
-                    self._move(self.serial, Y_DIRECT[0])
+                    self.move(Y_DIRECT[0])
                     axis = 'X' if not is_x_pass else 'Y'
             _x, _y = ui.position()
             is_x_pass = self._get_axis_pass(x, _x)
             is_y_pass = self._get_axis_pass(y, _y)
+
+    def pressRight(self):
+        self.serial.write(b'P')
+
+    def releaseRight(self):
+        self.serial.write(b'R')
 
     def _get_axis_pass(self, target_point, actual_point):
         return self._is_coord_less(actual_point, target_point) and self._is_coord_greater(actual_point, target_point)
@@ -57,6 +63,7 @@ class Move:
     def _is_coord_greater(current, target):
         return current <= target + ACCURACY
 
-    @staticmethod
-    def _move(serial, t):
-        serial.write(t.encode())
+    def move(self, t):
+        if t is None:
+            return
+        self.serial.write(t.encode())

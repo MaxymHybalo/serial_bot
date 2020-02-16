@@ -24,3 +24,7 @@ class Rect(Shape):
         if self.rect:
             x, y, w, h = self.rect
             cv2.rectangle(image, (x, y), (x + w, y + h), self.color, self.thinkness)
+
+    def center(self):
+        x, y, w, h = self.rect
+        return int(x + w / 2), int(y + h / 2)

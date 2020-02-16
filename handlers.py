@@ -1,8 +1,9 @@
-from utils.configurator import Configurator
 import bot
+
+from utils.configurator import Configurator
 from processes.instruction_processor import InstructionProcessor
 
-AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return', 'taming']
+AVAILABLE_MODES = ['buff', 'enhance', 'make', 'combination', 'return', 'taming', 'farming']
 
 
 def get_config(config):
@@ -65,3 +66,23 @@ def set_combination_mode(mode, config):
 
 def run_bot():
     return bot.run()
+
+
+def get_quests(config):
+    from utils.serial_controller import SerialController
+    from jobs.helpers.circus_handler import CircusHandler
+    from processes.wait import Wait
+    from jobs.buffer import Buffer
+    from utils.config import Config
+
+    Config().initialize_configs(config['navigator'])
+
+    if not SerialController().serial:
+        SerialController().run_serial(config['serial']) 
+
+    buff_cfg = Configurator(config['buffer']).from_yaml()
+    buff = Buffer(buff_cfg)
+    for i in range(8):
+        CircusHandler().get_quest()
+        Wait(2).delay()
+        buff.process_flow()
