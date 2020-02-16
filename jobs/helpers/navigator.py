@@ -10,7 +10,7 @@ from shapes.rect import Rect
 Y_OFFSET_FROM_START_POSITION = 70
 TURN_AROUND_DISTANCE = 500
 
-window = Window()
+# window = Window()
 config = Config()
 
 class Navigator:
@@ -97,7 +97,6 @@ def is_near_npc(npc, guild, near=120):
     npc = Rect(npc).center()
     guild = Rect(guild).center()
     d = distance(npc, guild)
-    print('distance', d)
     return d <= near
 
 def circus_npc_point(roi):
