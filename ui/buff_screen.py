@@ -25,6 +25,7 @@ class BuffScreen(Screen):
     def buff(self, call, state):
         self.config['refresh'] = True
         self.config['logout'] = True
+        self.config['spawn'] = False
         self.configfile.dump_yaml(self.config)
         return self.run_action(call)
 
