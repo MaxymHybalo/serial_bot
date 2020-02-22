@@ -61,7 +61,7 @@ class CircusHandler:
         Navigator.click_at_npc(npc, config.CircusNpc)
         Wait(1).delay()
         
-        npc_menu = HandleNpc().select_menu(config.CircusNpcMenu)
+        npc_menu = HandleNpc().select_menu(config.CircusNpcMenu, quality='threshold')
         if not npc_menu:
             return None
             
