@@ -17,5 +17,4 @@ class TestCV2Utils(unittest.TestCase):
     def test_screenshot(self):
         data = [100, 100, 1000, 200]
         result = screenshot(data)
-        print(result)
         self.assertIsInstance(result, Image)

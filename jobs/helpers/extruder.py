@@ -6,15 +6,8 @@ from utils.cv2_utils import show_image
 class Extruder:
 
     def __init__(self, image):
-
-        # if not isinstance(image, np.ndarray):
-        #     image = np.array(image)
-        #     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        # self.image = image
         self.set_image(image)
-        # plt.imshow(self.filtredImgByColor())
-        # plt.show()
+
 
     def set_image(self, image):
         if not isinstance(image, np.ndarray):
