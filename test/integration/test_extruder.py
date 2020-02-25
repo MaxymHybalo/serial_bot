@@ -12,7 +12,6 @@ class TestExtruder(unittest.TestCase):
         self.extruder = Extruder(get_image(self.testimage))
 
     def test_set_image(self):
-        data = 'test/fixtures/testslice.png'
-        data = get_image(data)
+        data = get_image(self.testimage)
         result = Extruder(data)
         self.assertIsInstance(result.image, np.ndarray)
