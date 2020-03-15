@@ -88,7 +88,7 @@ class Enhancer:
 
     def _init_flow(self):
         make = self.click_at_target(self.config['recognize']['enhance']['make'], make=False)
-        make.delay = 4
+        make.delay = 1
         make.process = 'click'
         main = self.click_at_target(self.config['recognize']['enhance']['slot'], make=False)
         cube = Rect(self.grid.get_region_of(self.cube[0], self.cube[1])).click()
