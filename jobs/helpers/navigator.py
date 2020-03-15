@@ -10,7 +10,7 @@ from shapes.rect import Rect
 Y_OFFSET_FROM_START_POSITION = 70
 TURN_AROUND_DISTANCE = 500
 
-# window = Window()
+window = Window()
 config = Config()
 
 class Navigator:
