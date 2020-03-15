@@ -4,7 +4,7 @@ from hashlib import sha1
 from utils.cv2_utils import get_image, screenshot
 from PIL.Image import Image
 
-TEST_SLICE_HASH = 'b91e3d064f1179469c3ed38832d6fbcda1247748'
+TEST_SLICE_HASH = '299f24df480dcccc383d55904577cfac87fd8362'
 
 class TestCV2Utils(unittest.TestCase):
 
