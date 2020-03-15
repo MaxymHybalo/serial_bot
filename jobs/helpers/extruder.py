@@ -6,15 +6,8 @@ from utils.cv2_utils import show_image
 class Extruder:
 
     def __init__(self, image):
-
-        # if not isinstance(image, np.ndarray):
-        #     image = np.array(image)
-        #     image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
-
-        # self.image = image
         self.set_image(image)
-        # plt.imshow(self.filtredImgByColor())
-        # plt.show()
+
 
     def set_image(self, image):
         if not isinstance(image, np.ndarray):
@@ -32,7 +25,6 @@ class Extruder:
         hsv = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
         lower = tuple(colorSpace.light)
         upper = tuple(colorSpace.dark)
-        print(lower,upper)
         mask = cv2.inRange(hsv, lower, upper)
         filtered = cv2.bitwise_and(image, image, mask=mask)
         return filtered
@@ -79,7 +71,7 @@ class Extruder:
 
     def _threshold_match(self, res):
         threshold = 0.8
-        loc = np.where( res >= threshold)
+        loc = np.where(res >= threshold)
         loc = list(zip(*loc[::-1]))
         if not len(loc):
             return None
@@ -103,34 +95,3 @@ class Extruder:
             # cv2.circle(result, (x,y), 3, 255, -1)
         # show_image(result)
     
-def as_rgb(image):
-    return cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-
-def draw_spectre():
-    super_area = np.zeros((1,255,3), np.uint8)
-    for k in range(255):
-        for i in range(255):
-            for j in range(255):
-                hsv_area[i,j] = (i,j,k)
-        super_area = cv2.vconcat([super_area, hsv_area])
-        cv2.imwrite('test_hsv_spectre.png', super_area)
-
-def test_extrude_by_channel(image):
-    I = 14
-    print(image.shape)
-    hsvImage = cv2.cvtColor(image, cv2.COLOR_BGR2HSV)
-    super_area = np.zeros((20, (I+1)*120, 3), np.uint8)
-    dark = (255,255,255)
-
-    for j in range(255):
-        sub_row = np.zeros(image.shape, np.uint8)
-        for i in range(I):
-            # 9 29 93 124
-            light = (i, 0, j)
-            mask = cv2.inRange(hsvImage, light, dark)
-            filtered = cv2.bitwise_and(image, image, mask=mask)
-            filtered = cv2.putText(filtered, (str(i) + ' ' + str(j)), (0,10), cv2.FONT_HERSHEY_SIMPLEX, 0.5,255)
-            sub_row = cv2.hconcat([sub_row, filtered])
-        super_area = cv2.vconcat([super_area, sub_row])
-    
-    cv2.imwrite('test_hsv_channel_hv.png', super_area)

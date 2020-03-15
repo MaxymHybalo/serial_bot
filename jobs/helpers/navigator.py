@@ -97,7 +97,6 @@ def is_near_npc(npc, guild, near=120):
     npc = Rect(npc).center()
     guild = Rect(guild).center()
     d = distance(npc, guild)
-    print('distance', d)
     return d <= near
 
 def circus_npc_point(roi):

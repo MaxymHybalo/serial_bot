@@ -16,7 +16,7 @@ class HandleNpc:
     def __init__(self):
         pass
 
-    def select_menu(self, config):
+    def select_menu(self, config, quality='minmax'):
         Wait(DELAY).delay()
         e = Extruder(screenshot(Window().rect))
         template = cv2.imread(config.path)
