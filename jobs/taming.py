@@ -19,9 +19,9 @@ class Taming:
         startTime = time.time()
 
         while self.config.isWorks():
-            Key('-').press()
+            Key('2').press()
             time.sleep(3)
-            Key('=').press()
+            Key('1').press()
             time.sleep(13)
             currentTime = time.time()
             if startTime + self.roundFrequency < currentTime:
