@@ -9,3 +9,4 @@ serial_env/
 *.yaml
 config.yml
 enhancer.config.yml
+*.csv
