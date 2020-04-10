@@ -41,7 +41,7 @@ class Farming:
     #     '_'
     # ]
 
-    def __init__(self):
+    def __init__(self, actions, timings):
         self.config = Config()
         self.config.enable()
         self.roundFrequency = 10
