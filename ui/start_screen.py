@@ -2,7 +2,7 @@ from ui.screen import Screen
 from ui.buff_screen import BuffScreen
 from ui.enhance_screen import EnhanceScreen
 from ui.circus_screen import CircusScreen
-from ui.farm_scren import FarmScreen
+from ui.farm_screen import FarmScreen
 from jobs.farming import Farming
 from jobs.taming import Taming
 from utils.config import Config

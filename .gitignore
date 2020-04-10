@@ -10,3 +10,5 @@ serial_env/
 config.yml
 enhancer.config.yml
 *.csv
+!config/
+!farming.yml

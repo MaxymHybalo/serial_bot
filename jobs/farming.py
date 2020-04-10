@@ -42,6 +42,9 @@ class Farming:
     # ]
 
     def __init__(self, actions, timings):
+        print(actions, timings)
+        self.action_params = actions
+        self.frequences = timings
         self.config = Config()
         self.config.enable()
         self.roundFrequency = 10

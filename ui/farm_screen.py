@@ -1,6 +1,7 @@
 from ui.screen import Screen
 from utils.configurator import Configurator
 from jobs.farming import Farming
+from utils.config import Config
 
 class FarmScreen(Screen):
 
@@ -40,7 +41,9 @@ class FarmScreen(Screen):
         for i in self.config['presets']:
             title = '{0}'.format(i['name'])
             callback = '{name}.farm_{executor}'.format(name=self.name, executor=str(title.lower()))
-            self.markup.row(self.InlineKeyboardButton(title, callback_data=callback))
+            self.markup.add(self.InlineKeyboardButton(title, callback_data=callback))
+        self.markup.add(self.InlineKeyboardButton('[STOP]', callback_data='{0}.{1}'.format(self.name, 'stop')))
+        self.markup.add(self.InlineKeyboardButton('[Back]', callback_data='{0}.{1}'.format(self.name, 'back')))
 
         if call is None:
             self.send()

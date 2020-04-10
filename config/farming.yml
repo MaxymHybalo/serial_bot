@@ -1,0 +1,26 @@
+presets:
+  - name: 'esMe'
+  - name: 'Solution'
+    timings:
+      - 1
+      - 4
+      - 5
+      - 6
+    actions:
+      - '1'
+      - '2'
+      - '3'
+      - '_'
+  - name: 'Acedia'
+    timings:
+      - 10
+      - 5
+      - 1
+      - 80
+      - 6
+    actions:
+      - '2'
+      - '3'
+      - '4'
+      - '5'
+      - '_'
