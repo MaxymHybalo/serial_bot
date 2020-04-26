@@ -31,18 +31,7 @@ class Farming:
         '_'
     ]
 
-    # frequences = [
-    #     0.5,
-
-    #     2
-    # ]
-    # action_params = [
-    #     '1',
-    #     '_'
-    # ]
-
     def __init__(self, actions, timings):
-        print(actions, timings)
         self.action_params = actions
         self.frequences = timings
         self.config = Config()
@@ -50,6 +39,9 @@ class Farming:
         self.roundFrequency = 10
         
         self.generate_actions()
+        self.init_skills_state()
+        self.init_actions_time()
+        
         self.window = Window()
         self.roundStart = self.window.center()
         self.rountEnd =  self.roundStart[0] + 100, self.roundStart[1]
@@ -72,11 +64,14 @@ class Farming:
             self.skills_state[a] = itime
     
     def generate_actions(self):
-        self.actions = ['key'] * (len(self.action_params) - 1)
-        self.actions.append('turn')
+        self.actions = []
+        for key in self.action_params:
+            method = self.get_method_name(key)
+            self.actions.append(method)
+    
+    def init_skills_state(self):
         self.skills_state = [0] * len(self.frequences)
-        self.init_actions_time()
-
+        
     def key(self, params):
         if type(params) == list:
             print('list key call')
@@ -90,3 +85,8 @@ class Farming:
         print('turn')
         Move().fromTo(self.roundStart, self.rountEnd)
         return None
+
+    def get_method_name(self, key):
+        if key is '_':
+            return 'turn'
+        return 'key'
