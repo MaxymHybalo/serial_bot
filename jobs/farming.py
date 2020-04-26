@@ -41,6 +41,7 @@ class Farming:
         self.generate_actions()
         self.init_skills_state()
         self.init_actions_time()
+        print(self.actions, self.action_params, timings)
         
         self.window = Window()
         self.roundStart = self.window.center()
