@@ -56,7 +56,7 @@ class Farming:
                 if itime > self.skills_state[i]:
                     f = getattr(self, a)
                     f(self.action_params[i])
-                    print(a, self.frequences[i])
+                    print(a, self.action_params[i], self.frequences[i])
                     self.skills_state[i] = itime + self.frequences[i]
     
     def init_actions_time(self):
