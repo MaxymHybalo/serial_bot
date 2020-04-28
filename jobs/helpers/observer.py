@@ -6,7 +6,7 @@ from processes.wait import Wait
 from shapes.window import Window
 from shapes.rect import Rect
 
-from jobs.helpers.navigator import get_guild_and_npc
+from jobs.helpers.navigator import get_npc
 
 from utils.config import Config
 
@@ -25,8 +25,8 @@ ANGLE_WIDTH = 10
 config = Config()
 
 def observe_height():
-    titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
-    height = camera_height(titleRoi, guildRoi)
+    titleRoi = get_npc(config.CharTitleConfig)
+    height = camera_height(titleRoi)
     observable = config.Observable
     ch_lower, ch_upper = observable.camera_height_lower, observable.camera_height_upper
     if height > ch_lower and height <= ch_upper:
@@ -34,25 +34,33 @@ def observe_height():
     return ch_lower - height
 
 def observe_angle():
-    titleRoi, guildRoi = get_guild_and_npc(config.CharTitleConfig)
-    width = camera_angle_width(titleRoi, guildRoi)
-
+    titleRoi = get_npc(config.CharTitleConfig)
+    width = camera_angle_width(titleRoi)
+    print('width,', width)
+    # import cv2
+    # import numpy as np
+    # from utils.cv2_utils import show_image, screenshot
+    # img = screenshot(Window().rect)
+    # img = np.array(img)
+    # img = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    # cv2.circle(img, Window().relative_center(), 10, 255, 2)
+    # show_image(img)
     if width >= 0 and width < ANGLE_WIDTH:
         return None
     return width
 
-def camera_height(npc, guild):
-    npcC, gC = _centers(npc, guild)
-    return gC[1] - npcC[1]
+def camera_height(npc):
+    npcC = _center(npc)
+    return Window().center()[1] + 30 - npcC[1]
 
-def camera_angle_width(npc, guild):
-    npcC, gC = _centers(npc, guild)
-    return npcC[0] - gC[0]
+def camera_angle_width(npc):
+    npcC = _center(npc)
+    screenC = Window().center()
+    print('nc, sc', npcC, screenC)
+    return npcC[0] - screenC[0] # calibrate coef +200
 
-def _centers(rect1, rect2):
-    c1 = Rect(rect1).center()
-    c2 = Rect(rect2).center()
-    return c1, c2
+def _center(rect1):
+    return Rect(rect1).center()
 
 class Observer:
 
