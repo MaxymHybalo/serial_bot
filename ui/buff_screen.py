@@ -12,6 +12,7 @@ class BuffScreen(Screen):
         self.title = 'Buffer menu:'
         self.load_config()
 
+    # Try to move this method do Screen class
     def load_config(self):
         self.configfile = Configurator(self.config['buffer'])
         self.config = self.configfile.from_yaml()
