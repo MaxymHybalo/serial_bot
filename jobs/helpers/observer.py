@@ -57,7 +57,7 @@ def camera_angle_width(npc):
     npcC = _center(npc)
     screenC = Window().center()
     print('nc, sc', npcC, screenC)
-    return npcC[0] - screenC[0] # calibrate coef +200
+    return npcC[0] - screenC[0] + 270 # calibrate coef
 
 def _center(rect1):
     return Rect(rect1).center()

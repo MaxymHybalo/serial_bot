@@ -90,10 +90,11 @@ def distance(point1, point2):
     x2, y2 = point2
     return math.sqrt((x1-x2)**2+(y1-y2)**2)
 
-def is_near_npc(npc, center, near=120):
+def is_near_npc(npc, center, near=180):
     # accept 2 rects
     npc = Rect(npc).center()
     d = distance(npc, center)
+    print('distance', d)
     return d <= near
 
 def circus_npc_point(roi):
