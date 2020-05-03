@@ -47,12 +47,12 @@ def observe_angle():
 
 def camera_height(npc):
     npcC = _center(npc)
-    return Window().relative_center()[1] + 10 - npcC[1]
+    return Window().relative_center()[1] - 10 - npcC[1]
 
 def camera_angle_width(npc):
     npcC = _center(npc)
     screenC = Window().relative_center()
-    return npcC[0] - screenC[0] + 13 # calibrate coef
+    return npcC[0] - screenC[0] + 15 # calibrate coef
 
 def _center(rect1):
     return Rect(rect1).center()
