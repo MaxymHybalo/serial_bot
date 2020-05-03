@@ -35,9 +35,9 @@ class Navigator:
         title = get_tempalate_roi(npc)
         Navigator.move_to_npc(title, npc)
         Wait(3).delay()
-        title, center = get_npc(npc), window.center()
+        title, center = get_npc(npc), window.relative_center()
         while not is_near_npc(title, center):
-            title, center = get_npc(npc), window.center()
+            title, center = get_npc(npc), window.relative_center()
             Wait(1).delay()
         title = get_npc(npc)
         Navigator.click_at_npc(title, npc)

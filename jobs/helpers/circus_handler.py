@@ -50,7 +50,9 @@ class CircusHandler:
             Click(x,y).make_click()
 
         Navigator.touch_npc(config.DungeonNpc)
+        Wait(1).delay()
         HandleNpc().select_menu(config.CircusDungeonMenu)
+        Wait(1).delay()
         x, y, w, h = config.StarIcon.roi
         x,y = Window().relative((x,y))
         Wait(1).delay()
