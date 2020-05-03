@@ -1,3 +1,5 @@
+import logging
+
 from processes.click import Click
 from shapes.window import Window
 from utils.cv2_utils import screenshot
@@ -12,6 +14,7 @@ TURN_AROUND_DISTANCE = 500
 
 window = Window()
 config = Config()
+log = logging.getLogger('navigator')
 
 class Navigator:
 
@@ -94,7 +97,8 @@ def is_near_npc(npc, center, near=180):
     # accept 2 rects
     npc = Rect(npc).center()
     d = distance(npc, center)
-    print('distance', d)
+    # log = logging.getLogger('navigator')
+    log.info('Distance: {0},  npc: {1}, center: {2}'.format(d, npc, center))
     return d <= near
 
 def circus_npc_point(roi):

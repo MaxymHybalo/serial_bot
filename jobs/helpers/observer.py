@@ -1,14 +1,11 @@
 import math
 
+from utils.config import Config
 from processes.move import Move
 from processes.wait import Wait
-
 from shapes.window import Window
 from shapes.rect import Rect
-
 from jobs.helpers.navigator import get_npc
-
-from utils.config import Config
 
 OBSERVE_Y = 0
 OBSERVE_Y_INV = 1
@@ -36,7 +33,6 @@ def observe_height():
 def observe_angle():
     titleRoi = get_npc(config.CharTitleConfig)
     width = camera_angle_width(titleRoi)
-    print('width,', width)
     # import cv2
     # import numpy as np
     # from utils.cv2_utils import show_image, screenshot
@@ -51,13 +47,12 @@ def observe_angle():
 
 def camera_height(npc):
     npcC = _center(npc)
-    return Window().center()[1] + 30 - npcC[1]
+    return Window().relative_center()[1] + 10 - npcC[1]
 
 def camera_angle_width(npc):
     npcC = _center(npc)
-    screenC = Window().center()
-    print('nc, sc', npcC, screenC)
-    return npcC[0] - screenC[0] + 270 # calibrate coef
+    screenC = Window().relative_center()
+    return npcC[0] - screenC[0] + 13 # calibrate coef
 
 def _center(rect1):
     return Rect(rect1).center()
