@@ -43,7 +43,12 @@ class Enhancer:
     def enhance(self):
         scope, _ = self.state()
         # self.click_at_target(self.config['recognize']['enhance']['menu'])
-        self.do_flow(scope) if self.mode == 'single' else self.do_binary_flow(scope)
+        if self.mode == 'disassamble':
+            self.do_binary_flow(scope)
+        elif self.mode == 'single':
+            self.do_flow(scope)
+        else:
+            self.do_binary_flow(scope)
 
     def do_flow(self, scope):
         make, main, cube = self._init_flow()
@@ -61,6 +66,32 @@ class Enhancer:
         cube.process = 'click'
         cube.make_click()
         main.make_click()
+
+    def _break(self, scope):
+        make, main, cube = self._init_flow()
+        self.log.info('Start enhancing from {0}'.format(len(scope)))
+        # cube.make_click()
+        # cube.process = 'dclick'
+        slots = flatten(scope)
+        size = len(slots)
+        print('[scope]', scope)
+        print('[slots]', slots)
+
+
+        # for i, s in enumerate(slots):
+        #     item = Rect(s).click().make_click()
+        #     if i < size - 1:
+        #         item2 = Rect(slots[i+1]).click().make_click()
+        #         self.log.info('Item 1 {0}, item 2 {1}'.format(s, slots[i+1]))
+
+            # cube.make_click()
+            # make.make_click()
+            # main.make_click()
+        
+        # cube.process = 'click'
+        # cube.make_click()
+        # main.make_click()
+
 
     def do_binary_flow(self, scope):
         make, main, cube = self._init_flow()

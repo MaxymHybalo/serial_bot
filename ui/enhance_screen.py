@@ -6,7 +6,7 @@ from utils.configurator import Configurator
 
 class EnhanceScreen(Screen):
 
-    buttons = ['Cube', 'Binary', 'Combination', 'Back']
+    buttons = ['Cube', 'Binary', 'Combination', 'Disassamble', 'Back']
 
     def __init__(self, message, bot):
         super().__init__(message, bot)
@@ -68,6 +68,12 @@ class EnhanceScreen(Screen):
         cs = CombinationScreen(self.message, self.bot)
         cs.render(call=call)
         return cs.name, cs
+    
+    def disassamble(self, call, state):
+        self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
+        self.config['mode'] = 'disassamble'
+        Enhancer(self.config).process()
+        return self.name, self
 
     def back(self, call, state):
         screen = 'StartScreen'
