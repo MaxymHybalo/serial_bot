@@ -31,7 +31,10 @@ class Window(metaclass=Singleton):
             print('window already inited: ', self.windowHead)
     
     def center(self):
-        return self.x + self.width / 2, self.y + self.height / 2
+        return self.x + int(self.width / 2), self.y + int(self.height / 2)
+
+    def relative_center(self):
+        return int(self.width / 2), int(self.height / 2)
 
     def relative(self, point):
         x, y = point

@@ -1,3 +1,5 @@
+import logging
+
 from processes.click import Click
 from shapes.window import Window
 from utils.cv2_utils import screenshot
@@ -12,6 +14,7 @@ TURN_AROUND_DISTANCE = 500
 
 window = Window()
 config = Config()
+log = logging.getLogger('navigator')
 
 class Navigator:
 
@@ -32,12 +35,11 @@ class Navigator:
         title = get_tempalate_roi(npc)
         Navigator.move_to_npc(title, npc)
         Wait(3).delay()
-        title, guild = get_guild_and_npc(npc)
-        while not is_near_npc(title, guild):
-            title, guild = get_guild_and_npc(npc)
-            print(title, guild)
+        title, center = get_npc(npc), window.relative_center()
+        while not is_near_npc(title, center):
+            title, center = get_npc(npc), window.relative_center()
             Wait(1).delay()
-        title, guild = get_guild_and_npc(npc)
+        title = get_npc(npc)
         Navigator.click_at_npc(title, npc)
         return title
 
@@ -61,12 +63,11 @@ class Navigator:
         Move().fromTo((x + sx, y + sy), (x + ex, y + ey))
 
 
-def get_guild_and_npc(npc):
+def get_npc(npc):
     rect = window.rect
     image = screenshot(rect)
     titleCenter = get_tempalate_roi(npc, image)
-    guildCenter = get_tempalate_roi(config.GuildIconConfig, image)
-    return titleCenter, guildCenter
+    return titleCenter
 
 def get_tempalate_roi(config, image=None):
     rect = Window().rect
@@ -92,11 +93,12 @@ def distance(point1, point2):
     x2, y2 = point2
     return math.sqrt((x1-x2)**2+(y1-y2)**2)
 
-def is_near_npc(npc, guild, near=120):
+def is_near_npc(npc, center, near=180):
     # accept 2 rects
     npc = Rect(npc).center()
-    guild = Rect(guild).center()
-    d = distance(npc, guild)
+    d = distance(npc, center)
+    # log = logging.getLogger('navigator')
+    log.info('Distance: {0},  npc: {1}, center: {2}'.format(d, npc, center))
     return d <= near
 
 def circus_npc_point(roi):
