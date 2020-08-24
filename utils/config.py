@@ -1,14 +1,16 @@
+import logging
 from utils.singleton import Singleton
 from utils.configurator import Configurator
 
 class Config(metaclass=Singleton):
     
     def __init__(self, *args, **kwargs):
+        self.log = logging.getLogger('config')
         self.mode = 'test'
     
     def load_config(self, config):
         if not hasattr(self, 'config'):
-            print('load config')
+            self.log.info('load config')
             self.config = Configurator(config).from_yaml()
 
     def isWorks(self):
