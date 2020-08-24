@@ -5,7 +5,7 @@ import logging
 # from telebot import types
 # from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
-import handlers
+# import handlers
 from utils.configurator import Configurator
 from utils.config import Config
 

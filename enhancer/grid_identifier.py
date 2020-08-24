@@ -8,15 +8,15 @@ ITEM_HEIGHT = 33
 MARGIN = 1
 SIZE = [9, 11]
 GRID_ENTRY = 'assets/enhancer/grid_identifier.png'
-
+GRID_ENTRY_2 = 'assets/enhancer/inventory_shop_active.png'
 # todo change debug to image log, decorate it
 # include size into class
 # add option use image instead path
-class Grid:
+class GridIdentifier:
 
     def __init__(self, debug=False):
         self.debug = debug
-        self.log = logging.getLogger('grid')
+        self.log = logging.getLogger('grid-identifier')
         self.identifier = GRID_ENTRY
         self.col, self.row = SIZE
         self.start = self.__find_grid_entry()
