@@ -13,3 +13,4 @@ enhancer.config.yml
 !config/
 !farming.yml
 *.lnk
+.DS_Store
