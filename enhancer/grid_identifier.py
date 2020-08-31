@@ -19,9 +19,9 @@ class GridIdentifier:
         self.log = logging.getLogger('grid-identifier')
         self.identifier = GRID_ENTRY
         self.col, self.row = SIZE
-        self.start = self.__find_grid_entry()
-        self.inventory_region = self.__inventory_region()
-        self.matix_rects = self.generate_rectangles(self.start)
+        self.start = self._find_grid_entry()
+        # self.inventory_region = self.__inventory_region()
+        # self.matix_rects = self.generate_rectangles(self.start)
 
     def slice_inventory(self, start, end):
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
@@ -91,11 +91,11 @@ class GridIdentifier:
             self.write_2nd_rects(rectangles, 'log/inventory_items_matrix.png')
         return rectangles
 
-    def __find_grid_entry(self):
-        rect = Recognizer(self.identifier, None, wait=0).recognize()
-        start = (rect[0], rect[1] + rect[3], 3)
-        self.log.debug('Found grid entry at: {0}'.format(start))
-        return start
+    def _find_grid_entry(self):
+        self.log.debug('Grid anchor: {0}'.format(self.identifier))
+        # start = (rect[0], rect[1] + rect[3], 3)
+        # self.log.debug('Found grid entry at: {0}'.format(start))
+        return None
 
     def __inventory_region(self):
         self.log.debug('Find inventory region')
