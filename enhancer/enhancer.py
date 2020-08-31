@@ -14,7 +14,7 @@ class Enhancer:
         self.log.info('Created new enhancer instance')
         self.log.info('Config, {0}'.format(config))
         self.open_source()
-        GridIdentifier()
+        GridIdentifier(self.source)
 
     def open_source(self):
         self.source = cv2.imread(FILE)

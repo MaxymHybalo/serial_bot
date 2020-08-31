@@ -30,24 +30,18 @@ def draw_corners(image, corners, color=255):
     return image
 
 
-def _rect(image, rect, iterate):
-    if iterate is 'rect':
-        for r in rect:
-            x, y, w, h = r
-            cv2.rectangle(image, (x, y), (x + w, y + h), COLOR, THICKNESS)
-    else:
-        x, y, w, h = rect
-        cv2.rectangle(image, (x, y), (x+w, y+h), COLOR, THICKNESS)
+def rect(image, rect):
+    if image is not isinstance(image, np.ndarray):
+        image = np.array(image)
+    x, y, w, h = rect
+    cv2.rectangle(image, (x, y), (x+w, y+h), COLOR, THICKNESS)
+    return image
 
 
-def _circle(image, circle, iterate):
-    if iterate is 'circle':
-        for c in circle:
-            x, y, r = c
-            cv2.circle(image, (x, y), r, COLOR, THICKNESS)
-    else:
-        x, y, r = circle
-        cv2.circle(image, (x, y), r, COLOR, THICKNESS)
+def circle(image, circle, thickness=THICKNESS):
+    x, y, r = circle
+    cv2.circle(image, (x, y), r, COLOR, thickness)
+    return image
 
 
 def make_image(src=None, region=None):
@@ -67,32 +61,6 @@ def show(image, name='image'):
     cv2.moveWindow(name, int(width / 2), int(height / 2))
     cv2.waitKey(0)
     cv2.destroyAllWindows()
-
-
-def log_image(**kwargs):
-    """
-    :param kwargs:
-        file - flag save image to file, value is string with file name
-    :return:
-    """
-    image = make_image()
-    if 'multi' in kwargs:
-        iterate = kwargs['multi']
-        log.debug('Multiple {0}\'s'.format(iterate))
-    else:
-        iterate = None
-    for key, value in kwargs.items():
-        if key is 'rect':
-            log.debug('Draw rectangle: {0}'.format(value))
-            _rect(image, value, iterate)
-        if key is 'circle':
-            log.debug('Draw circle: {0}'.format(value))
-            _circle(image, value, iterate)
-    if 'file' in kwargs:
-        log.debug('Save image to {0}'.format(kwargs['file']))
-        cv2.imwrite(kwargs['file'], image)
-    else:
-        show(image)
 
 def draw_rect(image, roi):
     return cv2.rectangle(image, roi[:2], (roi[0] + roi[2], roi[1] + roi[3]), 255,2)

@@ -1,7 +1,12 @@
 import logging
-from processes.recognizer import Recognizer
-import utils.cv2_utils as utils
 import pyautogui as ui
+
+import cv2
+
+import utils.cv2_utils as utils
+
+from processes.recognizer import Recognizer
+from jobs.helpers.extruder import Extruder
 
 ITEM_WIDTH = 33
 ITEM_HEIGHT = 33
@@ -14,12 +19,15 @@ GRID_ENTRY_2 = 'assets/enhancer/inventory_shop_active.png'
 # add option use image instead path
 class GridIdentifier:
 
-    def __init__(self, debug=False):
+    def __init__(self, source, debug=False):
         self.debug = debug
+        self.source = source
         self.log = logging.getLogger('grid-identifier')
-        self.identifier = GRID_ENTRY
+        self.identifier = cv2.imread(GRID_ENTRY)
+        # utils.show_image(self.identifier)
         self.col, self.row = SIZE
-        self.start = self._find_grid_entry()
+        self.entry = self._find_grid_entry()
+        # utils.show_image(utils.circle(self.source, (*self.entry, 2), thickness=3))
         # self.inventory_region = self.__inventory_region()
         # self.matix_rects = self.generate_rectangles(self.start)
 
@@ -92,10 +100,11 @@ class GridIdentifier:
         return rectangles
 
     def _find_grid_entry(self):
-        self.log.debug('Grid anchor: {0}'.format(self.identifier))
-        # start = (rect[0], rect[1] + rect[3], 3)
-        # self.log.debug('Found grid entry at: {0}'.format(start))
-        return None
+        self.log.debug('Grid anchor: {0}'.format(self.identifier.shape))
+        grid_entry = Extruder(self.source).match_by_template(self.identifier, method='minmax')
+        x, y, _, h = grid_entry
+        self.log.debug('Found grid entry at: {0}'.format(grid_entry))
+        return x, y + h
 
     def __inventory_region(self):
         self.log.debug('Find inventory region')
@@ -112,13 +121,3 @@ class GridIdentifier:
             rects += row
         utils.log_image(**{'rect': rects, 'multi': 'rect'})
         self.log.debug('Visualization ended')
-
-    @staticmethod
-    def write_2nd_rects(matrix, filename, single_rect=False):
-        if single_rect:
-            utils.log_image(**{'rect': matrix, 'file': filename})
-        else:
-            rects = []
-            for r in matrix:
-                rects += r
-            utils.log_image(**{'rect': rects, 'multi': 'rect', 'file': filename})
