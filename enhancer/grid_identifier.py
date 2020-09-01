@@ -5,9 +5,12 @@ import cv2
 
 import utils.cv2_utils as utils
 
+from enhancer.cell import Cell
 from processes.recognizer import Recognizer
 from jobs.helpers.extruder import Extruder
 
+X_SHIFT = 1 # X_SHIFT and Y_SHIFT used to calibrate actual inventory grid position of found inventory feature
+Y_SHIFT = 1
 ITEM_WIDTH = 33
 ITEM_HEIGHT = 33
 MARGIN = 1
@@ -28,8 +31,15 @@ class GridIdentifier:
         self.col, self.row = SIZE
         self.entry = self._find_grid_entry()
         # utils.show_image(utils.circle(self.source, (*self.entry, 2), thickness=3))
-        # self.inventory_region = self.__inventory_region()
-        # self.matix_rects = self.generate_rectangles(self.start)
+        self.inventory_region = self._inventory_region()
+        self.log.debug('Inventory region {0}'.format(self.inventory_region))
+        # utils.show_image(utils.rect(self.source, self.inventory_region))
+
+        self.matix_rects = self.generate_rectangles(self.entry)
+        # log cells
+        # for c in self.matix_rects:
+        #     self.source = utils.rect(self.source, c.rect())
+        # utils.show_image(self.source)
 
     def slice_inventory(self, start, end):
         self.log.debug('Try slice scope {0}:{1}'.format(start, end))
@@ -86,38 +96,33 @@ class GridIdentifier:
 
     def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
-        start = [i + 1 for i in start]
-        x, y, _ = start
-        cols = [c for c in range(self.col)]
-        rows = [r for r in range(self.row)]
-        rectangles = list(
-            map(lambda row: list(
-                map(lambda col: [x + (ITEM_WIDTH + MARGIN) * col + col, y + (ITEM_HEIGHT + MARGIN + 1) * row + row,
-                                 ITEM_WIDTH + 1, ITEM_HEIGHT + 1], cols)), rows))
-        self.log.debug('Rectangles generated')
-        if self.debug:
-            self.write_2nd_rects(rectangles, 'log/inventory_items_matrix.png')
-        return rectangles
+        x, y = start
+        cells = []
+        for col in range(self.col):
+            for row in range(self.row):
+                dx = x + (ITEM_WIDTH + MARGIN) * col + col
+                dy = y + (ITEM_HEIGHT + MARGIN + 1) * row + row
+                config = {
+                    "col": col,
+                    "row": row,
+                    "x": dx,
+                    "y": dy
+                }
+                cells.append(Cell(**config))
+        # import pdb; pdb.set_trace()
+        self.log.debug('Cells generated')
+
+        return cells
 
     def _find_grid_entry(self):
         self.log.debug('Grid anchor: {0}'.format(self.identifier.shape))
         grid_entry = Extruder(self.source).match_by_template(self.identifier, method='minmax')
         x, y, _, h = grid_entry
         self.log.debug('Found grid entry at: {0}'.format(grid_entry))
-        return x, y + h
+        return x + X_SHIFT, y + h + Y_SHIFT
 
-    def __inventory_region(self):
+    def _inventory_region(self):
         self.log.debug('Find inventory region')
-        region = [self.start[0] - 1, self.start[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
+        region = [self.entry[0] - 1, self.entry[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
                   self.row * (ITEM_HEIGHT + 2) + self.row + 1]
-        if self.debug:
-            utils.log_image(**{'rect': region, 'file': 'log/inventory_region.png'})
         return region
-
-    def __visualize_rect_matrix(self, matrix):
-        self.log.debug('Start visualizing')
-        rects = []
-        for row in matrix:
-            rects += row
-        utils.log_image(**{'rect': rects, 'multi': 'rect'})
-        self.log.debug('Visualization ended')
