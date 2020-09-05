@@ -43,6 +43,10 @@ def circle(image, circle, thickness=THICKNESS):
     cv2.circle(image, (x, y), r, COLOR, thickness)
     return image
 
+def text(image, text, x=0, y=0):
+    cv2.putText(image, str(text), (x,y), cv2.FONT_HERSHEY_SIMPLEX, 0.5, [0, 0, 200], 2)
+    return image
+
 
 def make_image(src=None, region=None):
     if region is None:
