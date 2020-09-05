@@ -70,7 +70,7 @@ class GridIdentifier:
     #     item = self.matix_rects[row - 1][col - 1]
     #     return int(item[0] + item[2] / 2), int(item[1] + item[3] / 2)
 
-    def get_region_of(self, col, row):
+    # def get_region_of(self, col, row):
         # """
         # :param col: column of item position
         # :param row: row of item position
