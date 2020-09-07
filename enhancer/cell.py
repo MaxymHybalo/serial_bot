@@ -9,7 +9,7 @@ class Cell:
 
         for key, value in kwargs.items():
             setattr(self, key, value)
-            self.log.info('Cell prop {0} is: {1}'.format(key, getattr(self, key)))
+            # self.log.info('Cell prop {0} is: {1}'.format(key, getattr(self, key)))
     
     def rect(self):
         self.log.warn('Cell rect')
