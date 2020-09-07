@@ -35,21 +35,21 @@ class GridIdentifier:
         self.log.debug('Inventory region {0}'.format(self.inventory_region))
         # utils.show_image(utils.rect(self.source, self.inventory_region))
 
-        self.matix_rects = self.generate_rectangles(self.entry)
+        self.cells = self.generate_rectangles(self.entry)
         # log cells
-        # for c in self.matix_rects:
-        #     self.source = utils.rect(self.source, c.rect())
-        #     self.source = utils.text(self.source, c.number, x=c.x, y=c.y)
+        for c in self.cells:
+            self.source = utils.rect(self.source, c.rect())
+            self.source = utils.text(self.source, c.number, x=c.x, y=c.y)
 
-        # utils.show_image(self.source)
+        utils.show_image(self.source)
 
     def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
         x, y = start
         cells = []
         count = 0
-        for col in range(self.col):
-            for row in range(self.row):
+        for row in range(self.row):
+            for col in range(self.col):
                 dx = x + (ITEM_WIDTH + MARGIN) * col + col
                 dy = y + 1 + (ITEM_HEIGHT + MARGIN + 1) * row + row
                 source = self.source[dy:dy+ITEM_HEIGHT, dx:dx+ITEM_WIDTH]
