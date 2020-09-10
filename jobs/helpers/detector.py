@@ -6,7 +6,7 @@ from jobs.helpers.extruder import Extruder
 
 class Detector:
 
-    def __init__(self, observable, window):
+    def __init__(self, observable=None, window=None):
         self.window = window
         # import pdb; pdb.set_trace()
         self.observable = observable
@@ -24,4 +24,11 @@ class Detector:
             image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
             match = e.match_by_template(self.observable, image=image, method='threshold')
             frame = image
+        return match
+
+    def find(self, target, template):
+        target = np.array(target)
+        template = np.array(template)
+        e = Extruder(target)
+        match = e.match_by_template(target, image=template, method='threshold')
         return match

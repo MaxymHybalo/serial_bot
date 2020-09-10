@@ -37,11 +37,11 @@ class GridIdentifier:
 
         self.cells = self.generate_rectangles(self.entry)
         # log cells
-        for c in self.cells:
-            self.source = utils.rect(self.source, c.rect())
-            self.source = utils.text(self.source, c.number, x=c.x, y=c.y)
+        # for c in self.cells:
+            # self.source = utils.rect(self.source, c.rect())
+            # self.source = utils.text(self.source, c.number, x=c.x, y=c.y)
 
-        utils.show_image(self.source)
+        # utils.show_image(self.source)
 
     def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))

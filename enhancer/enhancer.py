@@ -6,6 +6,7 @@ from enhancer.cell import Cell
 from enhancer.grid_identifier import GridIdentifier
 from enhancer.helpers import Finder
 from utils.configurator import Configurator
+from jobs.helpers.detector import Detector
 import utils.cv2_utils as utils # used for drawing images
 
 
@@ -25,6 +26,7 @@ class Enhancer:
         # import pdb; pdb.set_trace()
         # utils.show_image(self.grid.cells[self.cube_id].source)
         # utils.show_image(self.grid.source)
+        self._log_inventory(self.config['recognize'])
 
 
     def open_source(self):
@@ -36,4 +38,26 @@ class Enhancer:
         self.cube = self.config['enhancement']['cube']
         cube_col, cube_row = self.cube
         self.cube_id = self.fnd.by_id(int(cube_col) - 1, int(cube_row) - 1)
-        print(self.cube)
+        self.empty_item = 'assets/' + self.config['recognize']['grid']['eoi'] + '.png'
+        self.empty_item = cv2.imread(self.empty_item)
+        self.eoi = self.find_first_entry(self.empty_item)
+
+        # utils.show_image(utils.rect(self.source, self.eoi.rect()))
+
+    def find_first_entry(self, target):
+        entry = None
+        for cell in self.grid.cells:
+            empty = Detector().find(cell.source, self.empty_item)
+            if empty:
+                if entry:
+                    print(entry.row, entry.col, cell.row, cell.col)
+                    if cell.row < entry.row or cell.col < entry.col:
+                        entry = cell
+                else:
+                    entry = cell
+        return entry
+
+    def _log_inventory(self, dictionary):
+        # import pdb; pdb.set_trace()
+        for key, value in dictionary.items():
+            self.log.debug('{0}: {1}'.format(key, value))
