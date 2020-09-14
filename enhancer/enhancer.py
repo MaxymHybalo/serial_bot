@@ -26,7 +26,7 @@ class Enhancer:
         # import pdb; pdb.set_trace()
         # utils.show_image(self.grid.cells[self.cube_id].source)
         # utils.show_image(self.grid.source)
-        self._log_inventory(self.config['recognize'])
+        # self._log_inventory(self.config['recognize'])
 
 
     def open_source(self):
@@ -41,8 +41,7 @@ class Enhancer:
         self.empty_item = 'assets/' + self.config['recognize']['grid']['eoi'] + '.png'
         self.empty_item = cv2.imread(self.empty_item)
         self.eoi = self.find_first_entry(self.empty_item)
-
-        # utils.show_image(utils.rect(self.source, self.eoi.rect()))
+        self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
 
     def find_first_entry(self, target):
         entry = None
@@ -50,7 +49,6 @@ class Enhancer:
             empty = Detector().find(cell.source, self.empty_item)
             if empty:
                 if entry:
-                    print(entry.row, entry.col, cell.row, cell.col)
                     if cell.row < entry.row or cell.col < entry.col:
                         entry = cell
                 else:
