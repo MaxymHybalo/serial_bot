@@ -59,7 +59,7 @@ class GridIdentifier:
                     "x": dx,
                     "y": dy,
                     "source": source,
-                    "number": count
+                    "id": count
                 }
                 count+=1
                 cells.append(Cell(**config))

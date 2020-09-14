@@ -23,12 +23,6 @@ class Enhancer:
         self.grid = GridIdentifier(self.source)
         self.set_params()
 
-        # import pdb; pdb.set_trace()
-        # utils.show_image(self.grid.cells[self.cube_id].source)
-        # utils.show_image(self.grid.source)
-        # self._log_inventory(self.config['recognize'])
-
-
     def open_source(self):
         self.source = cv2.imread(FILE)
         self.log.info('Loaded source screen')
@@ -38,10 +32,12 @@ class Enhancer:
         self.cube = self.config['enhancement']['cube']
         cube_col, cube_row = self.cube
         self.cube_id = self.fnd.by_id(int(cube_col) - 1, int(cube_row) - 1)
+        self.cube = self.grid.cells[self.cube_id]
         self.empty_item = 'assets/' + self.config['recognize']['grid']['eoi'] + '.png'
         self.empty_item = cv2.imread(self.empty_item)
         self.eoi = self.find_first_entry(self.empty_item)
         self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
+        self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
 
     def find_first_entry(self, target):
         entry = None
