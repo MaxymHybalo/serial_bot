@@ -11,7 +11,7 @@ import utils.cv2_utils as utils # used for drawing images
 
 
 FILE = 'assets/enhancer/inventory.png'
-class Enhancer:
+class Inventory:
 
     def __init__(self, config):
         self.log = logging.getLogger('enhancer-v2')
