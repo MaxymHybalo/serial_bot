@@ -13,7 +13,7 @@ from utils.config import Config
 from utils.serial_controller import SerialController
 
 # ---- development imports
-from enhancer.inventory import Inventory
+from enhancer.invetory_dispatcher import InventoryDispatcher
 
 CONFIG_FILE = 'config.yml'
 
@@ -116,4 +116,4 @@ def make_class_name(modulename):
 #     bot.polling()
 # else:
 #     handlers.run_bot()
-Inventory(config)
+InventoryDispatcher(config)

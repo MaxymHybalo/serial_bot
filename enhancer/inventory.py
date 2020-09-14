@@ -5,7 +5,6 @@ import cv2
 from enhancer.cell import Cell
 from enhancer.grid_identifier import GridIdentifier
 from enhancer.helpers import Finder
-from utils.configurator import Configurator
 from jobs.helpers.detector import Detector
 import utils.cv2_utils as utils # used for drawing images
 
@@ -17,7 +16,7 @@ class Inventory:
         self.log = logging.getLogger('enhancer-v2')
         self.log.info('Created new enhancer instance')
         self.log.info('Config, {0}'.format(config))
-        self.config = Configurator(config['enhancer']).from_yaml()
+        self.config = config
         self.fnd = Finder()
         self.open_source()
         self.grid = GridIdentifier(self.source)
