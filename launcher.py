@@ -116,4 +116,5 @@ def make_class_name(modulename):
 #     bot.polling()
 # else:
 #     handlers.run_bot()
-InventoryDispatcher(config)
+inv_dispatcher = InventoryDispatcher(config)
+inv_dispatcher.enhance()
