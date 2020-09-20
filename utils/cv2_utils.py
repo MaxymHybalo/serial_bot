@@ -30,11 +30,11 @@ def draw_corners(image, corners, color=255):
     return image
 
 
-def rect(image, rect):
+def rect(image, rect, color=COLOR, thickness=THICKNESS):
     if image is not isinstance(image, np.ndarray):
         image = np.array(image)
     x, y, w, h = rect
-    cv2.rectangle(image, (x, y), (x+w, y+h), COLOR, THICKNESS)
+    cv2.rectangle(image, (x, y), (x+w, y+h), color, thickness)
     return image
 
 

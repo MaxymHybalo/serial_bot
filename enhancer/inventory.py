@@ -3,9 +3,10 @@ import logging
 import cv2
 
 from enhancer.cell import Cell
-from enhancer.grid_identifier import GridIdentifier
+from enhancer.grid_identifier import GridIdentifier, ITEM_HEIGHT, ITEM_WIDTH
 from enhancer.helpers import Finder
 from jobs.helpers.detector import Detector
+from processes.recognizer import Recognizer
 import utils.cv2_utils as utils # used for drawing images
 
 
@@ -23,7 +24,8 @@ class Inventory:
         self.set_params()
 
     def open_source(self):
-        self.source = cv2.imread(FILE)
+        # self.source = cv2.imread(FILE)
+        self.source = self._source()
         self.log.info('Loaded source screen')
         # utils.show_image(self.source)
 
@@ -36,6 +38,9 @@ class Inventory:
         self.empty_item = cv2.imread(self.empty_item)
         self.eoi = self.find_first_entry(self.empty_item)
         self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
+        # utils.show_image(self.main_slot)
+        self.main_slot = Detector().find(self.source, self.main_slot)
+        self.main_slot = [*self.main_slot[:2], ITEM_WIDTH, ITEM_HEIGHT] # predictable main slot area
         self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
 
     def find_first_entry(self, target):
@@ -44,7 +49,7 @@ class Inventory:
             empty = Detector().find(cell.source, self.empty_item)
             if empty:
                 if entry:
-                    if cell.row < entry.row or cell.col < entry.col:
+                    if cell.row < entry.row or (cell.col < entry.col and cell.row <= entry.row):
                         entry = cell
                 else:
                     entry = cell
@@ -54,3 +59,8 @@ class Inventory:
         # import pdb; pdb.set_trace()
         for key, value in dictionary.items():
             self.log.debug('{0}: {1}'.format(key, value))
+
+    def _source(self):
+        from shapes.window import Window
+        import numpy
+        return numpy.array(Window().screen)

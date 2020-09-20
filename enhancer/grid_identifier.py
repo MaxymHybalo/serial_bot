@@ -16,7 +16,7 @@ ITEM_HEIGHT = 33
 MARGIN = 1
 SIZE = [9, 11]
 GRID_ENTRY = 'assets/enhancer/grid_identifier.png'
-GRID_ENTRY_2 = 'assets/enhancer/inventory_shop_active.png'
+# GRID_ENTRY_2 = 'assets/enhancer/inventory_shop_active.png'
 # todo change debug to image log, decorate it
 # include size into class
 # add option use image instead path
@@ -30,18 +30,14 @@ class GridIdentifier:
         # utils.show_image(self.identifier)
         self.col, self.row = SIZE
         self.entry = self._find_grid_entry()
+        # print(self.entry)
         # utils.show_image(utils.circle(self.source, (*self.entry, 2), thickness=3))
         self.inventory_region = self._inventory_region()
         self.log.debug('Inventory region {0}'.format(self.inventory_region))
         # utils.show_image(utils.rect(self.source, self.inventory_region))
 
         self.cells = self.generate_rectangles(self.entry)
-        # log cells
-        # for c in self.cells:
-            # self.source = utils.rect(self.source, c.rect())
-            # self.source = utils.text(self.source, c.number, x=c.x, y=c.y)
 
-        # utils.show_image(self.source)
 
     def generate_rectangles(self, start):
         self.log.debug('Try generate rectangles: {0}, {1}'.format(self.col, self.row))
@@ -80,3 +76,10 @@ class GridIdentifier:
         region = [self.entry[0] - 1, self.entry[1] - 1, self.col * (ITEM_WIDTH + 1) + self.col + 1,
                   self.row * (ITEM_HEIGHT + 1) + self.row + 1]
         return region
+    
+    def cells_image(self):
+        for c in self.cells:
+            self.source = utils.rect(self.source, c.rect())
+            # self.source = utils.text(self.source, c.id, x=c.x, y=c.y)
+        return self.source
+        # utils.show_image(self.source)
