@@ -13,3 +13,4 @@ buff.config.yml
 *.csv
 !config/
 !farming.yml
+*.lnk

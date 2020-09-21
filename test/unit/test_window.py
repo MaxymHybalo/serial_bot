@@ -19,7 +19,7 @@ class TestWindow(unittest.TestCase):
 
     def test_center(self):
         result = Window().center()
-        self.assertEqual(result, (940.0, 765.0))
+        self.assertEqual(result, (940, 765))
 
     def test_relative(self):
         result = Window().relative((100, 100))
