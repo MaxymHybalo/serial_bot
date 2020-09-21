@@ -89,8 +89,13 @@ class Buffer:
             # Rect(select_button).click().make_click()
             wx, wy = Window().center()
             Click(wx, wy).make_click()
-            ok = Recognizer(self.ok, None).recognize()
-            Rect(ok).click().make_click()
+            ds, dy = self.config['markers']['confirm_logout_point']
+            dx, dy = wx + int(dx), wy + int(wy)
+
+            Click(dy, dx).make_click()
+            print(self.config['markers']['confirm_logout_point'])
+            # ok = Recognizer(self.ok, None).recognize()
+            # Rect(ok).click().make_click()
         return Recognizer(self.selector_ok, None).recognize()
 
 
