@@ -16,7 +16,6 @@ class Click:
 
     # param click mean Click instance
     def make_click(self, serial=SerialController()):
-        print(type(serial))
         if hasattr(serial, 'serial'):
             serial = serial.serial
         Move().moveTo(self.x, self.y)
