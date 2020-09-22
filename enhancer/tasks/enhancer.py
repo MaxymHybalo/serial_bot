@@ -12,7 +12,6 @@ class Enhancer:
         self.log = logging.getLogger('enhancer')
         self.config = config
         self.inventory = inventory
-        self.main = self.inventory.main_slot
         self.finder = Finder()
         self.log.info('Items to process: {0}'.format(len(self.inventory.working_cells)))
         self.proceed(int(self.config['options']['cycles']))
