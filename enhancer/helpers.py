@@ -16,3 +16,11 @@ class Finder:
     
     def by_id(self, x, y):
         return self.matrix[y][x]
+
+    def point(self, point):
+        from shapes.window import Window
+        xy = point[:2]
+        xy = Window().relative(xy)
+        if len(point) is 4:
+            return [*xy, *point[2:]]
+        return list(xy)

@@ -20,7 +20,7 @@ class Click:
             serial = serial.serial
         Move().moveTo(self.x, self.y)
         serial.write(CLICK)
-        if self.process == 'dclick':
+        if self.process == 'dclick' or self.process == 'double':
             serial.write(CLICK)
         delay = Wait(self.delay)
         delay.delay()

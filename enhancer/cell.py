@@ -14,4 +14,6 @@ class Cell:
     def rect(self):
         self.log.warn('Cell rect')
         return self.x, self.y, ITEM_WIDTH + 1, ITEM_WIDTH + 1
-# 
+    
+    def center(self):
+        return self.x + int(ITEM_WIDTH / 2), self.y + int(ITEM_HEIGHT / 2)
