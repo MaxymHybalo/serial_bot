@@ -26,4 +26,5 @@ class Enhancer:
         img = utils.rect(img, self.inventory.eoi.rect(), (30,100, 20), 3)
         print(self.inventory.main_slot)
         img = utils.rect(img, self.inventory.main_slot, (0, 200, 0),1)
+        img = utils.rect(img, self.inventory.make, (100, 200, 0), 2)
         utils.show_image(img)

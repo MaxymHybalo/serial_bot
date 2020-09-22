@@ -34,13 +34,12 @@ class Inventory:
         cube_col, cube_row = self.cube
         self.cube_id = self.fnd.by_id(int(cube_col) - 1, int(cube_row) - 1)
         self.cube = self.grid.cells[self.cube_id]
-        self.empty_item = 'assets/' + self.config['recognize']['grid']['eoi'] + '.png'
-        self.empty_item = cv2.imread(self.empty_item)
+        self.empty_item = cv2.imread('assets/' + self.config['recognize']['grid']['eoi'] + '.png')
         self.eoi = self.find_first_entry(self.empty_item)
         self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
-        # utils.show_image(self.main_slot)
-        self.main_slot = Detector().find(self.source, self.main_slot)
-        self.main_slot = [*self.main_slot[:2], ITEM_WIDTH, ITEM_HEIGHT] # predictable main slot area
+        self.make = cv2.imread('assets/' + self.config['recognize']['enhance']['make'] + '.png')
+        self.make = Detector().find(self.make, self.source)
+        self.main_slot = Detector().find(self.main_slot, self.source)
         self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
 
     def find_first_entry(self, target):
