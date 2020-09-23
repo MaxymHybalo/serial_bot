@@ -5,14 +5,13 @@ from processes.wait import Wait
 from shapes.rect import Rect
 from enhancer.helpers import Finder
 from enhancer.cell import Cell
+from enhancer.tasks.operator import Operator
 
-class Enhancer:
+class Enhancer(Operator):
 
     def __init__(self, config, inventory):
+        super().__init__(config, inventory)
         self.log = logging.getLogger('enhancer')
-        self.config = config
-        self.inventory = inventory
-        self.finder = Finder()
         self.log.info('Items to process: {0}'.format(len(self.inventory.working_cells)))
         self.proceed(int(self.config['options']['cycles']))
         # self.show_state()
@@ -50,17 +49,6 @@ class Enhancer:
     def main_click(self):
         Rect(self.finder.point(self.main)).click().make_click()
 
-    def click_at(self, key,  method='click'):
-        target = getattr(self.inventory, key)
-        x,y = 0, 0
-        if target is None:
-            return
-        if type(target) is Cell:
-            x,y = target.center()
-        else:
-            x, y = Rect(target).center()
-        x,y = self.finder.point((x,y))
-        Click(x,y, method).make_click()
 
     def show_state(self):
         img = self.inventory.grid.cells_image()
