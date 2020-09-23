@@ -13,17 +13,17 @@ class Enhancer(Operator):
         super().__init__(config, inventory)
         self.log = logging.getLogger('enhancer')
         self.log.info('Items to process: {0}'.format(len(self.inventory.working_cells)))
-        self.proceed(int(self.config['options']['cycles']))
         # self.show_state()
 
-    def proceed(self, loops):
+    def proceed(self):
+        loops = int(self.config['options']['cycles'])
         self.log.info('Enhancing rounds: {0}'.format(loops))
         for l in range(loops):
             self.stage(l)
 
     def stage(self, cycle):
         self.setup(cycle)
-        # self.enhancing()
+        self.enhancing()
         self.clear()
 
     def enhancing(self):

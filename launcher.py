@@ -117,4 +117,5 @@ def make_class_name(modulename):
 # else:
 #     handlers.run_bot()
 inv_dispatcher = InventoryDispatcher(config)
-inv_dispatcher.enhance()
+# inv_dispatcher.enhance()
+inv_dispatcher.unpack()
