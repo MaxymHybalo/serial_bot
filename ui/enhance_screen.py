@@ -1,7 +1,6 @@
 from ui.screen import Screen
 from ui.cubes_screen import CubesScreen
 from ui.combination_screen import CombinationScreen
-from jobs.enhancer import Enhancer
 from utils.configurator import Configurator
 
 class EnhanceScreen(Screen):
@@ -27,7 +26,7 @@ class EnhanceScreen(Screen):
                 self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
                 self.configfile.dump_yaml(self.config)
                 self.bot.answer_callback_query(call.id, 'Start {0} cycles'.format(data))
-                Enhancer(self.config).process()
+                # Enhancer(self.config).process()
                 return self.name, self
             
             setattr(self, attr_name, cycle)
@@ -61,7 +60,7 @@ class EnhanceScreen(Screen):
         self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
         self.config['mode'] = 'binary'
         self.configfile.dump_yaml(self.config)
-        Enhancer(self.config).process()
+        # Enhancer(self.config).process()
         return self.name, self
 
     def combination(self, call, state):
@@ -72,7 +71,7 @@ class EnhanceScreen(Screen):
     def disassamble(self, call, state):
         self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
         self.config['mode'] = 'disassamble'
-        Enhancer(self.config).process()
+        # Enhancer(self.config).process()
         return self.name, self
 
     def back(self, call, state):

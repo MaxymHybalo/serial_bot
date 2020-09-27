@@ -16,10 +16,9 @@ class StartScreen(Screen):
         self.title = 'Menu:'
 
     def buff(self, call, state):
-        # bs = state['BuffScreen'] if 'BuffScreen' in state else BuffScreen(self.message, self.bot)
-        # bs.render(call=call)
-        # return bs.name, bs
-        return None
+        bs = state['BuffScreen'] if 'BuffScreen' in state else BuffScreen(self.message, self.bot)
+        bs.render(call=call)
+        return bs.name, bs
 
     def enhance(self, call, state):
         # bs = state['EnhanceScreen'] if 'EnhanceScreen' in state else EnhanceScreen(self.message, self.bot)

@@ -34,26 +34,26 @@ class Bot:
         self.init_state(message, self.bot)
 
         ss = StartScreen(message, self.bot)
-        state[ss.name] = ss
+        self.state[ss.name] = ss
         ss.render()
 
     def handle_base_callbacks(self, call):
         try:
             self.proceed_screen(call)
         except KeyError as e:
-            logging.error(e)
+            self.log.error(e)
             print('Start screen not defined')
-            bot.answer_callback_query(call.id, 'StartScreen intiated, try again')
-            self.init_state(call, bot)
+            self.bot.answer_callback_query(call.id, 'StartScreen intiated, try again')
+            self.init_state(call, self.bot)
             self.proceed_screen(call)
         except Exception as e:
             print(e)
-            logging.error(e)
-            bot.answer_callback_query(str(e))
+            self.log.error(e)
+            self.bot.answer_callback_query(str(e))
         except:
             e = 'Something went wrong'
             print(e)
-            logging.error(e)
+            self.log.error(e)
 
 
 
@@ -86,6 +86,6 @@ class Bot:
     def proceed_screen(self, call):
         screen, action = call.data.split('.')
         screen = self.state[screen]
-        action_key, action_value = getattr(screen, action)(call, state)
+        action_key, action_value = getattr(screen, action)(call, self.state)
         if action_key:
-            state[action_key] = action_value
+            self.state[action_key] = action_value
