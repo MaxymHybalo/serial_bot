@@ -49,7 +49,7 @@ class Buffer:
         self._detect_chars()
         if self.config['buff']:
             self._go_over_chars(self._buff_flow)
-        if self.config['|refresh']:
+        if self.config['refresh']:
             self._go_over_chars(self._refresh_flow)
             Key('E').press()
 
@@ -85,18 +85,14 @@ class Buffer:
     def _go_to_selector(self):
         mode = self._setup_buff_mode()
         if mode:
-            # select_button = Recognizer(self.select_marker, None).recognize()
-            # Rect(select_button).click().make_click()
             wx, wy = Window().center()
+            Wait(0.5).delay()
             Click(wx, wy).make_click()
-            ds, dy = self.config['markers']['confirm_logout_point']
-            dx, dy = wx + int(dx), wy + int(wy)
-
-            Click(dy, dx).make_click()
-            print(self.config['markers']['confirm_logout_point'])
-            # ok = Recognizer(self.ok, None).recognize()
-            # Rect(ok).click().make_click()
-        return Recognizer(self.selector_ok, None).recognize()
+            dx, dy = self.config['markers']['confirm_logout_point']
+            dx, dy = wx + int(dx), wy + int(dy)
+            Wait(1).delay()
+            Click(dx, dy).make_click()
+        return Recognizer(self.selector, None).recognize()
 
 
     def _setup_buff_mode(self):

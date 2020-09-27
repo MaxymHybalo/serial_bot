@@ -2,7 +2,7 @@ asset_preffix: assets/window
 buff: true
 logout: true
 markers:
-  confirm_logout_point: [-200, 100]
+  confirm_logout_point: [50, -175]
   menu: menu_marker.png
   moon: moon_marker.png
   ok: ok.png
@@ -12,4 +12,4 @@ markers:
   selector_ok: selector_ok.png
   window: window_marker.png
 refresh: true
-spawn: true
+spawn: false
