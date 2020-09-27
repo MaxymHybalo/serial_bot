@@ -5,15 +5,15 @@ import numpy as np
 from utils.configurator import Configurator
 from utils.singleton import Singleton
 
-log = logging.getLogger('Window')
 class Window(metaclass=Singleton):
 
     def __init__(self):
+        self.log = logging.getLogger('window')
         self.config = Configurator('config.yml').from_yaml()['window']
         self.width, self.height = self.config['width'], self.config['height']
         self.locate_window()
         if self.windowHead is None:
-            log.error('Window has not initiated!')
+            self.log.error('Window has not initiated!')
             return
         self.x = self.windowHead[0]
         self.y = self.windowHead[1] + self.windowHead[3]
@@ -26,7 +26,7 @@ class Window(metaclass=Singleton):
     def locate_window(self):
         if not hasattr(self, 'windowHead'):
             self.windowHead = ui.locateOnScreen(self.config['marker'])
-            log.info('Located game window on screen')
+            self.log.info('Located game window on screen')
         else:
             print('window already inited: ', self.windowHead)
     

@@ -1,6 +1,6 @@
 from ui.screen import Screen
 from ui.buff_screen import BuffScreen
-from ui.enhance_screen import EnhanceScreen
+# from ui.enhance_screen import EnhanceScreen
 from ui.circus_screen import CircusScreen
 from ui.farm_screen import FarmScreen
 from jobs.farming import Farming
@@ -16,15 +16,17 @@ class StartScreen(Screen):
         self.title = 'Menu:'
 
     def buff(self, call, state):
-        bs = state['BuffScreen'] if 'BuffScreen' in state else BuffScreen(self.message, self.bot)
-        bs.render(call=call)
-        return bs.name, bs
+        # bs = state['BuffScreen'] if 'BuffScreen' in state else BuffScreen(self.message, self.bot)
+        # bs.render(call=call)
+        # return bs.name, bs
+        return None
 
     def enhance(self, call, state):
-        bs = state['EnhanceScreen'] if 'EnhanceScreen' in state else EnhanceScreen(self.message, self.bot)
-        bs.render(call=call)
-        return bs.name, bs
-    
+        # bs = state['EnhanceScreen'] if 'EnhanceScreen' in state else EnhanceScreen(self.message, self.bot)
+        # bs.render(call=call)
+        # return bs.name, bs
+        return None
+        
     def circus(self, call, state):
         cs = CircusScreen(self.message, self.bot)
         cs.render(call=call)
