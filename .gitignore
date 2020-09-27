@@ -9,6 +9,7 @@ serial_env/
 *.yaml
 config.yml
 enhancer.config.yml
+buff.config.yml
 *.csv
 !config/
 !farming.yml
