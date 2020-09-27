@@ -7,7 +7,7 @@ from enhancer.invetory_dispatcher import InventoryDispatcher
 
 class EnhanceScreen(Screen):
 
-    buttons = ['Cube', 'Unpack', 'Disassamble\Destroy', 'Binary', 'Combination', 'Back']
+    buttons = ['Cube', 'Unpack', 'Disassamble', 'Binary', 'Combination', 'Back']
 
     def __init__(self, message, bot):
         super().__init__(message, bot)
@@ -23,7 +23,6 @@ class EnhanceScreen(Screen):
 
             def cycle(call, state):
                 data = call.data.split('_')[1]
-                self.config['mode'] = 'single'
                 self.config['enhancement']['cycles'] = data
                 self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
                 self.configfile.dump_yaml(self.config)
@@ -59,6 +58,10 @@ class EnhanceScreen(Screen):
         cs.render(call=call)
         return cs.name, cs
 
+    def unpack(self, call, state):
+        InventoryDispatcher(self.config).unpack()
+        return self.name, self
+        
     def binary(self, call, state):
         self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
         self.config['mode'] = 'binary'
