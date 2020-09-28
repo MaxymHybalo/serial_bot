@@ -21,8 +21,8 @@ def load_config():
 config = load_config()
 configure_logger()
 SerialController().run_serial(config['serial'])
-Bot(config['token']).observe()
+# Bot(config['token']).observe()
 
-# from enhancer.invetory_dispatcher import InventoryDispatcher
-# inv_dispatcher = InventoryDispatcher(config['enhancer'])
-# inv_dispatcher.enhance()
+from enhancer.invetory_dispatcher import InventoryDispatcher
+inv_dispatcher = InventoryDispatcher(config['enhancer'])
+inv_dispatcher.destroy()

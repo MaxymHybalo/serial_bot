@@ -20,7 +20,7 @@ class Inventory:
         self.config = config
         self.fnd = Finder()
         self.open_source()
-        self.grid = GridIdentifier(self.source)
+        self.update_grid()
         self.set_params()
 
     def open_source(self):
@@ -41,7 +41,6 @@ class Inventory:
         self.make = Detector().find(self.make, self.source)
         self.main_slot = Detector().find(self.main_slot, self.source)
         self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
-        self.source = utils.rect(self.source, self.main_slot, (200,200,0), 3)
 
 
     def find_first_entry(self, target):
@@ -61,6 +60,9 @@ class Inventory:
         # import pdb; pdb.set_trace()
         for key, value in dictionary.items():
             self.log.debug('{0}: {1}'.format(key, value))
+    
+    def update_grid(self):
+        self.grid =  GridIdentifier(self.source)
 
     def _source(self):
         from shapes.window import Window

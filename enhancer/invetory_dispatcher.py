@@ -2,6 +2,7 @@ from utils.configurator import Configurator
 from enhancer.inventory import Inventory
 from enhancer.tasks.enhancer import Enhancer
 from enhancer.tasks.unpacker import Unpacker
+from enhancer.tasks.destructor import Destructor
 class InventoryDispatcher:
     
     def __init__(self, config):
@@ -20,3 +21,6 @@ class InventoryDispatcher:
 
     def unpack(self):
         Unpacker(self.enhancers_setup, self.inventory).proceed()
+    
+    def destroy(self):
+        Destructor(self.enhancers_setup, self.inventory).proceed()
