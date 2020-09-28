@@ -8,9 +8,7 @@ from jobs.buffer import Buffer
 from jobs.taming import Taming
 from jobs.farming import Farming
 
-from jobs.grid_layout import Grid
 from processes.object_processor import ProcessInitializer
-from processes.instruction_processor import InstructionProcessor
 from utils.serial_controller import SerialController
 from utils.config import Config
 

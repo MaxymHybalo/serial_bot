@@ -77,7 +77,8 @@ class EnhanceScreen(Screen):
     def disassamble(self, call, state):
         self.config['enhancement']['cube'] = state['CubesScreen'].config['enhancement']['cube']
         self.config['mode'] = 'disassamble'
-        # Enhancer(self.config).process() # TODO when destructor implemented
+        InventoryDispatcher(self.config).destroy() 
+
         return self.name, self
 
     def back(self, call, state):
