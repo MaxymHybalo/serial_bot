@@ -29,7 +29,11 @@ class Window(metaclass=Singleton):
             self.log.info('Located game window on screen')
         else:
             print('window already inited: ', self.windowHead)
-    
+
+    def update_window(self):
+        self.screen = ui.screenshot(region=(self.x,self.y, self.width, self.height))
+        return self.screen
+        
     def center(self):
         return self.x + int(self.width / 2), self.y + int(self.height / 2)
 

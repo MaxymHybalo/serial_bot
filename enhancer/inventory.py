@@ -37,7 +37,6 @@ class Inventory:
         self.empty_item = cv2.imread('assets/' + self.config['recognize']['grid']['eoi'] + '.png')
         self.eoi = self.find_first_entry(self.empty_item)
         self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
-        # import  pdb; pdb.set_trace()
         self.make = cv2.imread('assets/' + self.config['recognize']['enhance']['make'] + '.png')
         self.make = Detector().find(self.make, self.source)
         self.main_slot = Detector().find(self.main_slot, self.source)
@@ -66,4 +65,4 @@ class Inventory:
     def _source(self):
         from shapes.window import Window
         import numpy
-        return numpy.array(Window().screen)
+        return numpy.array(Window().update_window())

@@ -23,6 +23,6 @@ configure_logger()
 SerialController().run_serial(config['serial'])
 Bot(config['token']).observe()
 
-# inv_dispatcher = InventoryDispatcher(config)
+# from enhancer.invetory_dispatcher import InventoryDispatcher
+# inv_dispatcher = InventoryDispatcher(config['enhancer'])
 # inv_dispatcher.enhance()
-# inv_dispatcher.unpack()

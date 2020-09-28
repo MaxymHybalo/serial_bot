@@ -9,7 +9,7 @@ class Unpacker(Operator):
         super().__init__(config, inventory)
         self.log = logging.getLogger('unpacker')
         self.log.info('Unpacker init')
-        self.delay = 1
+        self.delay = 1.5
 
     def proceed(self):
         self.log.info('Unpacking')

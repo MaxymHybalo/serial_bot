@@ -8,7 +8,7 @@ class InventoryDispatcher:
         if type(config) is dict:
             self.config = config
         else:
-            self.config = Configurator(config['enhancer']).from_yaml()
+            self.config = Configurator(config).from_yaml()
         self.inventory = Inventory(self.config)
         self.enhancers_setup = {
             'options': self.config['enhancement'],
