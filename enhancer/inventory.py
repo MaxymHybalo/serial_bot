@@ -37,15 +37,19 @@ class Inventory:
         self.empty_item = cv2.imread('assets/' + self.config['recognize']['grid']['eoi'] + '.png')
         self.eoi = self.find_first_entry(self.empty_item)
         self.main_slot = cv2.imread('assets/' + self.config['recognize']['enhance']['slot'] + '.png')
+        # import  pdb; pdb.set_trace()
         self.make = cv2.imread('assets/' + self.config['recognize']['enhance']['make'] + '.png')
         self.make = Detector().find(self.make, self.source)
         self.main_slot = Detector().find(self.main_slot, self.source)
         self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
+        self.source = utils.rect(self.source, self.main_slot, (200,200,0), 3)
+
 
     def find_first_entry(self, target):
         entry = None
         for cell in self.grid.cells:
-            empty = Detector().find(cell.source, self.empty_item)
+            empty = Detector().find(self.empty_item, cell.source)
+
             if empty:
                 if entry:
                     if cell.row < entry.row or (cell.col < entry.col and cell.row <= entry.row):

@@ -63,9 +63,12 @@ class Enhancer:
             cube.make_click()
             make.make_click()
             main.make_click()
+            # Wait(4).delay()
+
         cube.process = 'click'
         cube.make_click()
         main.make_click()
+
 
     def _break(self, scope):
         # make, main, cube = self._init_flow()
@@ -87,7 +90,6 @@ class Enhancer:
                 item = Rect(s).click().make_click()
             # make
             make.make_click()
-            Wait(4).delay()
 
             
         #     if i < size - 1:

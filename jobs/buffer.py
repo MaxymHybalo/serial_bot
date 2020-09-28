@@ -5,7 +5,7 @@ from processes.wait import Wait
 from processes.click import Click
 from shapes.rect import Rect
 from processes.key import Key
-
+from shapes.window import Window
 class Buffer:
 
     FLOW = [
@@ -85,11 +85,14 @@ class Buffer:
     def _go_to_selector(self):
         mode = self._setup_buff_mode()
         if mode:
-            select_button = Recognizer(self.select_marker, None).recognize()
-            Rect(select_button).click().make_click()
-            ok = Recognizer(self.ok, None).recognize()
-            Rect(ok).click().make_click()
-        return Recognizer(self.selector_ok, None).recognize()
+            wx, wy = Window().center()
+            Wait(0.5).delay()
+            Click(wx, wy).make_click()
+            dx, dy = self.config['markers']['confirm_logout_point']
+            dx, dy = wx + int(dx), wy + int(dy)
+            Wait(1).delay()
+            Click(dx, dy).make_click()
+        return Recognizer(self.selector, None).recognize()
 
 
     def _setup_buff_mode(self):

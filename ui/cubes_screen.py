@@ -1,5 +1,4 @@
 from ui.screen import Screen
-from jobs.enhancer import Enhancer
 from utils.configurator import Configurator
 
 class CubesScreen(Screen):

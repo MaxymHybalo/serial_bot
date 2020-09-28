@@ -5,7 +5,10 @@ from enhancer.tasks.unpacker import Unpacker
 class InventoryDispatcher:
     
     def __init__(self, config):
-        self.config = Configurator(config['enhancer']).from_yaml()
+        if type(config) is dict:
+            self.config = config
+        else:
+            self.config = Configurator(config['enhancer']).from_yaml()
         self.inventory = Inventory(self.config)
         self.enhancers_setup = {
             'options': self.config['enhancement'],

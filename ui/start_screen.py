@@ -24,7 +24,8 @@ class StartScreen(Screen):
         bs = state['EnhanceScreen'] if 'EnhanceScreen' in state else EnhanceScreen(self.message, self.bot)
         bs.render(call=call)
         return bs.name, bs
-    
+        return None
+        
     def circus(self, call, state):
         cs = CircusScreen(self.message, self.bot)
         cs.render(call=call)
