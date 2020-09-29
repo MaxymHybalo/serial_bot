@@ -13,6 +13,7 @@ class Enhancer(Operator):
         super().__init__(config, inventory)
         self.log = logging.getLogger('enhancer')
         self.log.info('Items to process: {0}'.format(len(self.inventory.working_cells)))
+        self.delay = self.config['options']['await']
         # self.show_state()
 
     def proceed(self):
@@ -33,7 +34,7 @@ class Enhancer(Operator):
             Wait(0.3).delay()
             self.click_at('cube', 'double')
             self.click_at('make')
-            Wait(1).delay()
+            Wait(self.delay).delay()
             self.click_at('main_slot', 'double')
 
     def setup(self, cycle):

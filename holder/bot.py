@@ -7,6 +7,8 @@ from telebot import types
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
 
 from ui.start_screen import StartScreen
+from ui.command_screen import CommandScreen
+from utils.config import Config
 
 class Bot:
 
@@ -26,10 +28,27 @@ class Bot:
         @self.bot.message_handler(commands=['start'])
         def start(message):
             self.start(message)
+        
+        @self.bot.message_handler(commands=['await'])
+        def start(message):
+            self.set_await(message)
+
         @self.bot.callback_query_handler(func=lambda call: True)
         def callbacks(call):
             self.handle_base_callbacks(call)
-    
+
+    def set_await(self, message):
+        # import pdb; pdb.set_trace()
+        text = message.text
+        delay = text.split()[1:]
+        try:
+            delay = float(delay[0])
+        except Exception as e:
+            self.log.error(str(e))
+            return None
+
+        CommandScreen().set_await(delay)
+
     def start(self, message):
         self.init_state(message, self.bot)
 
