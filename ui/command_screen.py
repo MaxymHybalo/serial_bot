@@ -3,10 +3,12 @@ from utils.configurator import Configurator
 from utils.config import Config
 
 class CommandScreen:
+    visible = False
 
-    def __init__(self):
-        super().__init__()
+    def __init__(self, message, bot):
         self.log = logging.getLogger('command-screen')
+        self.message = message
+        self.bot = bot
 
     def set_await(self, delay):
         enhancer = Config().config

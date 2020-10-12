@@ -40,7 +40,12 @@ class Inventory:
         self.make = cv2.imread('assets/' + self.config['recognize']['enhance']['make'] + '.png')
         self.make = Detector().find(self.make, self.source)
         self.main_slot = Detector().find(self.main_slot, self.source)
-        self.working_cells = self.grid.cells[self.cube.id +1:self.eoi.id]
+        
+        end_id = self.grid.cells[-1]
+        if self.eoi:
+            end_id = self.eoi.id
+
+        self.working_cells = self.grid.cells[self.cube.id +1:end_id]
 
 
     def find_first_entry(self, target):

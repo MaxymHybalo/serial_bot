@@ -10,6 +10,8 @@ from ui.start_screen import StartScreen
 from ui.command_screen import CommandScreen
 from utils.config import Config
 
+INVISIBLE_SCREENS = ('CommandScreen')
+
 class Bot:
 
     def __init__(self, token):
@@ -86,6 +88,8 @@ class Bot:
         for m in modules:
             modname = m[:-3]
             classname = self.make_class_name(modname)
+            if classname in INVISIBLE_SCREENS:
+                continue
             classmodule = getattr(__import__('ui.' + modname), modname)
             class_tpl = getattr(classmodule, classname)
             classes[classname] = class_tpl
