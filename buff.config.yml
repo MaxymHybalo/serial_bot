@@ -12,4 +12,4 @@ markers:
   selector_ok: selector_ok.png
   window: window_marker.png
 refresh: true
-spawn: false
+spawn: true

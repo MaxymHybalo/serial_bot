@@ -41,7 +41,7 @@ class Inventory:
         self.make = Detector().find(self.make, self.source)
         self.main_slot = Detector().find(self.main_slot, self.source)
         
-        end_id = self.grid.cells[-1]
+        end_id = self.grid.cells[-1].id
         if self.eoi:
             end_id = self.eoi.id
 
