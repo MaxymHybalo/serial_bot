@@ -21,7 +21,7 @@ class Unpacker(Operator):
         for cell in self.inventory.working_cells:
             x, y = self.finder.point(cell.center())
             Click(x,y, 'double').make_click()
-            Wait(0.3).delay()
+            Wait(0.4).delay()
             self.click_at('make')
             Wait(self.delay).delay()
             self.click_at('main_slot', 'double')
