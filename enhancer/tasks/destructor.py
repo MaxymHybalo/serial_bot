@@ -1,4 +1,5 @@
 import logging
+import math
 
 from enhancer.tasks.operator import Operator
 from processes.click import Click
@@ -12,6 +13,7 @@ class Destructor(Operator):
         self.destruct_button = self.config['assets']['destructor']['button_of_start']
         self.dx, self.dy = self.destruct_button
         self.dx, self.dy = int(self.dx), int(self.dy)
+        self.select_delay = 0.1
         # import pdb; pdb.set_trace()
 
     def proceed(self):
@@ -19,12 +21,12 @@ class Destructor(Operator):
         self.log.info('End destruction')
     
     def destroy(self):
-        while len(self.inventory.working_cells):
+        for container in self.split_in_buckets():
             self.log.info('Destructor items {0}'.format(len(self.inventory.working_cells)))
-            for cell in self.inventory.working_cells[:20]:
+            for cell in container:
                 x, y = self.finder.point(cell.center())
                 Click(x,y, 'double').make_click()
-                Wait(0.2).delay()
+                Wait(self.select_delay).delay()
             
             x, y = self._get_destruct_point()
             Click(x,y, 'double').make_click()
@@ -33,6 +35,15 @@ class Destructor(Operator):
             self.update_inventory()
             self.log.info('Destructor rest items {0}'.format(len(self.inventory.working_cells)))
         
+    def split_in_buckets(self):
+        buckets = math.ceil(len(self.inventory.working_cells) / 20)
+        containers = []
+        step = 0
+        for b in range(buckets):
+            containers.append(self.inventory.working_cells[step:step+20])
+            step += 20
+        return containers
+
     def update_inventory(self):
         self.inventory.open_source()
         self.inventory.update_grid()
